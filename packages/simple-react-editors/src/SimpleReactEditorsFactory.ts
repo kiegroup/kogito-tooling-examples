@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-import { SimpleReactEditorsLanguageData } from "./SimpleReactEditorsLanguageData";
-import { Routes } from "@kogito-tooling/core-api";
+import { EditorFactory, EditorInitArgs, KogitoEditorEnvelopeContextType } from "@kogito-tooling/editor/dist/api";
+import { SimpleReactEditorInterface } from "./SimpleReactEditorInterface";
 
-export class SimpleReactEditorsRoutes implements Routes {
-  public getRoutes() {
-    return new Map<string, SimpleReactEditorsLanguageData>([
-      [
-        "txt",
-        {
-          type: "my-editor-type",
-          anyData: "something"
-        }
-      ]
-    ]);
+export class SimpleReactEditorsFactory implements EditorFactory {
+  public supports(fileExtension: string) {
+    return fileExtension === "txt";
+  }
+
+  public createEditor(envelopeContext: KogitoEditorEnvelopeContextType, initArgs: EditorInitArgs) {
+    return Promise.resolve(new SimpleReactEditorInterface(envelopeContext));
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,12 @@
  */
 
 import * as React from "react";
-import { EnvelopeBusInnerMessageHandler } from "@kogito-tooling/microeditor-envelope";
+import { KogitoEditorChannelApi } from "@kogito-tooling/editor/dist/api";
+import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 
 export interface Props {
   exposing: (s: SimpleReactEditor) => void;
-  messageBus: EnvelopeBusInnerMessageHandler;
+  channelApi: MessageBusClient<KogitoEditorChannelApi>
 }
 
 export interface State {
@@ -36,7 +37,7 @@ export class SimpleReactEditor extends React.Component<Props, State> {
   }
 
   public componentDidMount(): void {
-    this.props.messageBus.notify_ready();
+    this.props.channelApi.notify("receive_ready");
   }
 
   public async setContent(content: string): Promise<void> {
@@ -46,7 +47,7 @@ export class SimpleReactEditor extends React.Component<Props, State> {
   private async updateContent(content: string): Promise<void> {
     // The updateContent method is also called when users perform undo/redo actions
     // but, ideally, messageBus.notify_newEdit shouldn't be called in this cases.
-    this.props.messageBus.notify_newEdit({ id: new Date().getTime().toString() });
+    this.props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
     this.setContent(content);
   }
 

@@ -14,13 +14,31 @@
  * limitations under the License.
  */
 
-import { startExtension, DefaultChromeRouter } from "@kogito-tooling/chrome-extension";
-import { SimpleReactEditorsRoutes } from "simple-react-editors";
+import { startExtension } from "@kogito-tooling/chrome-extension";
+
+function getResourcesPathPrefix(): string {
+  const relativePath = "$_{WEBPACK_REPLACE__relativePath}";
+  if (relativePath) {
+    return `$_{WEBPACK_REPLACE__targetOrigin/${relativePath}`;
+  } else {
+    return "$_{WEBPACK_REPLACE__targetOrigin";
+  }
+}
 
 startExtension({
   name: "KIE :: Kogito Simple React Editor",
-  editorIndexPath: "envelope/index.html",
   extensionIconUrl: chrome.extension.getURL("/resources/kie-icon.png"),
   githubAuthTokenCookieName: "github-oauth-token-kie-editors",
-  router: new DefaultChromeRouter(new SimpleReactEditorsRoutes())
+  editorEnvelopeLocator: {
+    targetOrigin: window.location.origin,
+    mapping: new Map([
+      [
+        "txt",
+        {
+          resourcesPathPrefix: `${getResourcesPathPrefix()}/txt`,
+          envelopePath: `${getResourcesPathPrefix()}/envelope/index.html`
+        }
+      ]
+    ])
+  },
 });

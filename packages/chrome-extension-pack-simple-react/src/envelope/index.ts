@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import * as MicroEditorEnvelope from "@kogito-tooling/microeditor-envelope";
-import { EnvelopeBusMessage } from "@kogito-tooling/microeditor-envelope-protocol";
+import * as EditorEnvelope from "@kogito-tooling/editor/dist/envelope";
+import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
 import { SimpleReactEditorsFactory } from "simple-react-editors";
-import { ChannelType, getOperatingSystem } from "@kogito-tooling/core-api";
+import { ChannelType, getOperatingSystem } from "@kogito-tooling/channel-common-api";
 
-MicroEditorEnvelope.init({
+EditorEnvelope.init({
   container: document.getElementById("envelope-app")!,
-  busApi: {
-    postMessage<T>(message: EnvelopeBusMessage<T>, targetOrigin?: string, _?: any) {
+  bus: {
+    postMessage<D, T>(message: EnvelopeBusMessage<D, T>, targetOrigin?: string, _?: any) {
       window.parent.postMessage(message, targetOrigin!, _);
     }
   },

@@ -15,7 +15,7 @@
  */
 
 const path = require("path");
-const pfWebpackUtils = require("@kogito-tooling/patternfly-base/webpackUtils");
+const pfWebpackOptions = require("@kogito-tooling/patternfly-base/patternflyWebpackOptions");
 
 const commonConfig = {
   mode: "development",
@@ -69,7 +69,7 @@ module.exports = [
       "webview/index": "./src/webview/index.ts"
     },
     module: {
-      rules: [...commonConfig.module.rules, ...pfWebpackUtils.patternflyLoaders]
+      rules: [...commonConfig.module.rules, ...pfWebpackOptions.patternflyRules]
     }
   }
 ];

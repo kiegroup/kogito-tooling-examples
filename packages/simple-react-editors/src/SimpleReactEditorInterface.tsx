@@ -15,21 +15,24 @@
  */
 
 import * as React from "react";
-import { Editor, Element } from "@kogito-tooling/core-api";
-import { EnvelopeBusInnerMessageHandler } from "@kogito-tooling/microeditor-envelope";
+import { Editor, KogitoEditorEnvelopeContextType } from "@kogito-tooling/editor/dist/api";
 import { SimpleReactEditor } from "./SimpleReactEditor";
 
-export class SimpleReactEditorInterface extends Editor {
+export class SimpleReactEditorInterface implements Editor {
   private self: SimpleReactEditor;
+  public af_isReact = true;
+  public af_componentId: "txt-editor";
+  public af_componentTitle: "Txt Editor";
 
-  constructor(private readonly messageBus: EnvelopeBusInnerMessageHandler) {
-    super("readonly-react-editor");
-    this.af_isReact = true;
-    this.messageBus = messageBus;
+  constructor(private readonly envelopeContext: KogitoEditorEnvelopeContextType) {
   }
 
   public getContent(): Promise<string> {
     return this.self.getContent();
+  }
+
+  public async getElementPosition(selector: string) {
+    return Promise.resolve(undefined);
   }
 
   public setContent(path: string, content: string): Promise<void> {
@@ -40,7 +43,15 @@ export class SimpleReactEditorInterface extends Editor {
     return this.self.getPreview();
   }
 
-  public af_componentRoot(): Element {
-    return <SimpleReactEditor exposing={s => (this.self = s)} messageBus={this.messageBus} />;
+  public async undo(): Promise<void> {
+    //Place holder until StateControl is added for React based components.
+  }
+
+  public async redo(): Promise<void> {
+    //Place holder until StateControl is added for React based components.
+  }
+
+  public af_componentRoot() {
+    return <SimpleReactEditor exposing={s => (this.self = s)} channelApi={this.envelopeContext.channelApi} />;
   }
 }

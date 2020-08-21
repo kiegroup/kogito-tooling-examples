@@ -15,10 +15,20 @@
   },
   "devDependencies": {
     "@types/react": "16.8.8",
+    "css-loader": "^4.2.1",
+    "file-loader": "4.2.0",
     "lerna": "3.18.3",
-    "style-loader": "1.0.0",
-    "css-loader": "3.2.0",
-    "url-loader": "4.0.0",
-    "file-loader": "4.2.0"
+    "raw-loader": "^4.0.1",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.3",
+    "style-loader": "^1.2.1",
+    "url-loader": "^4.1.0"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "resolutions": {
+    "@patternfly/react-styles": "4.4.2"
   }
 }

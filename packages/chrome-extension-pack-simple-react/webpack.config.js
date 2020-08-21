@@ -18,7 +18,7 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const ZipPlugin = require("zip-webpack-plugin");
 const packageJson = require("./package.json");
-const pfWebpackUtils = require("@kogito-tooling/patternfly-base/webpackUtils");
+const pfWebpackOptions = require("@kogito-tooling/patternfly-base/patternflyWebpackOptions");
 
 module.exports = {
   mode: "development",
@@ -58,7 +58,7 @@ module.exports = {
         exclude: /node_modules/,
         use: ["babel-loader"]
       },
-      ...pfWebpackUtils.patternflyLoaders
+      ...pfWebpackOptions.patternflyRules
     ]
   },
   resolve: {
