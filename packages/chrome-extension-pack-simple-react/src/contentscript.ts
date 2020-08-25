@@ -15,15 +15,9 @@
  */
 
 import { startExtension } from "@kogito-tooling/chrome-extension";
+import { ChromeRouter } from "./other";
 
-function getResourcesPathPrefix(): string {
-  const relativePath = "$_{WEBPACK_REPLACE__relativePath}";
-  if (relativePath) {
-    return `$_{WEBPACK_REPLACE__targetOrigin/${relativePath}`;
-  } else {
-    return "$_{WEBPACK_REPLACE__targetOrigin";
-  }
-}
+const resourcesPathPrefix = new ChromeRouter().getResourcesPathPrefix();
 
 startExtension({
   name: "KIE :: Kogito Simple React Editor",
@@ -35,10 +29,10 @@ startExtension({
       [
         "txt",
         {
-          resourcesPathPrefix: `${getResourcesPathPrefix()}/txt`,
-          envelopePath: `${getResourcesPathPrefix()}/envelope/index.html`
+          resourcesPathPrefix: `${resourcesPathPrefix}/dist/`,
+          envelopePath: `${resourcesPathPrefix}/dist/envelope/index.html`
         }
       ]
     ])
-  },
+  }
 });

@@ -15,19 +15,21 @@
  */
 
 const path = require("path");
+const pfWebpackOptions = require("@kogito-tooling/patternfly-base/patternflyWebpackOptions");
+const nodeExternals = require("webpack-node-externals");
 
 module.exports = {
   mode: "development",
   devtool: "inline-source-map",
   entry: {
-    index: "./src/index.ts"
+    index: "./src/index.ts",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "[name].js",
-    libraryTarget: "commonjs2"
+    libraryTarget: "commonjs2",
   },
-  externals: {},
+  externals: [nodeExternals({ modulesDir: "../../node_modules" })],
   plugins: [],
   module: {
     rules: [
@@ -35,18 +37,19 @@ module.exports = {
         test: /\.tsx?$/,
         loader: "ts-loader",
         options: {
-          configFile: path.resolve("./tsconfig.json")
-        }
+          configFile: path.resolve("./tsconfig.json"),
+        },
       },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: ["babel-loader"]
-      }
-    ]
+        use: ["babel-loader"],
+      },
+      ...pfWebpackOptions.patternflyRules,
+    ],
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".jsx"],
-    modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")]
-  }
+    modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")],
+  },
 };

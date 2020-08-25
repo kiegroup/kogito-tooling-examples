@@ -20,49 +20,77 @@ const ZipPlugin = require("zip-webpack-plugin");
 const packageJson = require("./package.json");
 const pfWebpackOptions = require("@kogito-tooling/patternfly-base/patternflyWebpackOptions");
 
-module.exports = {
-  mode: "development",
-  devtool: "inline-source-map",
-  entry: {
-    contentscript: "./src/contentscript.ts",
-    background: "./src/background.ts",
-    "envelope/index": "./src/envelope/index.ts"
-  },
-  output: {
-    path: path.resolve(__dirname, "./dist"),
-    filename: "[name].js"
-  },
-  externals: {},
-  plugins: [
-    new CopyPlugin([
-      { from: "./static/manifest.json" },
-      { from: "./static/resources", to: "./resources" },
-      { from: "./static/envelope", to: "./envelope" }
-    ]),
-    new ZipPlugin({
-      filename: "kogito_tooling_examples_chrome_extension_simple_react_" + packageJson.version + ".zip",
-      pathPrefix: "dist"
-    })
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        loader: "ts-loader",
-        options: {
-          configFile: path.resolve("./tsconfig.json")
-        }
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: ["babel-loader"]
-      },
-      ...pfWebpackOptions.patternflyRules
-    ]
-  },
-  resolve: {
-    extensions: [".tsx", ".ts", ".js", ".jsx"],
-    modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")]
-  }
+function getRouterArgs(argv) {
+
+  let targetOrigin = argv["ROUTER_targetOrigin"] || process.env["ROUTER_targetOrigin"] || "https://localhost:8080";
+  let relativePath = argv["ROUTER_relativePath"] || process.env["ROUTER_relativePath"] || "";
+
+  return [targetOrigin, relativePath];
+}
+
+module.exports = (env, argv) => {
+  const [router_targetOrigin, router_relativePath] = getRouterArgs(argv);
+
+  return {
+    mode: "development",
+    devtool: "inline-source-map",
+    entry: {
+      contentscript: "./src/contentscript.ts",
+      background: "./src/background.ts",
+      "envelope/index": "./src/envelope/index.ts"
+    },
+    output: {
+      path: path.resolve(__dirname, "./dist"),
+      filename: "[name].js"
+    },
+    externals: {},
+    plugins: [
+      new CopyPlugin([
+        { from: "./static/manifest.json" },
+        { from: "./static/resources", to: "./resources" },
+        { from: "./static/envelope", to: "./envelope" }
+      ]),
+      new ZipPlugin({
+        filename: "kogito_tooling_examples_chrome_extension_simple_react_" + packageJson.version + ".zip",
+        pathPrefix: "dist"
+      })
+    ],
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          loader: "ts-loader",
+          options: {
+            configFile: path.resolve("./tsconfig.json")
+          }
+        },
+        {
+          test: /\.jsx?$/,
+          exclude: /node_modules/,
+          use: ["babel-loader"]
+        },
+        {
+          test: /other\.ts$/,
+          loader: "string-replace-loader",
+          options: {
+            multiple: [
+              {
+                search: "$_{WEBPACK_REPLACE__targetOrigin}",
+                replace: router_targetOrigin
+              },
+              {
+                search: "$_{WEBPACK_REPLACE__relativePath}",
+                replace: router_relativePath
+              }
+            ]
+          }
+        },
+        ...pfWebpackOptions.patternflyRules
+      ]
+    },
+    resolve: {
+      extensions: [".tsx", ".ts", ".js", ".jsx"],
+      modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")]
+    }
+  };
 };

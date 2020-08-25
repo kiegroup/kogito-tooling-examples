@@ -23,6 +23,6 @@ export class SimpleReactEditorsFactory implements EditorFactory {
   }
 
   public createEditor(envelopeContext: KogitoEditorEnvelopeContextType, initArgs: EditorInitArgs) {
-    return Promise.resolve(new SimpleReactEditorInterface(envelopeContext));
+    return Promise.resolve(new SimpleReactEditorInterface(envelopeContext, initArgs));
   }
 }

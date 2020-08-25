@@ -1,78 +1,182 @@
-/*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import * as React from "react";
-import { KogitoEditorChannelApi } from "@kogito-tooling/editor/dist/api";
+import { EditorApi, EditorInitArgs, KogitoEditorChannelApi } from "@kogito-tooling/editor/dist/api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import { ReactNode, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import { Page, PageHeader, PageSidebar, Nav, NavItem, NavList } from "@patternfly/react-core";
+import { DEFAULT_RECT } from "@kogito-tooling/guided-tour/dist/api";
+import { ContentType, ResourceContent } from "@kogito-tooling/channel-common-api";
+import { Base64 } from "./base64";
 
-export interface Props {
-  exposing: (s: SimpleReactEditor) => void;
-  channelApi: MessageBusClient<KogitoEditorChannelApi>
+interface Props {
+  children?: ReactNode;
+  channelApi: MessageBusClient<KogitoEditorChannelApi>;
+  initArgs: EditorInitArgs;
 }
 
-export interface State {
-  content: string;
+enum TweakOption {
+  CONTRAST = "contrast",
+  BRIGHTNESS = "brightness",
+  INVERT = "invert",
+  SEPIA = "sepia",
+  GRAYSCALE = "grayscale",
+  SATURATE = "saturate"
 }
 
-export class SimpleReactEditor extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    props.exposing(this);
-    this.state = {
-      content: ""
-    };
-  }
+const NavItemCss = {
+  display: "flex",
+  justifyContent: "space-evenly",
+  alignItems: "center"
+};
 
-  public componentDidMount(): void {
-    this.props.channelApi.notify("receive_ready");
-  }
+export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, Props> = (props, forwardedRef) => {
+  const [editorContent, setEditorContent] = useState("");
+  const [originalContent, setOriginalContent] = useState("");
 
-  public async setContent(content: string): Promise<void> {
-    this.setState({ content: content });
-  }
+  useEffect(() => {
+    props.channelApi.notify("receive_ready");
+  }, []);
 
-  private async updateContent(content: string): Promise<void> {
-    // The updateContent method is also called when users perform undo/redo actions
-    // but, ideally, messageBus.notify_newEdit shouldn't be called in this cases.
-    this.props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
-    this.setContent(content);
-  }
+  const setContent = useCallback(async (path: string, content: string) => {
+    setOriginalContent(content);
+  }, []);
 
-  public async getContent(): Promise<string> {
-    return this.state.content;
-  }
+  const getContent = useCallback(() => {
+    return editorContent;
+  }, [editorContent]);
 
-  public getPreview(): Promise<string | undefined> {
+  const getPreview = useCallback(() => {
     throw new Error("Method not implemented.");
-  }
+  }, []);
 
-  public render() {
-    return (
-      <textarea
-        style={{
-          width: "100%",
-          height: "100%",
-          outline: 0,
-          boxSizing: "border-box",
-          border: 0,
-          color: "black"
-        }}
-        value={this.state.content}
-        onChange={(e: any) => this.updateContent(e.target.value)}
-      />
-    );
-  }
-}
+  useImperativeHandle(forwardedRef, () => {
+    return {
+      getContent: () => Promise.resolve().then(() => getContent()),
+      setContent: (path: string, content: string) => Promise.resolve().then(() => setContent(path, content)),
+      getPreview: () => getPreview(),
+      undo: () => Promise.resolve(),
+      redo: () => Promise.resolve(),
+      getElementPosition: (selector: string) => Promise.resolve(DEFAULT_RECT)
+    };
+  });
+
+  const [isNavOpen, setIsNavOpen] = useState(true);
+  const imageExtension = useMemo(() => "data:image/png;base64", []);
+
+  const [contrast, setContrast] = useState("100");
+  const tweakContrast = useCallback(
+    e => {
+      setContrast(e.target.value);
+      props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
+    },
+    [contrast]
+  );
+
+  const [brightness, setBrightness] = useState("100");
+  const tweakBrightness = useCallback(
+    e => {
+      setBrightness(e.target.value);
+      props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
+    },
+    [brightness]
+  );
+
+  const [invert, setInvert] = useState("100");
+  const tweakInvert = useCallback(
+    e => {
+      setInvert(e.target.value);
+      props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
+    },
+    [invert]
+  );
+
+  const [sepia, setSepia] = useState("1");
+  const tweakSepia = useCallback(
+    e => {
+      setSepia(e.target.value);
+      props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
+    },
+    [sepia]
+  );
+
+  const [grayscale, setGrayscale] = useState("1");
+  const tweakGrayscale = useCallback(
+    e => {
+      setGrayscale(e.target.value);
+      props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
+    },
+    [grayscale]
+  );
+
+  const [saturate, setSaturate] = useState("100");
+  const tweakSaturate = useCallback(
+    e => {
+      setSaturate(e.target.value);
+      props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
+    },
+    [saturate]
+  );
+
+  useEffect(() => {
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d")!;
+    const image = document.getElementById("original") as HTMLImageElement;
+
+    ctx.filter = `${TweakOption.CONTRAST}(${contrast}%) ${TweakOption.BRIGHTNESS}(${brightness}%) ${TweakOption.INVERT}(${invert}%) ${TweakOption.GRAYSCALE}(${grayscale}%) ${TweakOption.SEPIA}(${sepia}%) ${TweakOption.SATURATE}(${saturate}%)`;
+    ctx.drawImage(image, 0, 0);
+
+    const data = canvas.toDataURL().split(",")[1];
+    console.log(data);
+    setEditorContent(data);
+  }, [contrast, sepia, saturate, grayscale, invert, brightness]);
+
+  useEffect(() => {
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d")!;
+    const image = document.getElementById("original") as HTMLImageElement;
+    ctx.drawImage(image, 0, 0);
+  }, [originalContent]);
+
+  return (
+    <Page
+      header={<PageHeader showNavToggle={true} isNavOpen={isNavOpen} onNavToggle={() => setIsNavOpen(!isNavOpen)} />}
+      sidebar={
+        <PageSidebar
+          nav={
+            <Nav aria-label="Nav">
+              <NavList>
+                <NavItem style={NavItemCss} itemId={0}>
+                  Contrast <input type="range" min="1" max="200" value={contrast} onChange={tweakContrast} />
+                </NavItem>
+                <NavItem style={NavItemCss} itemId={1}>
+                  Brightness <input type="range" min="1" max="200" value={brightness} onChange={tweakBrightness} />
+                </NavItem>
+                <NavItem style={NavItemCss} itemId={2}>
+                  Invert <input type="range" min="1" max="100" value={invert} onChange={tweakInvert} />
+                </NavItem>
+                <NavItem style={NavItemCss} itemId={3}>
+                  Sepia <input type="range" min="1" max="100" value={sepia} onChange={tweakSepia} />
+                </NavItem>
+                <NavItem style={NavItemCss} itemId={4}>
+                  Grayscale <input type="range" min="1" max="100" value={grayscale} onChange={tweakGrayscale} />
+                </NavItem>
+                <NavItem style={NavItemCss} itemId={5}>
+                  Saturate <input type="range" min="1" max="200" value={saturate} onChange={tweakSaturate} />
+                </NavItem>
+              </NavList>
+            </Nav>
+          }
+          isNavOpen={isNavOpen}
+        />
+      }
+    >
+      <div>
+        <div style={{ display: "none" }}>
+          <img id={"original"} src={`${imageExtension},${originalContent}`} alt={"Original Image"} />
+        </div>
+        <canvas id={"canvas"} />
+      </div>
+    </Page>
+  );
+};
+
+export const ReactEditor = React.forwardRef(RefForwardingReactEditor);
