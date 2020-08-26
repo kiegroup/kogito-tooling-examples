@@ -19,7 +19,7 @@ import { SimpleReactEditorInterface } from "./SimpleReactEditorInterface";
 
 export class SimpleReactEditorsFactory implements EditorFactory {
   public supports(fileExtension: string) {
-    return fileExtension === "txt";
+    return fileExtension === "base64png";
   }
 
   public createEditor(envelopeContext: KogitoEditorEnvelopeContextType, initArgs: EditorInitArgs) {

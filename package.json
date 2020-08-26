@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/react": "16.8.8",
+    "@types/react-dom": "^16.9.8",
     "css-loader": "^4.2.1",
     "file-loader": "4.2.0",
     "lerna": "3.18.3",

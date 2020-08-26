@@ -16,6 +16,8 @@
 
 import * as vscode from "vscode";
 import * as KogitoVsCode from "@kogito-tooling/vscode-extension";
+import * as path from "path";
+import * as fs from "fs";
 
 export function activate(context: vscode.ExtensionContext) {
   console.info("Extension is alive.");
@@ -24,21 +26,36 @@ export function activate(context: vscode.ExtensionContext) {
     extensionName: "kogito-tooling-examples.vscode-extension-pack-simple-react",
     context: context,
     viewType: "kieKogitoWebviewSimpleEditors",
-    getPreviewCommandId: "",
+    getPreviewCommandId: "extension.kogito.getPreviewSvg",
     editorEnvelopeLocator: {
       targetOrigin: "vscode",
       mapping: new Map([
         [
-          "txt",
+          "base64png",
           {
             resourcesPathPrefix: `dist/`,
             envelopePath: `dist/webview/index.js`
           }
         ]
       ])
-    },
+    }
   });
 
+  context.subscriptions.push(
+    vscode.commands.registerCommand("extension.kogito.createBase64Png", (file: { fsPath: string }) => {
+      const buffer = fs.readFileSync(file.fsPath);
+      const parsedPath = path.parse(file.fsPath);
+      const base64FileName = `${parsedPath.name}${parsedPath.ext}.base64png`;
+      const base64AbsoluteFilePath = path.join(parsedPath.dir, base64FileName);
+      fs.writeFileSync(base64AbsoluteFilePath, buffer.toString("base64"));
+
+      vscode.window.showInformationMessage("Generated the Base64 file with success!", "Open").then(selected => {
+        if (selected) {
+          vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(base64AbsoluteFilePath));
+        }
+      });
+    })
+  );
   console.info("Extension is successfully setup.");
 }
 
