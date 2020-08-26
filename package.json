@@ -21,14 +21,14 @@
     "raw-loader": "^4.0.1",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.3",
+    "string-replace-loader": "^2.3.0",
     "style-loader": "^1.2.1",
-    "url-loader": "^4.1.0"
+    "url-loader": "^4.1.0",
+    "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "string-replace-loader": "^2.3.0",
-    "webpack-node-externals": "^2.5.2"
+    "react-dom": "^16.13.1"
   },
   "resolutions": {
     "@patternfly/react-styles": "4.4.2"
