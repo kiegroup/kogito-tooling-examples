@@ -21,7 +21,6 @@
     "@kogito-tooling/channel-common-api": "0.6.1",
     "@kogito-tooling/editor": "0.6.1",
     "@kogito-tooling/envelope-bus": "0.6.1",
-    "@kogito-tooling/patternfly-base": "0.6.1",
-    "js-base64": "^3.4.5"
+    "@kogito-tooling/patternfly-base": "0.6.1"
   }
 }

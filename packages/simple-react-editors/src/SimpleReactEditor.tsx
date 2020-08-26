@@ -2,10 +2,8 @@ import * as React from "react";
 import { EditorApi, EditorInitArgs, KogitoEditorChannelApi } from "@kogito-tooling/editor/dist/api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import { ReactNode, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
-import { Page, PageHeader, PageSidebar, Nav, NavItem, NavList } from "@patternfly/react-core";
+import { Bullseye, Page, PageHeader, PageSidebar, Nav, NavItem, NavList, Switch } from "@patternfly/react-core";
 import { DEFAULT_RECT } from "@kogito-tooling/guided-tour/dist/api";
-import { ContentType, ResourceContent } from "@kogito-tooling/channel-common-api";
-import { Base64 } from "./base64";
 
 interface Props {
   children?: ReactNode;
@@ -24,7 +22,7 @@ enum TweakOption {
 
 const NavItemCss = {
   display: "flex",
-  justifyContent: "space-evenly",
+  justifyContent: "space-between",
   alignItems: "center"
 };
 
@@ -60,7 +58,6 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
   });
 
   const [isNavOpen, setIsNavOpen] = useState(true);
-  const imageExtension = useMemo(() => "data:image/png;base64", []);
 
   const [contrast, setContrast] = useState("100");
   const tweakContrast = useCallback(
@@ -80,16 +77,17 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
     [brightness]
   );
 
-  const [invert, setInvert] = useState("100");
+  const [invert, setInvert] = useState(false);
+  const invertValue = useMemo(() => (invert ? "100" : "0"), [invert]);
   const tweakInvert = useCallback(
-    e => {
-      setInvert(e.target.value);
+    isChecked => {
+      setInvert(isChecked);
       props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
     },
     [invert]
   );
 
-  const [sepia, setSepia] = useState("1");
+  const [sepia, setSepia] = useState("0");
   const tweakSepia = useCallback(
     e => {
       setSepia(e.target.value);
@@ -98,7 +96,7 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
     [sepia]
   );
 
-  const [grayscale, setGrayscale] = useState("1");
+  const [grayscale, setGrayscale] = useState("0");
   const tweakGrayscale = useCallback(
     e => {
       setGrayscale(e.target.value);
@@ -121,20 +119,23 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
     const ctx = canvas.getContext("2d")!;
     const image = document.getElementById("original") as HTMLImageElement;
 
-    ctx.filter = `${TweakOption.CONTRAST}(${contrast}%) ${TweakOption.BRIGHTNESS}(${brightness}%) ${TweakOption.INVERT}(${invert}%) ${TweakOption.GRAYSCALE}(${grayscale}%) ${TweakOption.SEPIA}(${sepia}%) ${TweakOption.SATURATE}(${saturate}%)`;
+    ctx.filter = `${TweakOption.CONTRAST}(${contrast}%) ${TweakOption.BRIGHTNESS}(${brightness}%) ${TweakOption.INVERT}(${invertValue}%) ${TweakOption.GRAYSCALE}(${grayscale}%) ${TweakOption.SEPIA}(${sepia}%) ${TweakOption.SATURATE}(${saturate}%)`;
     ctx.drawImage(image, 0, 0);
 
-    const data = canvas.toDataURL().split(",")[1];
-    console.log(data);
-    setEditorContent(data);
+    setEditorContent(canvas.toDataURL());
   }, [contrast, sepia, saturate, grayscale, invert, brightness]);
 
   useEffect(() => {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d")!;
     const image = document.getElementById("original") as HTMLImageElement;
-    ctx.drawImage(image, 0, 0);
-  }, [originalContent]);
+
+    image.onload = () => {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      ctx.drawImage(image, 0, 0);
+    };
+  }, []);
 
   return (
     <Page
@@ -145,22 +146,35 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
             <Nav aria-label="Nav">
               <NavList>
                 <NavItem style={NavItemCss} itemId={0}>
-                  Contrast <input type="range" min="1" max="200" value={contrast} onChange={tweakContrast} />
+                  <p>Contrast</p>
+                  <input type="range" min="0" max="200" value={contrast} onChange={tweakContrast} />
+                  <span>{contrast}</span>
                 </NavItem>
                 <NavItem style={NavItemCss} itemId={1}>
-                  Brightness <input type="range" min="1" max="200" value={brightness} onChange={tweakBrightness} />
+                  <p>Brightness</p>
+                  <input type="range" min="0" max="200" value={brightness} onChange={tweakBrightness} />
+                  <span>{brightness}</span>
                 </NavItem>
                 <NavItem style={NavItemCss} itemId={2}>
-                  Invert <input type="range" min="1" max="100" value={invert} onChange={tweakInvert} />
+                  <p>Sepia</p>
+                  <input type="range" min="0" max="100" value={sepia} onChange={tweakSepia} />
+                  <span>{sepia}</span>
                 </NavItem>
                 <NavItem style={NavItemCss} itemId={3}>
-                  Sepia <input type="range" min="1" max="100" value={sepia} onChange={tweakSepia} />
+                  <p>Grayscale</p>
+                  <input type="range" min="0" max="100" value={grayscale} onChange={tweakGrayscale} />{" "}
+                  <span>{grayscale}</span>
                 </NavItem>
                 <NavItem style={NavItemCss} itemId={4}>
-                  Grayscale <input type="range" min="1" max="100" value={grayscale} onChange={tweakGrayscale} />
+                  <p>Saturate</p>
+                  <input type="range" min="0" max="200" value={saturate} onChange={tweakSaturate} />
+                  <span>{saturate}</span>
                 </NavItem>
-                <NavItem style={NavItemCss} itemId={5}>
-                  Saturate <input type="range" min="1" max="200" value={saturate} onChange={tweakSaturate} />
+                <NavItem itemId={5}>
+                  <div style={NavItemCss}>
+                    <p>Invert</p>
+                    <Switch id="invert-switch" isChecked={invert} onChange={tweakInvert} />
+                  </div>
                 </NavItem>
               </NavList>
             </Nav>
@@ -169,12 +183,14 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
         />
       }
     >
-      <div>
-        <div style={{ display: "none" }}>
-          <img id={"original"} src={`${imageExtension},${originalContent}`} alt={"Original Image"} />
+      <Bullseye>
+        <div>
+          <div style={{ display: "none" }}>
+            <img id={"original"} src={originalContent} alt={"Original Image"} />
+          </div>
+          <canvas id={"canvas"} />
         </div>
-        <canvas id={"canvas"} />
-      </div>
+      </Bullseye>
     </Page>
   );
 };
