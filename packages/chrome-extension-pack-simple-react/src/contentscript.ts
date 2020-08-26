@@ -15,7 +15,7 @@
  */
 
 import { startExtension } from "@kogito-tooling/chrome-extension";
-import { ChromeRouter } from "./other";
+import { ChromeRouter } from "./ChromeRouter";
 
 const resourcesPathPrefix = new ChromeRouter().getResourcesPathPrefix();
 
