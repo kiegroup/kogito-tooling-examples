@@ -10,6 +10,11 @@
     "start": "webpack-dev-server -d --host 0.0.0.0"
   },
   "dependencies": {
-    "simple-react-editors": "0.6.1"
+    "simple-react-editors": "0.6.1",
+    "@kogito-tooling/kie-bc-editors": "0.6.1",
+    "@kogito-tooling/patternfly-base": "0.6.1"
+  },
+  "resolutions": {
+    "@patternfly/react-styles": "4.4.2"
   }
 }

@@ -153,104 +153,97 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
   }, []);
 
   return (
-    <Page
-      header={<PageHeader showNavToggle={true} isNavOpen={isNavOpen} onNavToggle={() => setIsNavOpen(!isNavOpen)} />}
-      sidebar={
-        <PageSidebar
-          nav={
-            <Nav aria-label="Nav">
-              <NavList>
-                <NavItem style={NavItemCss} itemId={0}>
-                  <p>Contrast</p>
-                  <div style={{ display: "flex" }}>
-                    <input
-                      style={{ width: "100px" }}
-                      type="range"
-                      min="0"
-                      max="200"
-                      value={contrast}
-                      onChange={tweakContrast}
-                    />
-                    <span style={{ width: "40px", textAlign: "right" }}>{contrast}</span>
-                  </div>
-                </NavItem>
-                <NavItem style={NavItemCss} itemId={1}>
-                  <p>Brightness</p>
-                  <div style={{ display: "flex" }}>
-                    <input
-                      style={{ width: "100px" }}
-                      type="range"
-                      min="0"
-                      max="200"
-                      value={brightness}
-                      onChange={tweakBrightness}
-                    />
-                    <span style={{ width: "40px", textAlign: "right" }}>{brightness}</span>
-                  </div>
-                </NavItem>
-                <NavItem style={NavItemCss} itemId={2}>
-                  <p>Sepia</p>
-                  <div style={{ display: "flex" }}>
-                    <input
-                      style={{ width: "100px" }}
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={sepia}
-                      onChange={tweakSepia}
-                    />
-                    <span style={{ width: "40px", textAlign: "right" }}>{sepia}</span>
-                  </div>
-                </NavItem>
-                <NavItem style={NavItemCss} itemId={3}>
-                  <p>Grayscale</p>
-                  <div style={{ display: "flex" }}>
-                    <input
-                      style={{ width: "100px" }}
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={grayscale}
-                      onChange={tweakGrayscale}
-                    />
-                    <span style={{ width: "40px", textAlign: "right" }}>{grayscale}</span>
-                  </div>
-                </NavItem>
-                <NavItem style={NavItemCss} itemId={4}>
-                  <p>Saturate</p>
-                  <div style={{ display: "flex" }}>
-                    <input
-                      style={{ width: "100px" }}
-                      type="range"
-                      min="0"
-                      max="200"
-                      value={saturate}
-                      onChange={tweakSaturate}
-                    />
-                    <span style={{ width: "40px", textAlign: "right" }}>{saturate}</span>
-                  </div>
-                </NavItem>
-                <NavItem itemId={5}>
-                  <div style={NavItemCss}>
-                    <p>Invert</p>
-                    <Switch id="invert-switch" isChecked={invert} onChange={tweakInvert} />
-                  </div>
-                </NavItem>
-              </NavList>
-            </Nav>
-          }
-          isNavOpen={isNavOpen}
-        />
-      }
-    >
-      <Bullseye>
-        <div>
+    <Page>
+      <div style={{ height: "100%", width: "100%" }}>
+        <div style={{ float: "right", backgroundColor: "black", height: "100%", width: "300px" }}>
+          <Nav aria-label="Image tweaker">
+            <NavList>
+              <NavItem style={NavItemCss} itemId={0}>
+                <p>Contrast</p>
+                <div style={{ display: "flex" }}>
+                  <input
+                    style={{ width: "100px" }}
+                    type="range"
+                    min="0"
+                    max="200"
+                    value={contrast}
+                    onChange={tweakContrast}
+                  />
+                  <span style={{ width: "40px", textAlign: "right" }}>{contrast}</span>
+                </div>
+              </NavItem>
+              <NavItem style={NavItemCss} itemId={1}>
+                <p>Brightness</p>
+                <div style={{ display: "flex" }}>
+                  <input
+                    style={{ width: "100px" }}
+                    type="range"
+                    min="0"
+                    max="200"
+                    value={brightness}
+                    onChange={tweakBrightness}
+                  />
+                  <span style={{ width: "40px", textAlign: "right" }}>{brightness}</span>
+                </div>
+              </NavItem>
+              <NavItem style={NavItemCss} itemId={2}>
+                <p>Sepia</p>
+                <div style={{ display: "flex" }}>
+                  <input
+                    style={{ width: "100px" }}
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={sepia}
+                    onChange={tweakSepia}
+                  />
+                  <span style={{ width: "40px", textAlign: "right" }}>{sepia}</span>
+                </div>
+              </NavItem>
+              <NavItem style={NavItemCss} itemId={3}>
+                <p>Grayscale</p>
+                <div style={{ display: "flex" }}>
+                  <input
+                    style={{ width: "100px" }}
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={grayscale}
+                    onChange={tweakGrayscale}
+                  />
+                  <span style={{ width: "40px", textAlign: "right" }}>{grayscale}</span>
+                </div>
+              </NavItem>
+              <NavItem style={NavItemCss} itemId={4}>
+                <p>Saturate</p>
+                <div style={{ display: "flex" }}>
+                  <input
+                    style={{ width: "100px" }}
+                    type="range"
+                    min="0"
+                    max="200"
+                    value={saturate}
+                    onChange={tweakSaturate}
+                  />
+                  <span style={{ width: "40px", textAlign: "right" }}>{saturate}</span>
+                </div>
+              </NavItem>
+              <NavItem itemId={5}>
+                <div style={NavItemCss}>
+                  <p>Invert</p>
+                  <Switch id="invert-switch" isChecked={invert} onChange={tweakInvert} />
+                </div>
+              </NavItem>
+            </NavList>
+          </Nav>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
           <div style={{ display: "none" }}>
             <img ref={imageRef} id={"original"} src={`${base64Header},${originalContent}`} alt={"Original Image"} />
           </div>
           <canvas ref={canvasRef} id={"canvas"} />
         </div>
-      </Bullseye>
+      </div>
     </Page>
   );
 };

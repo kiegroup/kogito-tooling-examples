@@ -1737,6 +1737,19 @@
     "@kogito-tooling/channel-common-api" "0.6.1"
     "@kogito-tooling/envelope-bus" "0.6.1"
 
+"@kogito-tooling/kie-bc-editors-unpacked@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@kogito-tooling/kie-bc-editors-unpacked/-/kie-bc-editors-unpacked-0.6.1.tgz#3f39f715b346770bc4e6336971e3f0c4f97ac72b"
+  integrity sha512-d8F5GiT7nKOQWVVopkGGyD+Ffrj1NpwIhlyRKJsVbKqnjbTryEMOGdCDu2GPbCVG/F0KAUJ9BycAVX1M/xNoeg==
+
+"@kogito-tooling/kie-bc-editors@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@kogito-tooling/kie-bc-editors/-/kie-bc-editors-0.6.1.tgz#79633c6226a8f08105c02ca377235555c2db8c71"
+  integrity sha512-+bUmKmOn52J4jXMlhgpFOMD+1hodHYbOVRIrga3atUyfy6e7f6BZS1jnVPtXaT+U1lxhVB7GRIwHzNcTep3orQ==
+  dependencies:
+    "@kogito-tooling/editor" "0.6.1"
+    "@kogito-tooling/kie-bc-editors-unpacked" "0.6.1"
+
 "@kogito-tooling/patternfly-base@0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@kogito-tooling/patternfly-base/-/patternfly-base-0.6.1.tgz#7e1ae2a5fee1202e2df7c40d3a9eb74001e64bd7"
@@ -8262,6 +8275,11 @@ postcss@^7.0.14, postcss@^7.0.32, postcss@^7.0.5, postcss@^7.0.6:
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
+
+prettier@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.1.1.tgz#d9485dd5e499daa6cb547023b87a6cf51bee37d6"
+  integrity sha512-9bY+5ZWCfqj3ghYBLxApy2zf6m+NJo5GzmLTpr9FsApsfjriNnS2dahWReHMi7qNPhhHl9SYHJs2cHZLgexNIw==
 
 private@^0.1.8:
   version "0.1.8"

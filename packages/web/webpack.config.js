@@ -23,7 +23,8 @@ module.exports = {
   devtool: "inline-source-map",
   entry: {
     index: "./src/index.tsx",
-    "envelope/image-editor": "./src/envelope/image-editor/envelope.ts"
+    "envelope/image-editor": "./src/envelope/image-editor.ts",
+    "envelope/gwt-editors": "./src/envelope/gwt-editors.ts"
   },
   output: {
     path: path.resolve("./dist"),
@@ -50,7 +51,16 @@ module.exports = {
       ...pfWebpackOptions.patternflyRules
     ]
   },
-  plugins: [new CopyPlugin({ patterns: [{ from: "./envelope", to: "./envelope" }, { from: "./static", to: "." }] })],
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: "./envelope", to: "./envelope" },
+        { from: "./static", to: "." },
+        { from: "../../node_modules/@kogito-tooling/kie-bc-editors-unpacked/dmn", to: "./gwt-editors/dmn" },
+        { from: "../../node_modules/@kogito-tooling/kie-bc-editors-unpacked/bpmn", to: "./gwt-editors/bpmn" }
+      ]
+    })
+  ],
   devServer: {
     historyApiFallback: false,
     disableHostCheck: true,
