@@ -18,7 +18,7 @@ import * as React from "react";
 import { EditorApi, EditorInitArgs, KogitoEditorChannelApi } from "@kogito-tooling/editor/dist/api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import { ReactNode, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
-import { Bullseye, Page, PageHeader, PageSidebar, Nav, NavItem, NavList, Switch } from "@patternfly/react-core";
+import { Page, Nav, NavItem, NavList, Switch } from "@patternfly/react-core";
 import { DEFAULT_RECT } from "@kogito-tooling/guided-tour/dist/api";
 
 interface Props {
@@ -59,21 +59,24 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
   }, [editorContent]);
 
   const getPreview = useCallback(() => {
-    throw new Error("Method not implemented.");
-  }, []);
+    const width = imageRef.current!.width;
+    const height = imageRef.current!.height;
+
+    return `<svg version="1.1" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image width="${width}" height="${height}" xlink:href="${base64Header},${editorContent}" /></svg>`;
+  }, [editorContent]);
 
   useImperativeHandle(forwardedRef, () => {
     return {
       getContent: () => Promise.resolve().then(() => getContent()),
       setContent: (path: string, content: string) => Promise.resolve().then(() => setContent(path, content)),
-      getPreview: () => getPreview(),
+      getPreview: () => Promise.resolve().then(() => getPreview()),
       undo: () => Promise.resolve(),
       redo: () => Promise.resolve(),
       getElementPosition: (selector: string) => Promise.resolve(DEFAULT_RECT)
     };
   });
 
-  const [isNavOpen, setIsNavOpen] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const base64Header = useMemo(() => "data:image/png;base64", []);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -149,7 +152,11 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
       canvasRef.current!.width = imageRef.current!.width;
       canvasRef.current!.height = imageRef.current!.height;
       ctx.drawImage(imageRef.current!, 0, 0);
+      setEditorContent(canvasRef.current!.toDataURL().split(",")[1]);
+      setDisabled(false);
     };
+
+    setDisabled(true);
   }, []);
 
   return (
@@ -162,6 +169,7 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
                 <p>Contrast</p>
                 <div style={{ display: "flex" }}>
                   <input
+                    disabled={disabled}
                     style={{ width: "100px" }}
                     type="range"
                     min="0"
@@ -176,6 +184,7 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
                 <p>Brightness</p>
                 <div style={{ display: "flex" }}>
                   <input
+                    disabled={disabled}
                     style={{ width: "100px" }}
                     type="range"
                     min="0"
@@ -190,6 +199,7 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
                 <p>Sepia</p>
                 <div style={{ display: "flex" }}>
                   <input
+                    disabled={disabled}
                     style={{ width: "100px" }}
                     type="range"
                     min="0"
@@ -204,6 +214,7 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
                 <p>Grayscale</p>
                 <div style={{ display: "flex" }}>
                   <input
+                    disabled={disabled}
                     style={{ width: "100px" }}
                     type="range"
                     min="0"
@@ -218,6 +229,7 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
                 <p>Saturate</p>
                 <div style={{ display: "flex" }}>
                   <input
+                    disabled={disabled}
                     style={{ width: "100px" }}
                     type="range"
                     min="0"
@@ -231,7 +243,7 @@ export const RefForwardingReactEditor: React.RefForwardingComponent<EditorApi, P
               <NavItem itemId={5}>
                 <div style={NavItemCss}>
                   <p>Invert</p>
-                  <Switch id="invert-switch" isChecked={invert} onChange={tweakInvert} />
+                  <Switch id="invert-switch" isDisabled={disabled} isChecked={invert} onChange={tweakInvert} />
                 </div>
               </NavItem>
             </NavList>

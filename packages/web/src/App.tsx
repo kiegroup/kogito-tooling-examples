@@ -52,7 +52,7 @@ export function App() {
   );
 
   const onFileUpload = useCallback((file: File) => {
-    setEditor(file.fileExtension as FileExtension);
+    setEditor(file.fileExtension);
     setFile(file);
   }, []);
 
