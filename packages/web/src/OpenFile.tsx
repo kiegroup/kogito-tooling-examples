@@ -42,7 +42,7 @@ export function OpenFile(props: Props) {
 
     const file = inputRef.current!.files![0];
     const fileExtension = extractFileExtension(file.name);
-    if (!fileExtension || ![...props.editorEnvelopeLocator.mapping.keys()].find(e => e === fileExtension)) {
+    if (!fileExtension || ![...props.editorEnvelopeLocator.mapping.keys()].find(event => event === fileExtension)) {
       return;
     }
 

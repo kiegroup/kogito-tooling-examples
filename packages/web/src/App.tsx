@@ -51,9 +51,9 @@ export function App() {
     [file, editor]
   );
 
-  const onFileUpload = useCallback((file: File) => {
-    setEditor(file.fileExtension);
-    setFile(file);
+  const onFileUpload = useCallback((newFile: File) => {
+    setEditor(newFile.fileExtension);
+    setFile(newFile);
   }, []);
 
   return (

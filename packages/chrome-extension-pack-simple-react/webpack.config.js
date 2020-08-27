@@ -21,7 +21,6 @@ const packageJson = require("./package.json");
 const pfWebpackOptions = require("@kogito-tooling/patternfly-base/patternflyWebpackOptions");
 
 function getRouterArgs(argv) {
-
   let targetOrigin = argv["ROUTER_targetOrigin"] || process.env["ROUTER_targetOrigin"] || "https://localhost:8080";
   let relativePath = argv["ROUTER_relativePath"] || process.env["ROUTER_relativePath"] || "";
 
@@ -45,11 +44,13 @@ module.exports = (env, argv) => {
     },
     externals: {},
     plugins: [
-      new CopyPlugin([
-        { from: "./static/manifest.json" },
-        { from: "./static/resources", to: "./resources" },
-        { from: "./static/envelope", to: "./envelope" }
-      ]),
+      new CopyPlugin({
+        patterns: [
+          { from: "./static/manifest.json" },
+          { from: "./static/resources", to: "./resources" },
+          { from: "./static/envelope", to: "./envelope" }
+        ]
+      }),
       new ZipPlugin({
         filename: "kogito_tooling_examples_chrome_extension_simple_react_" + packageJson.version + ".zip",
         pathPrefix: "dist"
