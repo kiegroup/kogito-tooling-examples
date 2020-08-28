@@ -160,9 +160,9 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
   }, []);
 
   return (
-    <Page>
+    <Page style={{ backgroundColor: "rgb(240, 240, 240)" }}>
       <div style={{ height: "100%", width: "100%" }}>
-        <div style={{ float: "right", backgroundColor: "black", height: "100%", width: "300px" }}>
+        <div style={{ float: "right", backgroundColor: "rgb(24, 24, 24)", height: "100%", width: "300px" }}>
           <Nav aria-label="Image tweaker">
             <NavList>
               <NavItem style={NavItemCss} itemId={0}>

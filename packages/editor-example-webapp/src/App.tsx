@@ -4,7 +4,7 @@ import "@patternfly/patternfly/patternfly.scss";
 import * as React from "react";
 import { Brand, Page, PageHeader, Nav, NavList, NavItem } from "@patternfly/react-core";
 import { Switch, Route, HashRouter as Router, Link } from "react-router-dom";
-import { useMemo } from "react";
+import {useEffect, useMemo, useState} from "react";
 import { Base64PngPage } from "./Editors/Base64PngPage";
 import { BpmnPage } from "./Editors/BpmnPage";
 import { DmnPage } from "./Editors/DmnPage";
@@ -17,9 +17,10 @@ enum Location {
 }
 
 export function App() {
-  const editor = useMemo(() => {
-    return window.location.hash.slice(1);
-  }, [window.location.hash]);
+  const [location, setLocation] = useState(Location.HOME);
+  useEffect(() => {
+    setLocation(window.location.hash.slice(1) as Location)
+  })
 
   return (
     <Router>
@@ -28,18 +29,18 @@ export function App() {
           <PageHeader
             logo={<Brand src={"logo.png"} alt="Logo" />}
             topNav={
-              <Nav aria-label="Nav" variant="horizontal">
+              <Nav onSelect={(e) => setLocation(e.itemId as Location)} aria-label="Nav" variant="horizontal">
                 <NavList>
-                  <NavItem itemId={Location.HOME} isActive={editor === Location.HOME}>
+                  <NavItem itemId={Location.HOME} isActive={location === Location.HOME}>
                     <Link to={Location.HOME}>Home</Link>
                   </NavItem>
-                  <NavItem itemId={Location.BASE46PNG} isActive={editor === Location.BASE46PNG}>
+                  <NavItem itemId={Location.BASE46PNG} isActive={location === Location.BASE46PNG}>
                     <Link to={Location.BASE46PNG}>Base64 PNG Editor</Link>
                   </NavItem>
-                  <NavItem itemId={Location.BPMN} isActive={editor === Location.BPMN}>
+                  <NavItem itemId={Location.BPMN} isActive={location === Location.BPMN}>
                     <Link to={Location.BPMN}>BPMN Editor</Link>
                   </NavItem>
-                  <NavItem itemId={Location.DMN} isActive={editor === Location.DMN}>
+                  <NavItem itemId={Location.DMN} isActive={location === Location.DMN}>
                     <Link to={Location.DMN}>DMN Editor</Link>
                   </NavItem>
                 </NavList>
