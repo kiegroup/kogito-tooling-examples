@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/**
+ *
+ * ========================================================================
+ * THIS FILE NEEDS TO GO TO kogito-tooling AND REPLACE EmbeddedEnvelope.tsx
+ * ========================================================================
+ *
+ */
 import {
   EditorApi,
   EditorEnvelopeLocator,
@@ -27,7 +34,7 @@ import * as CSS from "csstype";
 import * as React from "react";
 import { useEffect, useImperativeHandle, useMemo, useRef } from "react";
 import { File, StateControl, useEffectAfterFirstRender } from "@kogito-tooling/editor/dist/embedded";
-import { KogitoEditorChannelApiImpl } from "./KogitoEditorChannelApiImpl";
+import { KogitoEditorChannelApiImpl } from "../KogitoEditorChannelApiImpl";
 import { ApiDefinition } from "@kogito-tooling/envelope-bus/dist/api";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 
