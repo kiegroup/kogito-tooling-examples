@@ -20,14 +20,14 @@ import { ChromeRouter } from "./ChromeRouter";
 const resourcesPathPrefix = new ChromeRouter().getResourcesPathPrefix();
 
 startExtension({
-  name: "KIE :: Kogito Simple React Editor",
+  name: "Kogito Base64 PNG React Editor",
   extensionIconUrl: chrome.extension.getURL("/resources/kie-icon.png"),
   githubAuthTokenCookieName: "github-oauth-token-kie-editors",
   editorEnvelopeLocator: {
     targetOrigin: window.location.origin,
     mapping: new Map([
       [
-        "txt",
+        "base64png",
         {
           resourcesPathPrefix: `${resourcesPathPrefix}/dist/`,
           envelopePath: `${resourcesPathPrefix}/dist/envelope/index.html`

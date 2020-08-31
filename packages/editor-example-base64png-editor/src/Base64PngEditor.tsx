@@ -161,8 +161,14 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
 
   return (
     <Page style={{ backgroundColor: "rgb(240, 240, 240)" }}>
-      <div style={{ height: "100%", width: "100%" }}>
-        <div style={{ float: "right", backgroundColor: "rgb(24, 24, 24)", height: "100%", width: "300px" }}>
+      <div style={{ display: "flex", height: "100%", width: "100%", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
+          <div style={{ display: "none" }}>
+            <img ref={imageRef} id={"original"} src={`${base64Header},${originalContent}`} alt={"Original Image"} />
+          </div>
+          <canvas ref={canvasRef} id={"canvas"} style={{ maxWidth: "600px", maxHeight: "600px" }} />
+        </div>
+        <div style={{ backgroundColor: "rgb(24, 24, 24)", height: "100%", width: "300px" }}>
           <Nav aria-label="Image tweaker">
             <NavList>
               <NavItem style={NavItemCss} itemId={0}>
@@ -248,12 +254,6 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
               </NavItem>
             </NavList>
           </Nav>
-        </div>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-          <div style={{ display: "none" }}>
-            <img ref={imageRef} id={"original"} src={`${base64Header},${originalContent}`} alt={"Original Image"} />
-          </div>
-          <canvas ref={canvasRef} id={"canvas"} />
         </div>
       </div>
     </Page>

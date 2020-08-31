@@ -21,7 +21,7 @@ const packageJson = require("./package.json");
 const pfWebpackOptions = require("@kogito-tooling/patternfly-base/patternflyWebpackOptions");
 
 function getRouterArgs(argv) {
-  let targetOrigin = argv["ROUTER_targetOrigin"] || process.env["ROUTER_targetOrigin"] || "https://localhost:8080";
+  let targetOrigin = argv["ROUTER_targetOrigin"] || process.env["ROUTER_targetOrigin"] || "https://localhost:9000";
   let relativePath = argv["ROUTER_relativePath"] || process.env["ROUTER_relativePath"] || "";
 
   return [targetOrigin, relativePath];
@@ -43,6 +43,12 @@ module.exports = (env, argv) => {
       filename: "[name].js"
     },
     externals: {},
+    devServer: {
+      compress: true,
+      watchContentBase: true,
+      https: true,
+      port: 9000
+    },
     plugins: [
       new CopyPlugin({
         patterns: [
@@ -71,7 +77,7 @@ module.exports = (env, argv) => {
           use: ["babel-loader"]
         },
         {
-          test: /other\.ts$/,
+          test: /ChromeRouter\.ts$/,
           loader: "string-replace-loader",
           options: {
             multiple: [
