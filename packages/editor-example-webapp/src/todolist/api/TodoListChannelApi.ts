@@ -15,5 +15,5 @@
  */
 
 export interface TodoListChannelApi {
-    todoList__itemRemoved(item: string): void;
+  todoList__itemRemoved(item: string): void;
 }
