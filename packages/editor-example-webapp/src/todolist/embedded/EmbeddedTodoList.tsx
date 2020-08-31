@@ -20,7 +20,7 @@ import { EmbeddedEnvelopeFactory } from "../../copied-from-kogito-tooling/Embedd
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 import { TodoListApi, TodoListChannelApi, TodoListEnvelopeApi } from "../api";
 
-interface Props {
+export type Props = TodoListChannelApi & {
   targetOrigin: string;
   envelopePath: string;
 }
@@ -45,7 +45,7 @@ export const EmbeddedTodoList = React.forwardRef((props: Props, forwardedRef: Re
 
   const EmbeddedEnvelope = useMemo(() => {
     return EmbeddedEnvelopeFactory({
-      api: {},
+      api: props,
       envelopePath: props.envelopePath,
       origin: props.targetOrigin,
       refDelegate,

@@ -26,17 +26,16 @@ import { TodoListEnvelopeView, TodoListEnvelopeViewApi } from "./TodoListEnvelop
 export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
   const context = {};
 
-  const envelope = new Envelope<
-    TodoListEnvelopeApi,
-    TodoListChannelApi,
-    TodoListEnvelopeViewApi,
-    TodoListContext
-  >(args.bus);
+  const envelope = new Envelope<TodoListEnvelopeApi, TodoListChannelApi, TodoListEnvelopeViewApi, TodoListContext>(
+    args.bus
+  );
 
   const pageEnvelopeViewDelegate = async () => {
     const ref = React.createRef<TodoListEnvelopeViewApi>();
     return new Promise<() => TodoListEnvelopeViewApi>((res) =>
-      ReactDOM.render(<TodoListEnvelopeView ref={ref} />, args.container, () => res(() => ref.current!))
+      ReactDOM.render(<TodoListEnvelopeView ref={ref} channelApi={envelope.channelApi} />, args.container, () =>
+        res(() => ref.current!)
+      )
     );
   };
 

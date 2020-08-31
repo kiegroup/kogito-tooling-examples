@@ -66,6 +66,7 @@ export function TodoListPage() {
             ref={todoListRef}
             targetOrigin={window.location.origin}
             envelopePath={"/envelope/todo-list.html"}
+            todoList__itemRemoved={(item) => window.alert(`Item '${item}' removed successfully!`)}
           />
         </PageSection>
       </div>

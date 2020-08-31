@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Item} from "./TodoListEnvelopeApi";
+import { Item } from "./TodoListEnvelopeApi";
 
 export interface TodoListApi {
-    addItem(item: string): Promise<void>
-    getItems(): Promise<Item[]>
-    markAllAsCompleted(): void
+  addItem(item: string): Promise<void>;
+  getItems(): Promise<Item[]>;
+  markAllAsCompleted(): void;
 }
