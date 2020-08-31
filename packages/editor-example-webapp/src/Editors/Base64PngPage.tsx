@@ -22,8 +22,7 @@ export function Base64PngPage() {
   });
 
   // Set the chosen file
-  const openSample = useCallback((fileName: string) => {
-    const filePath = `examples/${fileName}.base64png`;
+  const openSample = useCallback((fileName: string, filePath: string) => {
     setFile({
       isReadOnly: false,
       fileExtension: "base64png",
@@ -64,14 +63,14 @@ export function Base64PngPage() {
 }
 
 // A custom gallery component to show the base64png samples
-function Base64PngGallery(props: { openSample: (fileName: string) => void }) {
-  const [images, setImages] = useState<{ name: string; content: string }[]>([]);
+function Base64PngGallery(props: { openSample: (fileName: string, filePath: string) => void }) {
+  const [images, setImages] = useState<{ name: string; content: string; path: string }[]>([]);
   useEffect(() => {
     Promise.all(
       samplePaths.map(({ fileName, path }) =>
         fetch(path)
           .then(response => response.text())
-          .then(content => ({ name: fileName, content: content }))
+          .then(content => ({ name: fileName, content: content, path }))
       )
     ).then(samples => setImages([...images, ...samples]));
   }, []);
@@ -86,7 +85,10 @@ function Base64PngGallery(props: { openSample: (fileName: string) => void }) {
         </div>
         <NavList>
           {images.map(image => (
-            <NavItem style={{ display: "flex", alignItems: "center" }} onClick={() => props.openSample(image.name)}>
+            <NavItem
+              style={{ display: "flex", alignItems: "center" }}
+              onClick={() => props.openSample(image.name, image.path)}
+            >
               <Card style={{ width: "200px" }}>
                 <img alt={image.name} src={`data:image/png;base64,${image.content}`} />
               </Card>
