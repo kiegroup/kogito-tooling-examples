@@ -86,7 +86,7 @@ function Base64PngGallery(props: { openSample: (fileName: string) => void }) {
         </div>
         <NavList>
           {images.map(image => (
-            <NavItem style={{ display: "flex", alignItems: "center" }} onClick={() => props.openSample(image.name)}>
+            <NavItem key={image.name} style={{ display: "flex", alignItems: "center" }} onClick={() => props.openSample(image.name)}>
               <Card style={{ width: "200px" }}>
                 <img alt={image.name} src={`data:image/png;base64,${image.content}`} />
               </Card>

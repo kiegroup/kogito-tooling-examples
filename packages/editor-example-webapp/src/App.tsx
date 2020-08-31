@@ -8,18 +8,20 @@ import {useEffect, useMemo, useState} from "react";
 import { Base64PngPage } from "./Editors/Base64PngPage";
 import { BpmnPage } from "./Editors/BpmnPage";
 import { DmnPage } from "./Editors/DmnPage";
+import {TodoListPage} from "./Editors/TodoListPage";
 
 enum Location {
   BPMN = "/editor/bpmn",
   DMN = "/editor/dmn",
   BASE46PNG = "/editor/base64png",
+  TODO_LIST = "/page/todo-list",
   HOME = "/"
 }
 
 export function App() {
   const [location, setLocation] = useState(Location.HOME);
   useEffect(() => {
-    setLocation(window.location.hash.slice(1) as Location)
+    setLocation(window.location.hash.slice(1) as Location) //Remove trailing '#' from route to match the Location enum.
   })
 
   return (
@@ -43,6 +45,9 @@ export function App() {
                   <NavItem itemId={Location.DMN} isActive={location === Location.DMN}>
                     <Link to={Location.DMN}>DMN Editor</Link>
                   </NavItem>
+                  <NavItem itemId={Location.TODO_LIST} isActive={location === Location.TODO_LIST}>
+                    <Link to={Location.TODO_LIST}>'To do' list Page</Link>
+                  </NavItem>
                 </NavList>
               </Nav>
             }
@@ -61,6 +66,9 @@ export function App() {
           </Route>
           <Route path={"/editor/dmn"}>
             <DmnPage />
+          </Route>
+          <Route path={Location.TODO_LIST}>
+            <TodoListPage />
           </Route>
         </Switch>
       </Page>
