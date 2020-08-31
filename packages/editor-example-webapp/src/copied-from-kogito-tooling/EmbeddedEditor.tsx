@@ -34,7 +34,7 @@ import * as CSS from "csstype";
 import * as React from "react";
 import { useEffect, useImperativeHandle, useMemo, useRef } from "react";
 import { File, StateControl, useEffectAfterFirstRender } from "@kogito-tooling/editor/dist/embedded";
-import { KogitoEditorChannelApiImpl } from "../KogitoEditorChannelApiImpl";
+import { KogitoEditorChannelApiImpl } from "./KogitoEditorChannelApiImpl";
 import { ApiDefinition } from "@kogito-tooling/envelope-bus/dist/api";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 
