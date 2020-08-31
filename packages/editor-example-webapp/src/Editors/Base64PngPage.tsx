@@ -84,9 +84,9 @@ function Base64PngGallery(props: { openSample: (fileName: string, filePath: stri
           </Title>
         </div>
         <NavList>
-          {images.map((image, index) => (
+          {images.map(image => (
             <NavItem
-              key={index}
+              key={image.name}
               style={{ display: "flex", alignItems: "center" }}
               onClick={() => props.openSample(image.name, image.path)}
             >
