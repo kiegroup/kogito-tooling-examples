@@ -2,27 +2,29 @@ import "@patternfly/patternfly/base/patternfly-variables.css";
 import "@patternfly/patternfly/patternfly-addons.scss";
 import "@patternfly/patternfly/patternfly.scss";
 import * as React from "react";
-import { Brand, Page, PageHeader, Nav, NavList, NavItem } from "@patternfly/react-core";
-import { Switch, Route, HashRouter as Router, Link } from "react-router-dom";
-import {useEffect, useMemo, useState} from "react";
+import { useEffect, useState } from "react";
+import { Brand, Nav, NavItem, NavList, Page, PageHeader } from "@patternfly/react-core";
+import { HashRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Base64PngPage } from "./Editors/Base64PngPage";
 import { BpmnPage } from "./Editors/BpmnPage";
 import { DmnPage } from "./Editors/DmnPage";
-import {TodoListPage} from "./Editors/TodoListPage";
+import { TodoListPage } from "./Editors/TodoListPage";
+import { PingPongPages } from "./Editors/PingPongPages";
 
 enum Location {
   BPMN = "/editor/bpmn",
   DMN = "/editor/dmn",
   BASE46PNG = "/editor/base64png",
   TODO_LIST = "/page/todo-list",
-  HOME = "/"
+  PING_PONG_PAGES = "/page/my-custom-page-impls",
+  HOME = "/",
 }
 
 export function App() {
   const [location, setLocation] = useState(Location.HOME);
   useEffect(() => {
-    setLocation(window.location.hash.slice(1) as Location) //Remove trailing '#' from route to match the Location enum.
-  })
+    setLocation(window.location.hash.slice(1) as Location); //Remove trailing '#' from route to match the Location enum.
+  });
 
   return (
     <Router>
@@ -48,6 +50,9 @@ export function App() {
                   <NavItem itemId={Location.TODO_LIST} isActive={location === Location.TODO_LIST}>
                     <Link to={Location.TODO_LIST}>'To do' list Page</Link>
                   </NavItem>
+                  <NavItem itemId={Location.PING_PONG_PAGES} isActive={location === Location.PING_PONG_PAGES}>
+                    <Link to={Location.PING_PONG_PAGES}>Ping-Pong Pages</Link>
+                  </NavItem>
                 </NavList>
               </Nav>
             }
@@ -69,6 +74,9 @@ export function App() {
           </Route>
           <Route path={Location.TODO_LIST}>
             <TodoListPage />
+          </Route>
+          <Route path={Location.PING_PONG_PAGES}>
+            <PingPongPages />
           </Route>
         </Switch>
       </Page>

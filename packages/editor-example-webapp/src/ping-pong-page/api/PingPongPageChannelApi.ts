@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
-export * from "./MyPage";
-export * from "./MyPageFactory";
-export * from "./MyPageEnvelope";
+export interface PingPongPageChannelApi {
+  pingPongPage__ping(source: string): void;
+  pingPongPage__pong(source: string, replyingTo: string): void;
+}

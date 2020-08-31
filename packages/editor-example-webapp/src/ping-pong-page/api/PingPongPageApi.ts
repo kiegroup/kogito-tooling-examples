@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-export * from "./EmbeddedMyPage";
+// tslint:disable-next-line:no-empty-interface
+export interface PingPongPageApi {}

@@ -14,5 +14,15 @@
  * limitations under the License.
  */
 
-export * from "./MyPageImpl";
-export * from "./MyPageImplFactory";
+export interface PingPongPageEnvelopeApi {
+  pingPongPage__init(association: Association, initArgs: PingPongPageInitArgs): Promise<void>;
+}
+
+export interface Association {
+  origin: string;
+  envelopeServerId: string;
+}
+
+export interface PingPongPageInitArgs {
+  name: string;
+}

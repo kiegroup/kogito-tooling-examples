@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-import * as React from "react";
-import { MyPageApi } from "../api";
+import { init } from "../ping-pong-page/envelope";
+import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
+import { PingPongPageReactImplFactory } from "../ping-pong-page/react-impl";
 
-export interface MyPage extends MyPageApi {
-  af_componentRoot(): React.ReactNode;
-}
+init({
+  container: document.getElementById("envelope-app")!,
+  bus: {
+    postMessage<D, Type>(message: EnvelopeBusMessage<D, Type>, targetOrigin?: string, transfer?: any) {
+      window.parent.postMessage(message, "*", transfer);
+    },
+  },
+  pingPongPageFactory: new PingPongPageReactImplFactory(),
+});

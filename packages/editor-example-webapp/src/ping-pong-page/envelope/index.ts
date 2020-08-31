@@ -14,4 +14,6 @@
  * limitations under the License.
  */
 
-export * from "./MyPageMapping";
+export * from "./PingPongPage";
+export * from "./PingPongPageFactory";
+export * from "./PingPongPageEnvelope";

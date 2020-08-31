@@ -14,28 +14,33 @@
  * limitations under the License.
  */
 
-import { MyPage } from "./MyPage";
+import { PingPongPage } from "./PingPongPage";
 import * as React from "react";
 import { useImperativeHandle, useState } from "react";
 
-export interface MyPageEnvelopeViewApi {
-  setPage(page: MyPage): Promise<void>;
+export interface PingPongPageViewApi {
+  setPage(page: PingPongPage): Promise<void>;
 }
 
-export const MyPageEnvelopeView = React.forwardRef((props, forwardedRef) => {
-  const [page, setPage] = useState<MyPage>();
+export const PingPongPageEnvelopeView = React.forwardRef((props, forwardedRef) => {
+  const [page, setPage] = useState<PingPongPage>();
 
   useImperativeHandle(forwardedRef, () => ({ setPage }), []);
 
   return (
     <>
       {page && (
-        <div style={{ margin: "10px" }}>
-          <h1>This is an implementation of MyPage.</h1>
-          <br />
-          <h4>MyPage contents are inside the red border:</h4>
-          <div style={{ border: "2px solid red" }}>{page.af_componentRoot()}</div>
-        </div>
+        <>
+          <h2>This is an implementation of Ping-Pong Page</h2>
+
+          <h4>
+            <i>Ping-Pong Page implementation is inside the red border.</i>
+          </h4>
+
+          <div id={"ping-pong-page-container"} style={{ border: "2px solid red" }}>
+            {page?.reactComponent?.()}
+          </div>
+        </>
       )}
     </>
   );

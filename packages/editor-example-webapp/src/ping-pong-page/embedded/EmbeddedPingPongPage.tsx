@@ -16,35 +16,31 @@
 
 import * as React from "react";
 import { useCallback, useMemo } from "react";
-import { MyPageMapping } from "../channel";
-import { MyPageApi, MyPageChannelApi, MyPageEnvelopeApi } from "../api";
+import { PingPongPageMapping } from "../channel";
+import { PingPongPageApi, PingPongPageChannelApi, PingPongPageEnvelopeApi } from "../api";
 import { EmbeddedEnvelopeFactory } from "../../copied-from-kogito-tooling/EmbeddedEnvelopeFactory";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 
-interface Props {
-  mapping: MyPageMapping;
+export type Props = PingPongPageChannelApi & {
+  mapping: PingPongPageMapping;
   targetOrigin: string;
-}
+  name: string;
+};
 
-export const EmbeddedMyPage = React.forwardRef((props: Props, forwardedRef: React.Ref<MyPageApi>) => {
-  const refDelegate = useCallback(
-    (envelopeServer): MyPageApi => ({
-      setText: (text) => envelopeServer.client.notify("myPage__setText", text),
-    }),
-    []
-  );
+export const EmbeddedPingPongPage = React.forwardRef((props: Props, forwardedRef: React.Ref<PingPongPageApi>) => {
+  const refDelegate = useCallback((envelopeServer): PingPongPageApi => ({}), []);
 
-  const pollInit = useCallback((envelopeServer: EnvelopeServer<MyPageChannelApi, MyPageEnvelopeApi>) => {
+  const pollInit = useCallback((envelopeServer: EnvelopeServer<PingPongPageChannelApi, PingPongPageEnvelopeApi>) => {
     return envelopeServer.client.request(
-      "myPage__init",
+      "pingPongPage__init",
       { origin: envelopeServer.origin, envelopeServerId: envelopeServer.id },
-      { backendUrl: "https://localhost:8000" }
+      { name: props.name }
     );
   }, []);
 
   const EmbeddedEnvelope = useMemo(() => {
     return EmbeddedEnvelopeFactory({
-      api: {},
+      api: props,
       envelopePath: props.mapping.envelopePath,
       origin: props.targetOrigin,
       refDelegate,

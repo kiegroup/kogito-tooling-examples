@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
-export interface MyPageApi {
-  setText(text: string): void;
+export interface PingPongPageMapping {
+  title: string;
+  envelopePath: string;
 }

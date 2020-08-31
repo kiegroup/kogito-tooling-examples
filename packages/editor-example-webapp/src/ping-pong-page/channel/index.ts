@@ -14,10 +14,4 @@
  * limitations under the License.
  */
 
-import { MyPageChannelApi, MyPageInitArgs } from "../api";
-import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
-import { MyPage } from "./MyPage";
-
-export interface MyPageFactory {
-  create(initArgs: MyPageInitArgs, channelApi: MessageBusClient<MyPageChannelApi>): MyPage;
-}
+export * from "./PingPongPageMapping";

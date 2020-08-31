@@ -14,5 +14,10 @@
  * limitations under the License.
  */
 
-// tslint:disable-next-line:no-empty-interface
-export interface MyPageChannelApi {}
+import { PingPongPageChannelApi, PingPongPageInitArgs } from "../api";
+import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import { PingPongPage } from "./PingPongPage";
+
+export interface PingPongPageFactory {
+  create(initArgs: PingPongPageInitArgs, channelApi: MessageBusClient<PingPongPageChannelApi>): PingPongPage;
+}

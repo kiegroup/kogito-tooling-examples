@@ -14,16 +14,5 @@
  * limitations under the License.
  */
 
-import { init } from "../my-page/envelope";
-import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
-import { MyPageImplFactory } from "../my-page/impl";
-
-init({
-  container: document.getElementById("envelope-app")!,
-  bus: {
-    postMessage<D, Type>(message: EnvelopeBusMessage<D, Type>, targetOrigin?: string, transfer?: any) {
-      window.parent.postMessage(message, "*", transfer);
-    },
-  },
-  myPageFactory: new MyPageImplFactory(),
-});
+export * from "./PingPongPageReactImpl";
+export * from "./PingPongPageReactImplFactory";

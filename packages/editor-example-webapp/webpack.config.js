@@ -25,7 +25,7 @@ module.exports = {
     index: "./src/index.tsx",
     "envelope/image-editor": "./src/envelope/image-editor.ts",
     "envelope/gwt-editors": "./src/envelope/gwt-editors.ts",
-    "envelope/my-page": "./src/envelope/my-page.ts",
+    "envelope/ping-pong-page-react-impl": "./src/envelope/ping-pong-page-react-impl.ts",
     "envelope/todo-list": "./src/envelope/todo-list.ts"
   },
   output: {

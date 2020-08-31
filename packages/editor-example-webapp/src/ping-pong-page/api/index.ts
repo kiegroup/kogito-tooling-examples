@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-export interface MyPageMapping {
-  title: string;
-  envelopePath: string;
-  backendUrl: string;
-}
+export * from "./PingPongPageChannelApi";
+export * from "./PingPongPageEnvelopeApi";
+export * from "./PingPongPageApi";

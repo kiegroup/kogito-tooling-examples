@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-import { MyPageApi, MyPageChannelApi, MyPageInitArgs } from "../api";
-import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import * as React from "react";
-import { MyPageImpl } from "./MyPageImpl";
-import { MyPageFactory } from "../envelope";
+import { PingPongPageApi } from "../api";
 
-export class MyPageImplFactory implements MyPageFactory {
-  public create(initArgs: MyPageInitArgs, channelApi: MessageBusClient<MyPageChannelApi>) {
-    const ref = React.createRef<MyPageApi>();
-    return {
-      setText: (text: string) => ref.current!.setText(text),
-      af_componentRoot: () => {
-        return <MyPageImpl initArgs={initArgs} channelApi={channelApi} ref={ref} />;
-      }
-    };
-  }
+export interface PingPongPage extends PingPongPageApi {
+  reactComponent?(): React.ReactNode;
 }

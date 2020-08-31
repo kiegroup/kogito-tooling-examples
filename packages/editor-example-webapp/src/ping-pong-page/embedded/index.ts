@@ -14,6 +14,4 @@
  * limitations under the License.
  */
 
-export * from "./MyPageChannelApi";
-export * from "./MyPageEnvelopeApi";
-export * from "./MyPageApi";
+export * from "./EmbeddedPingPongPage";
