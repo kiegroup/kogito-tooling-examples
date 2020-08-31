@@ -26,10 +26,11 @@ export interface TodoListEnvelopeViewApi {
   markAllAsCompleted(): void;
 }
 
-export const TodoListEnvelopeView = React.forwardRef<
-  TodoListEnvelopeViewApi,
-  { channelApi: MessageBusClient<TodoListChannelApi> }
->((props, forwardedRef) => {
+interface Props {
+  channelApi: MessageBusClient<TodoListChannelApi>;
+}
+
+export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, Props>((props, forwardedRef) => {
   const [user, setUser] = useState<string | undefined>();
   const [items, setItems] = useState<Item[]>([]);
 
