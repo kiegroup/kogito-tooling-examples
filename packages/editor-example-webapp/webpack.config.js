@@ -58,7 +58,6 @@ module.exports = {
         { from: "./envelope", to: "./envelope" },
         { from: "./static", to: "." },
         { from: "../../node_modules/@kogito-tooling/kie-bc-editors-unpacked/dmn", to: "./gwt-editors/dmn" },
-        { from: "../../node_modules/@kogito-tooling/kie-bc-editors-unpacked/bpmn", to: "./gwt-editors/bpmn" }
       ]
     })
   ],

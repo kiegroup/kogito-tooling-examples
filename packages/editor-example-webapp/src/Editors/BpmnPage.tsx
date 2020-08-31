@@ -60,7 +60,7 @@ export function BpmnPage() {
         ]
       ])
     };
-  }, [file]);
+  }, []);
 
   const [fileBlob, setFileBlob] = useState(new Blob());
   const onDownload = useCallback(() => {
@@ -95,7 +95,7 @@ export function BpmnPage() {
       isReadOnly: false,
       fileExtension: "bpmn",
       fileName: "sample",
-      getFileContents: () => fetch(`examples/sample.bpmn`).then(response => response.text())
+      getFileContents: () => fetch("examples/sample.bpmn").then(response => response.text())
     });
   }, []);
 
@@ -107,22 +107,22 @@ export function BpmnPage() {
       return;
     }
 
-    const file = inputRef.current!.files![0];
-    const fileExtension = extractFileExtension(file.name);
+    const currentFile = inputRef.current!.files![0];
+    const fileExtension = extractFileExtension(currentFile.name);
     if (!fileExtension || ![...editorEnvelopeLocator.mapping.keys()].find(element => element === fileExtension)) {
       return;
     }
 
-    setFileName(removeFileExtension(file.name));
+    setFileName(removeFileExtension(currentFile.name));
     setFile({
       isReadOnly: false,
-      fileExtension: extractFileExtension(file.name)!,
-      fileName: removeFileExtension(file.name),
+      fileExtension: extractFileExtension(currentFile.name)!,
+      fileName: removeFileExtension(currentFile.name),
       getFileContents: () =>
         new Promise<string | undefined>(resolve => {
           const reader = new FileReader();
           reader.onload = (event: any) => resolve(event.target.result as string);
-          reader.readAsText(file);
+          reader.readAsText(currentFile);
         })
     });
   }, []);
