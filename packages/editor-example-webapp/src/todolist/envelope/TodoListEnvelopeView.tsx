@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import * as React from "react";
 import { useCallback, useImperativeHandle, useMemo, useState } from "react";
-import { Item } from "../api";
+import { Item, TodoListChannelApi } from "../api";
 
 export interface TodoListEnvelopeViewApi {
   setUser(user: string): void;
@@ -25,7 +26,11 @@ export interface TodoListEnvelopeViewApi {
   markAllAsCompleted(): void;
 }
 
-export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, {}>((props, forwardedRef) => {
+interface Props {
+  channelApi: MessageBusClient<TodoListChannelApi>;
+}
+
+export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, Props>((props, forwardedRef) => {
   const [user, setUser] = useState<string | undefined>();
   const [items, setItems] = useState<Item[]>([]);
 
@@ -37,6 +42,7 @@ export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, {}
       if (i >= 0) {
         itemsCopy.splice(i, 1);
         setItems(itemsCopy);
+        props.channelApi.notify("todoList__itemRemoved", item.label);
       }
     },
     [items]
@@ -78,6 +84,8 @@ export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, {}
           <p>
             Welcome, <b>{user}</b>!
           </p>
+
+          <hr />
 
           <h2>Here's your 'To do' list:</h2>
 

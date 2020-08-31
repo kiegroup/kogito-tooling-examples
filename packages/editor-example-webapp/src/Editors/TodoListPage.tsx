@@ -25,10 +25,14 @@ export function TodoListPage() {
 
   const [newItem, setNewItem] = useState("");
 
-  const addItem = useCallback(() => {
-    todoListRef.current?.addItem(newItem);
-    setNewItem("");
-  }, [newItem]);
+  const addItem = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      todoListRef.current?.addItem(newItem);
+      setNewItem("");
+    },
+    [newItem]
+  );
 
   return (
     <Page>
@@ -43,13 +47,15 @@ export function TodoListPage() {
             <NavList>
               <NavItem onClick={todoListRef.current?.markAllAsCompleted}>Mark all as completed</NavItem>
               <NavItem>
-                <input
-                  type={"text"}
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
-                  placeholder={"New item"}
-                />
-                <button onClick={addItem}>Add</button>
+                <form onSubmit={addItem}>
+                  <input
+                    type={"text"}
+                    value={newItem}
+                    onChange={(e) => setNewItem(e.target.value)}
+                    placeholder={"New item"}
+                  />
+                  <button>Add</button>
+                </form>
               </NavItem>
             </NavList>
           </Nav>
@@ -60,6 +66,7 @@ export function TodoListPage() {
             ref={todoListRef}
             targetOrigin={window.location.origin}
             envelopePath={"/envelope/todo-list.html"}
+            todoList__itemRemoved={(item) => window.alert(`Item '${item}' removed successfully!`)}
           />
         </PageSection>
       </div>

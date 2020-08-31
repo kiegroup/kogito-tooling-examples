@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 
-// tslint:disable-next-line:no-empty-interface
-export interface TodoListChannelApi {}
+export interface TodoListChannelApi {
+  todoList__itemRemoved(item: string): void;
+}

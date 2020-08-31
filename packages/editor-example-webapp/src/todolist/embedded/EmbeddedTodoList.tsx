@@ -20,17 +20,20 @@ import { EmbeddedEnvelopeFactory } from "../../copied-from-kogito-tooling/Embedd
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 import { TodoListApi, TodoListChannelApi, TodoListEnvelopeApi } from "../api";
 
-interface Props {
+export type Props = TodoListChannelApi & {
   targetOrigin: string;
   envelopePath: string;
-}
+};
 
 export const EmbeddedTodoList = React.forwardRef((props: Props, forwardedRef: React.Ref<TodoListApi>) => {
-  const refDelegate = useCallback((envelopeServer): TodoListApi => ({
-    addItem: (item) => envelopeServer.client.request("todoList__addItem", item),
-    getItems: () => envelopeServer.client.request("todoList__getItems"),
-    markAllAsCompleted: () => envelopeServer.client.notify("todoList__markAllAsCompleted")
-  }), []);
+  const refDelegate = useCallback(
+    (envelopeServer): TodoListApi => ({
+      addItem: (item) => envelopeServer.client.request("todoList__addItem", item),
+      getItems: () => envelopeServer.client.request("todoList__getItems"),
+      markAllAsCompleted: () => envelopeServer.client.notify("todoList__markAllAsCompleted"),
+    }),
+    []
+  );
 
   const pollInit = useCallback((envelopeServer: EnvelopeServer<TodoListChannelApi, TodoListEnvelopeApi>) => {
     return envelopeServer.client.request(
@@ -45,7 +48,7 @@ export const EmbeddedTodoList = React.forwardRef((props: Props, forwardedRef: Re
 
   const EmbeddedEnvelope = useMemo(() => {
     return EmbeddedEnvelopeFactory({
-      api: {},
+      api: props,
       envelopePath: props.envelopePath,
       origin: props.targetOrigin,
       refDelegate,
