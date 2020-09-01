@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-export class ChromeRouter {
-  public getResourcesPathPrefix(): string {
-    const relativePath = "$_{WEBPACK_REPLACE__relativePath}";
-    if (relativePath) {
-      return `${this.getTargetOrigin()}/${relativePath}`;
-    } else {
-      return this.getTargetOrigin();
-    }
-  }
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { App } from "./App";
 
-  public getTargetOrigin() {
-    return "$_{WEBPACK_REPLACE__targetOrigin}";
-  }
-}
+ReactDOM.render(<App />, document.getElementById("app"));

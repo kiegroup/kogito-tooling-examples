@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-export class ChromeRouter {
-  public getResourcesPathPrefix(): string {
-    const relativePath = "$_{WEBPACK_REPLACE__relativePath}";
-    if (relativePath) {
-      return `${this.getTargetOrigin()}/${relativePath}`;
-    } else {
-      return this.getTargetOrigin();
-    }
-  }
+import * as React from "react";
+import { Page, PageSection, TextContent, Text } from "@patternfly/react-core";
 
-  public getTargetOrigin() {
-    return "$_{WEBPACK_REPLACE__targetOrigin}";
-  }
+export function Home() {
+  return (
+    <Page>
+      <PageSection>
+        <TextContent>
+          <Text component={"h1"}>Welcome to Kogito Tooling Examples</Text>
+          <Text component={"p"}>
+            To understand what's in this webapp, please refer to the project README on GitHub
+          </Text>
+        </TextContent>
+      </PageSection>
+    </Page>
+  );
 }

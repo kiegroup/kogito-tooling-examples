@@ -18,8 +18,19 @@ import * as React from "react";
 import { EditorApi, EditorInitArgs, KogitoEditorChannelApi } from "@kogito-tooling/editor/dist/api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
-import { Page, Nav, NavItem, NavList, Switch } from "@patternfly/react-core";
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateBody,
+  Page,
+  Nav,
+  NavItem,
+  NavList,
+  Switch,
+  Title,
+} from "@patternfly/react-core";
 import { DEFAULT_RECT } from "@kogito-tooling/guided-tour/dist/api";
+import CubesIcon from "@patternfly/react-icons/dist/js/icons/cubes-icon";
 
 /**
  * channelApi Gives the editor the possibility to send requests and notifications to the channel, it implements the KogitoEditorChannelApi.
@@ -34,7 +45,7 @@ interface Props {
 const NavItemCss = {
   display: "flex",
   justifyContent: "space-between",
-  alignItems: "center"
+  alignItems: "center",
 };
 
 /**
@@ -74,7 +85,7 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
    */
   const setContent = useCallback((path: string, content: string) => {
     setOriginalContent(content);
-    return new Promise<void>(res => setTimeout(res, 0));
+    return new Promise<void>((res) => setTimeout(res, 50));
   }, []);
 
   /**
@@ -105,12 +116,12 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
       getPreview: () => Promise.resolve().then(() => getPreview()),
       undo: () => Promise.resolve(),
       redo: () => Promise.resolve(),
-      getElementPosition: (selector: string) => Promise.resolve(DEFAULT_RECT)
+      getElementPosition: (selector: string) => Promise.resolve(DEFAULT_RECT),
     };
   });
 
   /**
-   * State that handles if the commands are disable or not. It's useful in case of a broken image or empty file is open.
+   * State that handles if the commands are disable or not. It's useful in case of a broken image or empty file is open. It starts disabled by default, and when a image is successfully loaded it becomes false.
    */
   const [disabled, setDisabled] = useState(true);
 
@@ -141,7 +152,7 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
    * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
    */
   const tweakContrast = useCallback(
-    e => {
+    (e) => {
       setContrast(e.target.value);
       props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
     },
@@ -158,7 +169,7 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
    * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
    */
   const tweakBrightness = useCallback(
-    e => {
+    (e) => {
       setBrightness(e.target.value);
       props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
     },
@@ -181,7 +192,7 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
    * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
    */
   const tweakInvert = useCallback(
-    isChecked => {
+    (isChecked) => {
       setInvert(isChecked);
       props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
     },
@@ -198,7 +209,7 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
    * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
    */
   const tweakSepia = useCallback(
-    e => {
+    (e) => {
       setSepia(e.target.value);
       props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
     },
@@ -215,7 +226,7 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
    * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
    */
   const tweakGrayscale = useCallback(
-    e => {
+    (e) => {
       setGrayscale(e.target.value);
       props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
     },
@@ -232,7 +243,7 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
    * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
    */
   const tweakSaturate = useCallback(
-    e => {
+    (e) => {
       setSaturate(e.target.value);
       props.channelApi.notify("receive_newEdit", { id: new Date().getTime().toString() });
     },
@@ -252,10 +263,12 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
   }, [contrast, sepia, saturate, grayscale, invert, brightness]);
 
   /**
-   * When the editor starts, it must determine the canvas dimensions, and it should have the image dimension. On the first render, the image will not be loaded yet, so it's necessary to add a callback to when the image finishes loading to set the canvas dimensions and print the image. If the image is loaded, the controls are not disabled; otherwise, the controls will remain disabled.
+   * When the editor starts, it must determine the canvas dimensions, and to do so it requires the image dimension. On the first render, the image will not be loaded yet, so it's necessary to add a callback to when the image finishes loading, it'll set the canvas dimensions and show the image. If the image is loaded, the controls are not disabled; otherwise, the controls will remain disabled.
    */
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d")!;
+    canvasRef.current!.width = 0;
+    canvasRef.current!.height = 0;
 
     imageRef.current!.onload = () => {
       canvasRef.current!.width = imageRef.current!.width;
@@ -277,9 +290,18 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
           <div style={{ display: "none" }}>
             <img ref={imageRef} id={"original"} src={`${base64Header},${originalContent}`} alt={"Original Image"} />
           </div>
+          {disabled && (
+            <EmptyState>
+              <EmptyStateIcon icon={CubesIcon} />
+              <Title headingLevel="h5" size="4xl">
+                Empty image
+              </Title>
+              <EmptyStateBody>Load a valid base64png file using our gallery!</EmptyStateBody>
+            </EmptyState>
+          )}
           <canvas ref={canvasRef} id={"canvas"} style={{ maxWidth: "600px", maxHeight: "600px" }} />
         </div>
-        <div style={{ backgroundColor: "rgb(24, 24, 24)", height: "100%", width: "300px" }}>
+        <div style={{ backgroundColor: "rgb(24, 24, 24)", height: "100%", width: "350px" }}>
           <Nav aria-label="Image tweaker">
             <NavList>
               <NavItem style={NavItemCss} itemId={0}>
