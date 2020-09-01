@@ -15,7 +15,6 @@
  */
 
 const path = require("path");
-const pfWebpackOptions = require("@kogito-tooling/patternfly-base/patternflyWebpackOptions");
 
 const commonConfig = {
   mode: "development",
@@ -25,10 +24,10 @@ const commonConfig = {
     filename: "[name].js",
     library: "VsCodePackSimpleReact",
     libraryTarget: "umd",
-    umdNamedDefine: true
+    umdNamedDefine: true,
   },
   externals: {
-    vscode: "commonjs vscode"
+    vscode: "commonjs vscode",
   },
   plugins: [],
   module: {
@@ -37,20 +36,20 @@ const commonConfig = {
         test: /\.tsx?$/,
         loader: "ts-loader",
         options: {
-          configFile: path.resolve("./tsconfig.json")
-        }
+          configFile: path.resolve("./tsconfig.json"),
+        },
       },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: ["babel-loader"]
-      }
-    ]
+        use: ["babel-loader"],
+      },
+    ],
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".jsx"],
-    modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")]
-  }
+    modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")],
+  },
 };
 
 module.exports = [
@@ -58,18 +57,18 @@ module.exports = [
     ...commonConfig,
     target: "node",
     entry: {
-      "extension/extension": "./src/extension/extension.ts"
+      "extension/extension": "./src/extension/extension.ts",
     },
-    plugins: []
+    plugins: [],
   },
   {
     ...commonConfig,
     target: "web",
     entry: {
-      "base64png-editor-envelope/index": "./src/base64png-editor-envelope/index.ts"
+      "todo-list-view-envelope/index": "./src/todo-list-view-envelope/index.ts",
     },
     module: {
-      rules: [...commonConfig.module.rules, ...pfWebpackOptions.patternflyRules]
-    }
-  }
+      rules: [...commonConfig.module.rules],
+    },
+  },
 ];

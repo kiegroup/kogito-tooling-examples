@@ -28,7 +28,7 @@ export const PingPongPageEnvelopeView = React.forwardRef((props, forwardedRef) =
   useImperativeHandle(forwardedRef, () => ({ setPage }), []);
 
   return (
-    <>
+    <div style={{ border: "2px solid green", padding: "10px" }}>
       {page && (
         <>
           <h2>This is an implementation of Ping-Pong Page</h2>
@@ -42,6 +42,6 @@ export const PingPongPageEnvelopeView = React.forwardRef((props, forwardedRef) =
           </div>
         </>
       )}
-    </>
+    </div>
   );
 });
