@@ -17,47 +17,76 @@
 import * as React from "react";
 import { EditorApi, EditorInitArgs, KogitoEditorChannelApi } from "@kogito-tooling/editor/dist/api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
-import { ReactNode, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { Page, Nav, NavItem, NavList, Switch } from "@patternfly/react-core";
 import { DEFAULT_RECT } from "@kogito-tooling/guided-tour/dist/api";
 
+/**
+ * channelApi Gives the editor the possibility to send requests and notifications to the channel, it implements the KogitoEditorChannelApi.
+ * initArgs Initial arguments that is passed when the editor is created. It has the file extension, the initial locale (in case the editor implements i18n) and the envelope resources path.
+ */
 interface Props {
-  children?: ReactNode;
   channelApi: MessageBusClient<KogitoEditorChannelApi>;
   initArgs: EditorInitArgs;
 }
 
-enum TweakOption {
-  CONTRAST = "contrast",
-  BRIGHTNESS = "brightness",
-  INVERT = "invert",
-  SEPIA = "sepia",
-  GRAYSCALE = "grayscale",
-  SATURATE = "saturate"
-}
-
+// TODO: Add to CSS file
 const NavItemCss = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center"
 };
 
+/**
+ * To expose the component methods and give control to who is using the Editor, and be able to use React Hooks, it's necessary to create a React RefForwardingComponent which implements the EditorApi.
+ *
+ * The EditorApi is a contract created by Kogito Tooling which determines the necessary methods to an Editor communicate to the Channel.
+ *
+ * @param props any props that it's necessary to this editor work
+ * @param forwardedRef the EditorApi ref
+ * @constructor
+ */
 export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorApi, Props> = (props, forwardedRef) => {
+  //
+  /**
+   * Editor Content - The current editor value (contains all edits).
+   * The editorContent has the current value of all tweaks that has been done to the image. This value is the one displayed on the canvas.
+   */
   const [editorContent, setEditorContent] = useState("");
+
+  /**
+   * Original Content - The original base64 value (can't be changed with edits).
+   * All new edit is made on top of the original value.
+   * This is used because changing the image contrast to 0 would tweak it to a gray image, and turning it back to 100 would apply the changes on top of the gray image. This is solved by using the originalContent on ever new edit, so it's not possible to lose the image metadata after an edit.
+   */
   const [originalContent, setOriginalContent] = useState("");
 
+  /**
+   * Notify the channel that the editor is ready after the first render. That enables to open files, ...
+   */
   useEffect(() => {
     props.channelApi.notify("receive_ready");
   }, []);
 
-  const setContent = useCallback(async (path: string, content: string) => {
+  /**
+   * Callback exposed to the Channel that is called when a new file is opened. It sets the originalContent to the received value.
+   * TODO: The setTimout is a bug
+   */
+  const setContent = useCallback((path: string, content: string) => {
     setOriginalContent(content);
+    return new Promise<void>(res => setTimeout(res, 0));
   }, []);
 
+  /**
+   * Callback exposed to the Channel to retrieve the current value of the editor. It returns the value of the editorContent which is the state that has the edit image.
+   */
   const getContent = useCallback(() => {
     return editorContent;
   }, [editorContent]);
 
+  /**
+   * Callback exposed to the Channel to retrieve the SVG content of the editor. A SVG is a XML file that is wrapped with a <svg> tag. For this editor it's necessary to return the edited image (editorContent).
+   */
   const getPreview = useCallback(() => {
     const width = imageRef.current!.width;
     const height = imageRef.current!.height;
@@ -65,10 +94,14 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
     return `<svg version="1.1" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image width="${width}" height="${height}" xlink:href="${base64Header},${editorContent}" /></svg>`;
   }, [editorContent]);
 
+  /**
+   * The useImperativeHandler give the control of the Editor component to who have it's reference, making it possible to communicate with the editor.
+   * It returns all methods that are determined on the EditorApi.
+   */
   useImperativeHandle(forwardedRef, () => {
     return {
       getContent: () => Promise.resolve().then(() => getContent()),
-      setContent: (path: string, content: string) => Promise.resolve().then(() => setContent(path, content)),
+      setContent: (path: string, content: string) => setContent(path, content),
       getPreview: () => Promise.resolve().then(() => getPreview()),
       undo: () => Promise.resolve(),
       redo: () => Promise.resolve(),
@@ -76,12 +109,37 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
     };
   });
 
-  const [disabled, setDisabled] = useState(false);
+  /**
+   * State that handles if the commands are disable or not. It's useful in case of a broken image or empty file is open.
+   */
+  const [disabled, setDisabled] = useState(true);
+
+  /**
+   * The base64 PNG header is used to append to the originalContent/editorContent so it can be properly rendered on the <img> tag
+   */
   const base64Header = useMemo(() => "data:image/png;base64", []);
+
+  /**
+   * The reference of the canvas. It allows to access/modify the canvas properties imperatively.
+   * The canvas renders the editorContent.
+   */
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  /**
+   * The reference of the image. It allows to access/modify the canvas properties imperatively.
+   * The image renders the originalContent.
+   */
   const imageRef = useRef<HTMLImageElement>(null);
 
+  /**
+   * State that handles the contrast value, 100% is the starting value.
+   */
   const [contrast, setContrast] = useState("100");
+
+  /**
+   * Callback to tweak the contrast value. It also notifies to the Channel that a new edit happened on the editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
+   */
   const tweakContrast = useCallback(
     e => {
       setContrast(e.target.value);
@@ -90,7 +148,15 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
     [contrast]
   );
 
+  /**
+   * State that handles the brightness value, 100% is the starting value.
+   */
   const [brightness, setBrightness] = useState("100");
+
+  /**
+   * Callback to tweak the brightness value. It also notifies to the Channel that a new edit happened on the editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
+   */
   const tweakBrightness = useCallback(
     e => {
       setBrightness(e.target.value);
@@ -99,8 +165,21 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
     [brightness]
   );
 
+  /**
+   * State that handles if the image is inverted or not. This state is modified by a switch, so it's only possible to have two values (false/true).
+   * The false is by default the starting value, which represents a no-inverted image.
+   */
   const [invert, setInvert] = useState(false);
+
+  /**
+   * The invert value is discrete, and has a value on the interval [0%, 100%]. This editor implements only two possible values: 0% (false) and 100% (true). The invertValue is re-calculated everytime the invert state is changed.
+   */
   const invertValue = useMemo(() => (invert ? "100" : "0"), [invert]);
+
+  /**
+   * Callback to tweak the invert value. It also notifies to the Channel that a new edit happened on the editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
+   */
   const tweakInvert = useCallback(
     isChecked => {
       setInvert(isChecked);
@@ -109,7 +188,15 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
     [invert]
   );
 
+  /**
+   * State that handles the sepia value, 0% is the starting value.
+   */
   const [sepia, setSepia] = useState("0");
+
+  /**
+   * Callback to tweak the sepia value. It also notifies to the Channel that a new edit happened on the editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
+   */
   const tweakSepia = useCallback(
     e => {
       setSepia(e.target.value);
@@ -118,7 +205,15 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
     [sepia]
   );
 
+  /**
+   * State that handles the grayscale value, 0% is the starting value.
+   */
   const [grayscale, setGrayscale] = useState("0");
+
+  /**
+   * Callback to tweak the grayscale value. It also notifies to the Channel that a new edit happened on the editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
+   */
   const tweakGrayscale = useCallback(
     e => {
       setGrayscale(e.target.value);
@@ -127,7 +222,15 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
     [grayscale]
   );
 
+  /**
+   * State that handles the saturation value, 0% is the starting value.
+   */
   const [saturate, setSaturate] = useState("100");
+
+  /**
+   * Callback to tweak the saturation value. It also notifies to the Channel that a new edit happened on the editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the editor.
+   */
   const tweakSaturate = useCallback(
     e => {
       setSaturate(e.target.value);
@@ -136,15 +239,21 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
     [saturate]
   );
 
+  /**
+   * After a new edit is made by the user, it will change one of the states that handle the tweak values (contrast/brightness/invert/grayscale/sepia/saturate), and the content of the canvas need to be re-printed applying a filter with the current values. The resultant image is converted to base64 (toDataURL) and then saved in the editorContent after the base64 header is removed (split(",")[1]).
+   */
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d")!;
 
-    ctx.filter = `${TweakOption.CONTRAST}(${contrast}%) ${TweakOption.BRIGHTNESS}(${brightness}%) ${TweakOption.INVERT}(${invertValue}%) ${TweakOption.GRAYSCALE}(${grayscale}%) ${TweakOption.SEPIA}(${sepia}%) ${TweakOption.SATURATE}(${saturate}%)`;
+    ctx.filter = `contrast(${contrast}%) brightness(${brightness}%) invert(${invertValue}%) grayscale(${grayscale}%) sepia(${sepia}%) saturate(${saturate}%)`;
     ctx.drawImage(imageRef.current!, 0, 0);
 
     setEditorContent(canvasRef.current!.toDataURL().split(",")[1]);
   }, [contrast, sepia, saturate, grayscale, invert, brightness]);
 
+  /**
+   * When the editor starts, it must determine the canvas dimensions, and it should have the image dimension. On the first render, the image will not be loaded yet, so it's necessary to add a callback to when the image finishes loading to set the canvas dimensions and print the image. If the image is loaded, the controls are not disabled; otherwise, the controls will remain disabled.
+   */
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d")!;
 
@@ -156,7 +265,9 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
       setDisabled(false);
     };
 
-    setDisabled(true);
+    return () => {
+      imageRef.current!.onload = null;
+    };
   }, []);
 
   return (

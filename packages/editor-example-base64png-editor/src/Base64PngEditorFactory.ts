@@ -17,6 +17,9 @@
 import { EditorFactory, EditorInitArgs, KogitoEditorEnvelopeContextType } from "@kogito-tooling/editor/dist/api";
 import { Base64PngEditorInterface } from "./Base64PngEditorInterface";
 
+/**
+ * Factory to be used by the Channel to create a Base64 PNG Editor, It implements an EditorFactory, which determines how to create an editor.
+ */
 export class Base64PngEditorFactory implements EditorFactory {
   public supports(fileExtension: string) {
     return fileExtension === "base64png";
