@@ -1,5 +1,5 @@
 import { ChannelType } from "@kogito-tooling/channel-common-api";
-import { EmbeddedEditor, EmbeddedEditorRef } from "../EmbeddedEditor";
+import { EmbeddedEditor, EmbeddedEditorRef } from "../copied-from-kogito-tooling/EmbeddedEditor";
 import * as React from "react";
 import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
 import { useCallback, useMemo, useRef, useState } from "react";

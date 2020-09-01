@@ -2,13 +2,14 @@ import "@patternfly/patternfly/base/patternfly-variables.css";
 import "@patternfly/patternfly/patternfly-addons.scss";
 import "@patternfly/patternfly/patternfly.scss";
 import * as React from "react";
-import { Brand, Page, PageHeader, Nav, NavList, NavItem } from "@patternfly/react-core";
-import { Switch, Route, HashRouter as Router, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Brand, Nav, NavItem, NavList, Page, PageHeader } from "@patternfly/react-core";
+import { HashRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Base64PngPage } from "./Editors/Base64PngPage";
 import { BpmnPage } from "./Editors/BpmnPage";
 import { DmnPage } from "./Editors/DmnPage";
-import { TodoListPage } from "./Editors/TodoListPage";
+import { TodoListViewPage } from "./Editors/TodoListViewPage";
+import { PingPongViewsPage } from "./Editors/PingPongViewsPage";
 import { Home } from "./Home";
 
 enum Location {
@@ -16,7 +17,8 @@ enum Location {
   DMN = "/editor/dmn",
   BASE46PNG = "/editor/base64png",
   TODO_LIST = "/page/todo-list",
-  HOME = "/"
+  PING_PONG_PAGES = "/page/my-custom-page-impls",
+  HOME = "/",
 }
 
 export function App() {
@@ -49,6 +51,9 @@ export function App() {
                   <NavItem itemId={Location.TODO_LIST} isActive={location === Location.TODO_LIST}>
                     <Link to={Location.TODO_LIST}>'To do' list Page</Link>
                   </NavItem>
+                  <NavItem itemId={Location.PING_PONG_PAGES} isActive={location === Location.PING_PONG_PAGES}>
+                    <Link to={Location.PING_PONG_PAGES}>Ping-Pong Pages</Link>
+                  </NavItem>
                 </NavList>
               </Nav>
             }
@@ -69,7 +74,10 @@ export function App() {
             <DmnPage />
           </Route>
           <Route path={Location.TODO_LIST}>
-            <TodoListPage />
+            <TodoListViewPage />
+          </Route>
+          <Route path={Location.PING_PONG_PAGES}>
+            <PingPongViewsPage />
           </Route>
         </Switch>
       </Page>
