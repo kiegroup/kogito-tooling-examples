@@ -25,8 +25,8 @@ module.exports = {
     index: "./src/index.tsx",
     "envelope/image-editor": "./src/envelope/image-editor.ts",
     "envelope/gwt-editors": "./src/envelope/gwt-editors.ts",
-    "envelope/ping-pong-page-react-impl": "./src/envelope/ping-pong-page-react-impl.ts",
-    "envelope/todo-list": "./src/envelope/todo-list.ts"
+    "envelope/ping-pong-view-react-impl": "./src/envelope/ping-pong-view-react-impl.ts",
+    "envelope/todo-list-view": "./src/envelope/todo-list-view.ts"
   },
   output: {
     path: path.resolve("./dist"),

@@ -8,8 +8,8 @@ import { HashRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Base64PngPage } from "./Editors/Base64PngPage";
 import { BpmnPage } from "./Editors/BpmnPage";
 import { DmnPage } from "./Editors/DmnPage";
-import { TodoListPage } from "./Editors/TodoListPage";
-import { PingPongPages } from "./Editors/PingPongPages";
+import { TodoListViewPage } from "./Editors/TodoListViewPage";
+import { PingPongViewsPage } from "./Editors/PingPongViewsPage";
 
 enum Location {
   BPMN = "/editor/bpmn",
@@ -73,10 +73,10 @@ export function App() {
             <DmnPage />
           </Route>
           <Route path={Location.TODO_LIST}>
-            <TodoListPage />
+            <TodoListViewPage />
           </Route>
           <Route path={Location.PING_PONG_PAGES}>
-            <PingPongPages />
+            <PingPongViewsPage />
           </Route>
         </Switch>
       </Page>
