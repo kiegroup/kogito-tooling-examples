@@ -19,7 +19,7 @@ import { Editor, EditorApi, EditorInitArgs, KogitoEditorEnvelopeContextType } fr
 import { Base64PngEditor } from "./Base64PngEditor";
 
 /**
- * This class implements the Editor interface, a contract made by the Kogito Tooling that determines what methods an Editor needs to implement and what properties should be initialized.
+ * This class implements the Editor interface, a contract made by the Kogito Tooling that determines what methods an Editor needs to implement and what properties it must define. Instances are created by Base64PngEditorFactory.
  */
 export class Base64PngEditorInterface implements Editor {
   private editorRef: React.RefObject<EditorApi>;
@@ -59,7 +59,7 @@ export class Base64PngEditorInterface implements Editor {
   }
 
   /**
-   * Retrieve the SVG content of the Editor
+   * Retrieve the SVG string representing the content of the Editor
    */
   public getPreview(): Promise<string | undefined> {
     return this.editorRef.current?.getPreview()!;
@@ -83,6 +83,8 @@ export class Base64PngEditorInterface implements Editor {
    * Initialize the Editor component.
    */
   public af_componentRoot() {
-    return <Base64PngEditor ref={this.editorRef} channelApi={this.envelopeContext.channelApi} initArgs={this.initArgs} />;
+    return (
+      <Base64PngEditor ref={this.editorRef} channelApi={this.envelopeContext.channelApi} initArgs={this.initArgs} />
+    );
   }
 }
