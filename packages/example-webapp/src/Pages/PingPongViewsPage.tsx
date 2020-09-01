@@ -19,6 +19,7 @@ import { useMemo, useState } from "react";
 import { Label, Nav, NavItem, NavList, Page, PageSection, Title } from "@patternfly/react-core";
 import { EmbeddedPingPongView } from "ping-pong-view/dist/embedded";
 import { PingPongViewChannelApi } from "ping-pong-view/dist/api";
+import {EmbeddedTodoList} from "todo-list-view/dist/embedded";
 
 let pings = 0;
 let pongs = 0;
@@ -94,7 +95,7 @@ export function PingPongViewsPage() {
               {...api}
               name={"React 2"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in Vue", envelopePath: "/envelope/ping-pong-view-react-impl.html" }}
+              mapping={{ title: "Ping-Pong Page in React", envelopePath: "/envelope/ping-pong-view-react-impl.html" }}
             />
           </PageSection>
 
@@ -103,7 +104,7 @@ export function PingPongViewsPage() {
               {...api}
               name={"React 3"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in Vue", envelopePath: "/envelope/ping-pong-view-react-impl.html" }}
+              mapping={{ title: "Ping-Pong Page in React", envelopePath: "/envelope/ping-pong-view-react-impl.html" }}
             />
           </PageSection>
         </div>

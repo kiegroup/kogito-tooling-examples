@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,4 +14,13 @@
  * limitations under the License.
  */
 
-export * from "./envelope/TodoListEnvelope";
+import * as TodoListViewEnvelope from "todo-list-view/dist/envelope";
+
+declare global {
+  export const acquireVsCodeApi: any;
+}
+
+TodoListViewEnvelope.init({
+  container: document.getElementById("envelope-app")!,
+  bus: acquireVsCodeApi(),
+});

@@ -34,11 +34,11 @@ export function activate(context: vscode.ExtensionContext) {
           "base64png",
           {
             resourcesPathPrefix: `dist/`,
-            envelopePath: `dist/webview/index.js`
-          }
-        ]
-      ])
-    }
+            envelopePath: `dist/base64png-editor-envelope/index.js`,
+          },
+        ],
+      ]),
+    },
   });
 
   context.subscriptions.push(
@@ -49,17 +49,19 @@ export function activate(context: vscode.ExtensionContext) {
       const base64AbsoluteFilePath = path.join(parsedPath.dir, base64FileName);
       fs.writeFileSync(base64AbsoluteFilePath, buffer.toString("base64"));
 
-      vscode.window.showInformationMessage("Generated the Base64 file with success!", "Open").then(selected => {
-        if (selected) {
-          vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(base64AbsoluteFilePath));
+      vscode.window.showInformationMessage("Generated the Base64 file with success!", "Open").then((selected) => {
+        if (!selected) {
+          return;
         }
+
+        vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(base64AbsoluteFilePath));
       });
     })
   );
+
   console.info("Extension is successfully setup.");
 }
 
 export function deactivate() {
-  //FIXME: For some reason, this method is not being called :(
   console.info("Extension is deactivating");
 }

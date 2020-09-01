@@ -17,39 +17,67 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 
-module.exports = {
-  mode: "development",
-  devtool: "inline-source-map",
-  entry: {
-    "api/index": "./src/api/index.ts",
-    "envelope/index": "./src/envelope/index.ts",
-    "embedded/index": "./src/embedded/index.ts"
-  },
-  output: {
-    path: path.resolve(__dirname, "./dist"),
-    filename: "[name].js",
-    libraryTarget: "commonjs2",
-  },
-  externals: [nodeExternals({ modulesDir: "../../node_modules" })],
-  plugins: [],
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        loader: "ts-loader",
-        options: {
-          configFile: path.resolve("./tsconfig.json"),
+module.exports = [
+  {
+    mode: "development",
+    devtool: "inline-source-map",
+    entry: {
+      "vscode/index": "./src/vscode/index.ts",
+    },
+    output: {
+      path: path.resolve("./dist"),
+      filename: "[name].js",
+      libraryTarget: "commonjs2",
+    },
+    target: "node",
+    externals: [{ vscode: "commonjs vscode" }, nodeExternals({ modulesDir: "../../node_modules" })],
+    resolve: {
+      extensions: [".tsx", ".ts", ".js", ".jsx"],
+      modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          loader: "ts-loader",
         },
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: ["babel-loader"],
-      }
-    ],
+      ],
+    },
   },
-  resolve: {
-    extensions: [".tsx", ".ts", ".js", ".jsx"],
-    modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")],
+  {
+    mode: "development",
+    devtool: "inline-source-map",
+    entry: {
+      "api/index": "./src/api/index.ts",
+      "envelope/index": "./src/envelope/index.ts",
+      "embedded/index": "./src/embedded/index.ts",
+    },
+    output: {
+      path: path.resolve(__dirname, "./dist"),
+      filename: "[name].js",
+      libraryTarget: "commonjs2",
+    },
+    externals: [nodeExternals({ modulesDir: "../../node_modules" })],
+    plugins: [],
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          loader: "ts-loader",
+          options: {
+            configFile: path.resolve("./tsconfig.json"),
+          },
+        },
+        {
+          test: /\.jsx?$/,
+          exclude: /node_modules/,
+          use: ["babel-loader"],
+        },
+      ],
+    },
+    resolve: {
+      extensions: [".tsx", ".ts", ".js", ".jsx"],
+      modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")],
+    },
   },
-};
+];
