@@ -15,17 +15,17 @@
  */
 
 import * as React from "react";
+import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { EditorApi, EditorInitArgs, KogitoEditorChannelApi } from "@kogito-tooling/editor/dist/api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
-import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import {
   EmptyState,
-  EmptyStateIcon,
   EmptyStateBody,
-  Page,
+  EmptyStateIcon,
   Nav,
   NavItem,
   NavList,
+  Page,
   Switch,
   Title,
 } from "@patternfly/react-core";
@@ -49,16 +49,17 @@ const NavItemCss = {
 };
 
 /**
- * To expose the component methods and give control to who is using the Editor, and be able to use React Hooks, it's necessary to create a React RefForwardingComponent which implements the EditorApi.
+ * This is an Editor component. By exposing its `ref` implementing EditorApi, this component exposes its imperative handles and gives control to its parent. To be able to do that, it's necessary to create a RefForwardingComponent.
  *
- * The EditorApi is a contract created by Kogito Tooling which determines the necessary methods to an Editor communicate to the Channel.
+ * The EditorApi is a contract created by Kogito Tooling which determines the necessary methods for an Editor to implement so that the Channel can manipulate its contents and retrieve valuable information.
  *
- * @param props any props that it's necessary to this editor work
- * @param forwardedRef the EditorApi ref
- * @constructor
+ * @param props Any props that are necessary for this Editor to work. In this case..
+ * @param props.channelApi The object which allows this Editor to communicate with its containing Channel.
+ * @param props.initArgs Initial arguments sent by the Channel that enable this Editor to start properly.
+ * @param props.initArgs.resourcesPathPrefix The prefix which must be prepended by static resources (e.g. JS/CSS files) to be loaded properly.
+ * @param props.initArgs.fileExtension The file extension of the file that's being opened. Used when the same editor can handle multiple file extensions.
  */
-export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorApi, Props> = (props, forwardedRef) => {
-  //
+export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwardedRef) => {
   /**
    * Editor Content - The current editor value (contains all edits).
    * The editorContent has the current value of all tweaks that has been done to the image. This value is the one displayed on the canvas.
@@ -67,13 +68,13 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
 
   /**
    * Original Content - The original base64 value (can't be changed with edits).
-   * All new edit is made on top of the original value.
+   * All new edits are made on top of the original value.
    * This is used because changing the image contrast to 0 would tweak it to a gray image, and turning it back to 100 would apply the changes on top of the gray image. This is solved by using the originalContent on ever new edit, so it's not possible to lose the image metadata after an edit.
    */
   const [originalContent, setOriginalContent] = useState("");
 
   /**
-   * Notify the channel that the editor is ready after the first render. That enables to open files, ...
+   * Notify the channel that the Editor is ready after the first render. That enables it to open files, ...
    */
   useEffect(() => {
     props.channelApi.notify("receive_ready");
@@ -102,11 +103,16 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
     const width = imageRef.current!.width;
     const height = imageRef.current!.height;
 
-    return `<svg version="1.1" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image width="${width}" height="${height}" xlink:href="${base64Header},${editorContent}" /></svg>`;
+    return `
+<svg version="1.1" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" 
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+    <image width="${width}" height="${height}" xlink:href="${base64Header},${editorContent}" />
+</svg>`;
   }, [editorContent]);
 
   /**
-   * The useImperativeHandler give the control of the Editor component to who have it's reference, making it possible to communicate with the editor.
+   * The useImperativeHandler give the control of the Editor component to who have it's reference, making it possible to communicate with the Editor.
    * It returns all methods that are determined on the EditorApi.
    */
   useImperativeHandle(forwardedRef, () => {
@@ -391,6 +397,4 @@ export const RefForwardingBase64PngEditor: React.RefForwardingComponent<EditorAp
       </div>
     </Page>
   );
-};
-
-export const Base64PngEditor = React.forwardRef(RefForwardingBase64PngEditor);
+});

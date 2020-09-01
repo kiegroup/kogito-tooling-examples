@@ -15,9 +15,9 @@
  */
 
 import * as vscode from "vscode";
-import { TodoListWebview } from "todo-list-view/dist/vscode";
-import { TodoListEnvelopeApi } from "todo-list-view/dist/api";
-import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import {TodoListWebview} from "todo-list-view/dist/vscode";
+import {TodoListEnvelopeApi} from "todo-list-view/dist/api";
+import {MessageBusClient} from "@kogito-tooling/envelope-bus/dist/api";
 
 const openTodoListViewCommandId = "kogito-tooling-examples.todo-list-view";
 const addTodoItemCommandId = "kogito-tooling-examples.todo-list-view.add-item";
@@ -61,8 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
         throw new Error("Can't find selection of non-existent Text Editor");
       }
 
-      const selection = textEditor.selection;
-      const selectedText = textEditor.document.getText(selection);
+      const selectedText = textEditor.document.getText(textEditor.selection);
       if (selectedText.length <= 0) {
         vscode.window.showErrorMessage(`Cannot add empty 'To do' item.`);
         return;

@@ -15,7 +15,7 @@
  */
 
 import * as React from "react";
-import { Page, PageSection, TextContent, Text } from "@patternfly/react-core";
+import { Page, PageSection, Text, TextContent } from "@patternfly/react-core";
 
 export function Home() {
   return (
@@ -24,7 +24,9 @@ export function Home() {
         <TextContent>
           <Text component={"h1"}>Welcome to Kogito Tooling Examples</Text>
           <Text component={"p"}>
-            To understand what's in this webapp, please refer to the project README on GitHub
+            <span>To understand what's in this webapp, please refer to the project </span>
+            <a href={"https://github.com/kiegroup/kogito-tooling-examples/blob/master/README.md"}>{"README"}</a>
+            <span> on GitHub.</span>
           </Text>
         </TextContent>
       </PageSection>
