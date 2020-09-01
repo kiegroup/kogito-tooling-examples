@@ -190,7 +190,6 @@ export function BpmnPage() {
           </Nav>
         </div>
         <EmbeddedEditor
-          key={operation}
           ref={editorRef}
           file={file}
           editorEnvelopeLocator={editorEnvelopeLocator}

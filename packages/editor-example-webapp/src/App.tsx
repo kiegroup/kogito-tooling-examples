@@ -4,11 +4,12 @@ import "@patternfly/patternfly/patternfly.scss";
 import * as React from "react";
 import { Brand, Page, PageHeader, Nav, NavList, NavItem } from "@patternfly/react-core";
 import { Switch, Route, HashRouter as Router, Link } from "react-router-dom";
-import {useEffect, useMemo, useState} from "react";
+import { useEffect, useState } from "react";
 import { Base64PngPage } from "./Editors/Base64PngPage";
 import { BpmnPage } from "./Editors/BpmnPage";
 import { DmnPage } from "./Editors/DmnPage";
-import {TodoListPage} from "./Editors/TodoListPage";
+import { TodoListPage } from "./Editors/TodoListPage";
+import { Home } from "./Home";
 
 enum Location {
   BPMN = "/editor/bpmn",
@@ -21,8 +22,8 @@ enum Location {
 export function App() {
   const [location, setLocation] = useState(Location.HOME);
   useEffect(() => {
-    setLocation(window.location.hash.slice(1) as Location) //Remove trailing '#' from route to match the Location enum.
-  })
+    setLocation(window.location.hash.slice(1) as Location); //Remove trailing '#' from route to match the Location enum.
+  });
 
   return (
     <Router>
@@ -31,7 +32,7 @@ export function App() {
           <PageHeader
             logo={<Brand src={"logo.png"} alt="Logo" />}
             topNav={
-              <Nav onSelect={(e) => setLocation(e.itemId as Location)} aria-label="Nav" variant="horizontal">
+              <Nav onSelect={e => setLocation(e.itemId as Location)} aria-label="Nav" variant="horizontal">
                 <NavList>
                   <NavItem itemId={Location.HOME} isActive={location === Location.HOME}>
                     <Link to={Location.HOME}>Home</Link>
@@ -56,7 +57,7 @@ export function App() {
       >
         <Switch>
           <Route exact={true} path={"/"}>
-            <p>This is an example</p>
+            <Home />
           </Route>
           <Route path={"/editor/base64png"}>
             <Base64PngPage />

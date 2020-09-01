@@ -126,6 +126,12 @@ const RefForwardingEmbeddedEditor: React.RefForwardingComponent<EmbeddedEditorRe
     envelopeServer.client.notify("receive_localeChange", props.locale);
   }, [props.locale]);
 
+  useEffectAfterFirstRender(() => {
+    props.file.getFileContents().then(content => {
+      envelopeServer.client.notify("receive_contentChanged", { content: content! })
+    })
+  }, [props.file]);
+
   // Register position provider for Guided Tour
   useGuidedTourPositionProvider(envelopeServer.client, iframeRef);
 

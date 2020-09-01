@@ -40,7 +40,7 @@ export function Base64PngPage() {
           "base64png",
           {
             resourcesPathPrefix: `/envelope/`,
-            envelopePath: `/envelope/image-editor.html?f=${file.fileName}`
+            envelopePath: `/envelope/image-editor.html`
           }
         ]
       ])

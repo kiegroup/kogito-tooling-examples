@@ -34,7 +34,7 @@ export function DmnPage() {
   const editorRef = useRef<EmbeddedEditorRef>(null);
   const [operation, setOperation] = useState(Operation.NEW_FILE);
   const [file, setFile] = useState<File>({
-    fileName: "file",
+    fileName: "new-file",
     fileExtension: "dmn",
     getFileContents: () => Promise.resolve(""),
     isReadOnly: false
@@ -183,7 +183,6 @@ export function DmnPage() {
           </Nav>
         </div>
         <EmbeddedEditor
-          key={operation}
           ref={editorRef}
           file={file}
           editorEnvelopeLocator={editorEnvelopeLocator}
