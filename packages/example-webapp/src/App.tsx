@@ -24,8 +24,8 @@ import { HashRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Base64PngPage } from "./Pages/Base64Png/Base64PngPage";
 import { BpmnPage } from "./Pages/Gwt/BpmnPage";
 import { DmnPage } from "./Pages/Gwt/DmnPage";
-import { TodoListViewPage } from "./Pages/TodoListViewPage";
-import { PingPongViewsPage } from "./Pages/PingPongViewsPage";
+import { TodoListViewPage } from "./Pages/TodoList/TodoListViewPage";
+import { PingPongViewsPage } from "./Pages/PingPong/PingPongViewsPage";
 import { Home } from "./Home";
 
 enum Location {

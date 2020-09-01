@@ -19,7 +19,7 @@ import { useMemo, useState } from "react";
 import { Label, Nav, NavItem, NavList, Page, PageSection, Title } from "@patternfly/react-core";
 import { EmbeddedPingPongView } from "ping-pong-view/dist/embedded";
 import { PingPongViewChannelApi } from "ping-pong-view/dist/api";
-import {EmbeddedTodoList} from "todo-list-view/dist/embedded";
+import { StatsSidebar } from "./StatsSidebar";
 
 let pings = 0;
 let pongs = 0;
@@ -44,42 +44,7 @@ export function PingPongViewsPage() {
   return (
     <Page>
       <div style={{ display: "flex", height: "100%" }}>
-        <div>
-          <Nav style={{ backgroundColor: "rgb(24, 24, 24)", height: "100%", width: "300px" }}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <Title style={{ color: "white", padding: "20px" }} headingLevel="h3" size="xl">
-                Stats
-              </Title>
-            </div>
-            <NavList>
-              <NavItem>
-                <div>
-                  Pings: &nbsp;
-                  <Label>{pings}</Label>
-                </div>
-              </NavItem>
-              <NavItem>
-                <div>
-                  Pongs: &nbsp;
-                  <Label>{pongs}</Label>
-                </div>
-              </NavItem>
-              <NavItem>
-                <div>
-                  Last ping: &nbsp;
-                  <Label>{lastPing}</Label>
-                </div>
-              </NavItem>
-              <NavItem>
-                <div>
-                  Last pong: &nbsp;
-                  <Label>{lastPong}</Label>
-                </div>
-              </NavItem>
-            </NavList>
-          </Nav>
-        </div>
-
+        <StatsSidebar lastPing={lastPing} lastPong={lastPong} pings={pings} pongs={pongs} />
         <div style={{ display: "flex" }}>
           <PageSection>
             <EmbeddedPingPongView
