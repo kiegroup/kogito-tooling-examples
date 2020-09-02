@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * This class use the webpack.config (string-replace-loader) to set the envelope and resources path.
+ */
 export class ChromeRouter {
   public getResourcesPathPrefix(): string {
     const relativePath = "$_{WEBPACK_REPLACE__relativePath}";

@@ -38,7 +38,14 @@ enum Location {
 }
 
 export function App() {
+  /**
+   * State which determines what is the current route.
+   */
   const [location, setLocation] = useState(Location.HOME);
+
+  /**
+   * On the first render, the location state is determined by the current URL.
+   */
   useEffect(() => {
     setLocation(window.location.hash.slice(1) as Location); //Remove trailing '#' from route to match the Location enum.
   });

@@ -14,27 +14,9 @@
  * limitations under the License.
  */
 
-import HttpHeader = chrome.webRequest.HttpHeader;
-
+/**
+ * Add an extension background log to be shown when the chrome extension is installed or updated.
+ */
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Kogito Tooling extension is running.");
 });
-
-function removeHeader(headers: HttpHeader[], name: string) {
-  for (let i = 0; i < headers.length; i++) {
-    if (headers[i].name.toLowerCase() === name) {
-      headers.splice(i, 1);
-      break;
-    }
-  }
-}
-
-chrome.webRequest.onHeadersReceived.addListener(
-  details => {
-    removeHeader(details.responseHeaders!, "content-security-policy");
-    removeHeader(details.responseHeaders!, "x-frame-options");
-    return { responseHeaders: details.responseHeaders };
-  },
-  { urls: ["https://github.com/*"] },
-  ["blocking", "responseHeaders"]
-);

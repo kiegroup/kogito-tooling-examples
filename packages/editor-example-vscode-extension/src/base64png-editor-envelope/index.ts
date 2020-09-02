@@ -22,9 +22,17 @@ declare global {
   export const acquireVsCodeApi: any;
 }
 
+/**
+ * Initialize the Envelope with some args.
+ *
+ * @param args.container Where the envelope should be rendered. This id must be on the envelope html.
+ * @param args.bus The communication interface, which determines what types of messages can be send or can be received from the Channel
+ * @param args.editorFactory A new instance of the Editor that is going to be used by the envelope.
+ * @param args.editorContext The context of where this envelope is going to run.
+ */
 EditorEnvelope.init({
   container: document.getElementById("envelope-app")!,
   bus: acquireVsCodeApi(),
   editorFactory: new Base64PngEditorFactory(),
-  editorContext: { channel: ChannelType.VSCODE, operatingSystem: getOperatingSystem() }
+  editorContext: { channel: ChannelType.VSCODE, operatingSystem: getOperatingSystem() },
 });

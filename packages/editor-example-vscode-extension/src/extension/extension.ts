@@ -22,6 +22,16 @@ import * as fs from "fs";
 export function activate(context: vscode.ExtensionContext) {
   console.info("Extension is alive.");
 
+  /**
+   * Starts the extension and set initial properties:
+   *
+   * @params args.extensionName The extension name.
+   * @params args.context The VS Code context.
+   * @params args.viewType The name of the view command to open the Editor.
+   * @params args.getPreviewCommandId The name of the command to generate a SVG file. (it was set on the package.json)
+   * @params args.editorEnvelopeLocator.targetOrigin The initial path of the envelope.
+   * @params args.editorEnvelopeLocator.mapping A map associating a file extension with the respective envelope path and resources path.
+   */
   KogitoVsCode.startExtension({
     extensionName: "kogito-tooling-examples.editor-example-vscode-extension",
     context: context,
@@ -41,7 +51,15 @@ export function activate(context: vscode.ExtensionContext) {
     },
   });
 
+  /**
+   * Add a new command to VS Code. The command should be referenced on the package.json
+   */
   context.subscriptions.push(
+    /**
+     * This command works on any png image. It will create a new file, it converts a PNG image to a base64png file.
+     *
+     * To use it, can click on the Kogito icon on the top right or use the VS Code command pallet.
+     */
     vscode.commands.registerCommand("extension.kogito.createBase64Png", (file: { fsPath: string }) => {
       const buffer = fs.readFileSync(file.fsPath);
       const parsedPath = path.parse(file.fsPath);

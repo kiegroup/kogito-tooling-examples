@@ -24,17 +24,17 @@ import { File } from "@kogito-tooling/editor/dist/embedded";
 import { Sidebar } from "./Sidebar";
 
 /**
- *
  * @constructor
  */
 export function BpmnPage() {
   /**
-   *
+   * The reference of the Editor. It allows us to access/modify the Editor properties imperatively.
    */
   const editorRef = useRef<EmbeddedEditorRef>(null);
 
   /**
-   *
+   * State that handles the file. It's important to type with the File type of the @kogito-tooling/dist/embedded.
+   * It's initialized with an empty file with the base64png extension. The file is used by the EmbeddedEditor to set the content on the Editor. Updating the file will trigger a re-render on the Editor because the EmbeddedEditor will set updated content on the Editor.
    */
   const [file, setFile] = useState<File>({
     fileName: "new-file",
@@ -44,7 +44,7 @@ export function BpmnPage() {
   });
 
   /**
-   *
+   * The Editor envelope locator informs the EmbeddedEditor what file extension the Editor can read, and it maps to the respective envelope path and the Editor resources (like CSS, icons, etc).
    */
   const editorEnvelopeLocator: EditorEnvelopeLocator = useMemo(() => {
     return {

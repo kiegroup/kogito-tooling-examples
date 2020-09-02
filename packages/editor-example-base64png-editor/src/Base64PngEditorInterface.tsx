@@ -23,24 +23,24 @@ import { Base64PngEditor } from "./Base64PngEditor";
  * This class implements the Editor interface, a contract made by the Kogito Tooling that determines what methods an Editor needs to implement and its properties.
  * The implemented methods in this class are used to communicate with the Channel.
  *
- * envelopeContext All the features and information provided by the Kogito Tooling Envelope.
- * envelopeContext.services The services available to be used by the Editor.
- * envelopeContext.services.keyboardShortcuts Give the possibility to register keyboard shortcuts on your Editor
- * envelopeContext.services.i18n Give the possibility to subscribe to locale changes that happened on the Channel.
- * envelopeContext.services.guidedTour
- * envelopeContext.channelApi The object which allows this Editor to communicate with its containing Channel.
- * envelopeContext.channelApi.request Make requests to the Channel that returns a Promise with a response.
- * envelopeContext.channelApi.notify Send a notification to the Channel that doesn't return a response.
- * envelopeContext.channelApi.subscribe Subscribe to other envelopes.
- * envelopeContext.channelApi.unsubscribe Unsubscribe to other envelopes.
- * envelopeContext.context The object that contains additional information about where the Editor is running.
- * envelopeContext.context.channel The Channel which the Editor is running.
- * envelopeContext.context.operatingSystem The OS which the Editor is running.
+ * @constructor envelopeContext All the features and information provided by the Kogito Tooling Envelope.
+ * @constructor envelopeContext.services The services available to be used by the Editor.
+ * @constructor envelopeContext.services.keyboardShortcuts Give the possibility to register keyboard shortcuts on your Editor
+ * @constructor envelopeContext.services.i18n Give the possibility to subscribe to locale changes that happened on the Channel.
+ * @constructor envelopeContext.services.guidedTour
+ * @constructor envelopeContext.channelApi The object which allows this Editor to communicate with its containing Channel.
+ * @constructor envelopeContext.channelApi.request Make requests to the Channel that returns a Promise with a response.
+ * @constructor envelopeContext.channelApi.notify Send a notification to the Channel that doesn't return a response.
+ * @constructor envelopeContext.channelApi.subscribe Subscribe to other envelopes.
+ * @constructor envelopeContext.channelApi.unsubscribe Unsubscribe to other envelopes.
+ * @constructor envelopeContext.context The object that contains additional information about where the Editor is running.
+ * @constructor envelopeContext.context.channel The Channel which the Editor is running.
+ * @constructor envelopeContext.context.operatingSystem The OS which the Editor is running.
  *
- * initArgs Initial arguments sent by the Channel that enable this Editor to start properly.
- * initArgs.resourcesPathPrefix The prefix which must be prepended by static resources (e.g. JS/CSS files) to be loaded properly.
- * initArgs.fileExtension The file extension of the file that's being opened. Used when the same Editor can handle multiple file extensions.
- * initArgs.initialLocale The initial locale of the application. Useful in case the Editor implements i18n.
+ * @constructor initArgs Initial arguments sent by the Channel that enable this Editor to start properly.
+ * @constructor initArgs.resourcesPathPrefix The prefix which must be prepended by static resources (e.g. JS/CSS files) to be loaded properly.
+ * @constructor initArgs.fileExtension The file extension of the file that's being opened. Used when the same Editor can handle multiple file extensions.
+ * @constructor initArgs.initialLocale The initial locale of the application. Useful in case the Editor implements i18n.
  */
 export class Base64PngEditorInterface implements Editor {
   private editorRef: React.RefObject<EditorApi>;

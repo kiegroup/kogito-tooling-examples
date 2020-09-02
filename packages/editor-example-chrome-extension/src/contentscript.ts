@@ -19,10 +19,19 @@ import { ChromeRouter } from "./ChromeRouter";
 
 const resourcesPathPrefix = new ChromeRouter().getResourcesPathPrefix();
 
+/**
+ * Starts the extension and set initial properties:
+ *
+ * @params args.name The extension name
+ * @params args.extensionIconUrl The extension icon that will be displayed on the chrome://extension page.
+ * @params args.githubAuthTokenCookieName The name of the cookie that will be set when using the github oauth. This is required to open files on private repos.
+ * @params args.editorEnvelopeLocator.targetOrigin The initial path of the envelope.
+ * @params args.editorEnvelopeLocator.mapping A map associating a file extension with the respective envelope path and resources path.
+ */
 startExtension({
   name: "Kogito Base64 PNG React Editor",
   extensionIconUrl: chrome.extension.getURL("/resources/kie-icon.png"),
-  githubAuthTokenCookieName: "github-oauth-token-kie-editors",
+  githubAuthTokenCookieName: "github-oauth-token-base64-editors",
   editorEnvelopeLocator: {
     targetOrigin: window.location.origin,
     mapping: new Map([
@@ -30,9 +39,9 @@ startExtension({
         "base64png",
         {
           resourcesPathPrefix: `${resourcesPathPrefix}/dist/`,
-          envelopePath: `${resourcesPathPrefix}/dist/envelope/index.html`
-        }
-      ]
-    ])
-  }
+          envelopePath: `${resourcesPathPrefix}/dist/envelope/index.html`,
+        },
+      ],
+    ]),
+  },
 });
