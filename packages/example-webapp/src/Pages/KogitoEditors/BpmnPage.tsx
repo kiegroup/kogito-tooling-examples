@@ -44,7 +44,7 @@ export function BpmnPage() {
   });
 
   /**
-   * The Editor envelope locator informs the EmbeddedEditor what file extension the Editor can read, and it maps to the respective envelope path and the Editor resources (like CSS, icons, etc).
+   * The Editor envelope locator informs the EmbeddedEditor what file extension the Editor can open, and it maps to the respective envelope path and the Editor resources (like CSS, icons, etc).
    */
   const editorEnvelopeLocator: EditorEnvelopeLocator = useMemo(() => {
     return {
