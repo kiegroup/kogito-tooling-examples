@@ -65,10 +65,10 @@ export function App() {
                     <Link to={Location.DMN}>DMN Editor</Link>
                   </NavItem>
                   <NavItem itemId={Location.TODO_LIST} isActive={location === Location.TODO_LIST}>
-                    <Link to={Location.TODO_LIST}>'To do' list Page</Link>
+                    <Link to={Location.TODO_LIST}>'To do' list View</Link>
                   </NavItem>
                   <NavItem itemId={Location.PING_PONG_PAGES} isActive={location === Location.PING_PONG_PAGES}>
-                    <Link to={Location.PING_PONG_PAGES}>Ping-Pong Pages</Link>
+                    <Link to={Location.PING_PONG_PAGES}>Ping-Pong Views</Link>
                   </NavItem>
                 </NavList>
               </Nav>

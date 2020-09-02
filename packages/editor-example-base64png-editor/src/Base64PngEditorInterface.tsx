@@ -24,13 +24,13 @@ import { Base64PngEditor } from "./Base64PngEditor";
  * The implemented methods in this class are used to communicate with the Channel.
  *
  * envelopeContext All the features and information provided by the Kogito Tooling Envelope.
- * envelopeContext.services The services available to be used by the editor.
+ * envelopeContext.services The services available to be used by the Editor.
  * envelopeContext.services.keyboardShortcuts Give the possibility to register keyboard shortcuts on your Editor
  * envelopeContext.services.i18n Give the possibility to subscribe to locale changes that happened on the Channel.
  * envelopeContext.services.guidedTour
  * envelopeContext.channelApi The object which allows this Editor to communicate with its containing Channel.
  * envelopeContext.channelApi.request Make requests to the Channel that returns a Promise with a response.
- * envelopeContext.channelApi.notify Send a notification to the Channel that doesn't returns a response.
+ * envelopeContext.channelApi.notify Send a notification to the Channel that doesn't return a response.
  * envelopeContext.channelApi.subscribe Subscribe to other envelopes.
  * envelopeContext.channelApi.unsubscribe Unsubscribe to other envelopes.
  * envelopeContext.context The object that contains additional information about where the Editor is running.
