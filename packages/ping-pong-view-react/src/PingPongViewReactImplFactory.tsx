@@ -23,10 +23,11 @@ import { PingPongViewApi, PingPongViewChannelApi, PingPongViewInitArgs } from "p
 export class PingPongViewReactImplFactory implements PingPongViewFactory {
   public create(initArgs: PingPongViewInitArgs, channelApi: MessageBusClient<PingPongViewChannelApi>) {
     const ref = React.createRef<PingPongViewApi>();
-    return {
-      reactComponent: () => {
-        return <PingPongViewReactImpl initArgs={initArgs} channelApi={channelApi} ref={ref} />;
-      },
-    } as PingPongView;
+
+    const pingPongView: PingPongView = {
+      reactComponent: () => <PingPongViewReactImpl initArgs={initArgs} channelApi={channelApi} ref={ref} />,
+    };
+
+    return pingPongView;
   }
 }

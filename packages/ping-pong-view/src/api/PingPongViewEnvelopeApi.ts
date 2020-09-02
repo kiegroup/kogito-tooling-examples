@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Methods provided by the Envelope that can be consumed by the Channel.
+ */
 export interface PingPongViewEnvelopeApi {
   pingPongView__init(association: Association, initArgs: PingPongViewInitArgs): Promise<void>;
 }

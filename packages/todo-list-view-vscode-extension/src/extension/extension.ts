@@ -39,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
       targetOrigin: "vscode",
     },
     {
-      /**
+      /*
        * This is the implementation of TodoListChannelApi
        */
       todoList__itemRemoved: (item) => {
