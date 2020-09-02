@@ -23,13 +23,29 @@ import { TodoListEnvelopeApiImpl } from "./TodoListEnvelopeApiImpl";
 import { TodoListChannelApi, TodoListEnvelopeApi } from "../api";
 import { TodoListEnvelopeView, TodoListEnvelopeViewApi } from "./TodoListEnvelopeView";
 
+/**
+ * Function that starts an Envelope application.
+ *
+ * @param args.container: The HTML element in which the Todo List View will render
+ * @param args.bus: The implementation of a `bus` that knows how to send messages to the Channel.
+ *
+ */
 export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
   const context = {};
 
+  /*
+   Creates a new generic Envelope, typed with the right interfaces.
+  */
   const envelope = new Envelope<TodoListEnvelopeApi, TodoListChannelApi, TodoListEnvelopeViewApi, TodoListContext>(
     args.bus
   );
 
+  /*
+   * Function that knows how to render a Todo List View.
+   * In this case, it's a React application, but any other framework can be used.
+   *
+   * Returns a Promise<() => TodoListEnvelopeViewApi> that can be used in TodoListEnvelopeApiImpl.
+   */
   const pageEnvelopeViewDelegate = async () => {
     const ref = React.createRef<TodoListEnvelopeViewApi>();
     return new Promise<() => TodoListEnvelopeViewApi>((res) =>
@@ -39,6 +55,7 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
     );
   };
 
+  // Starts the Envelope application with the provided TodoListEnvelopeApi implementation.
   return envelope.start(pageEnvelopeViewDelegate, context, {
     create: (apiFactoryArgs) => new TodoListEnvelopeApiImpl(apiFactoryArgs),
   });

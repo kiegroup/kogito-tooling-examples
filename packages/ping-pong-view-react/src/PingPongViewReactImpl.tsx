@@ -15,7 +15,7 @@
  */
 
 import * as React from "react";
-import { useCallback, useImperativeHandle, useMemo } from "react";
+import { useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { PingPongViewApi, PingPongViewChannelApi, PingPongViewInitArgs } from "ping-pong-view/dist/api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import { useSubscription } from "@kogito-tooling/envelope-bus/dist/hooks";
@@ -25,33 +25,77 @@ interface Props {
   channelApi: MessageBusClient<PingPongViewChannelApi>;
 }
 
+interface LogEntry {
+  line: string;
+  time: number;
+}
+
+/**
+ * This is a React implementation of a PingPongView.
+ *
+ *
+ */
 export const PingPongViewReactImpl = React.forwardRef<PingPongViewApi, Props>((props, forwardedRef) => {
-  const pingPongViewApi: PingPongViewApi = useMemo(() => ({}), []);
+  const pingPongViewApi: PingPongViewApi = useMemo(
+    () => ({
+      /*
+       * Here's where your PingPongViewApi implementation would go if it wasn't empty.
+       *
+       * Since PingPongViews can't be controlled by its parents (PingPongViewEnvelopeView, or EmbeddedPingPongView),
+       * we don't need anything here.
+       */
+    }),
+    []
+  );
+
+  // This line turns your pingPongViewApi implementation into a `ref` of this component,
+  // allowing this Ping-Pong View implementation to be controlled by its parents.
   useImperativeHandle(forwardedRef, () => pingPongViewApi, [pingPongViewApi]);
 
+  // Create `log` state to display the messages exchanged by Ping-Pong Views
+  const [log, setLog] = useState<LogEntry[]>([{ line: "Logs will show up here", time: 0 }]);
+
+  // Function to be called when pressing the 'Ping others!' button.
   const ping = useCallback(() => {
     props.channelApi.notify("pingPongView__ping", props.initArgs.name);
   }, []);
 
+  // Subscribes to messages sent to `pingPongView__ping`.
+  // Notice how this listens to messages received BY the Channel.
   useSubscription(props.channelApi, "pingPongView__ping", (pingSource) => {
+    // If this instance sent the PING, we ignore it.
     if (pingSource === props.initArgs.name) {
       return;
     }
 
-    console.info(`${props.initArgs.name} says: Ping from '${pingSource}' received.`);
+    // Updates the log to show a feedback that a PING message was observed.
+    setLog((prevLog) => [...prevLog, { line: `PING from '${pingSource}'.`, time: getCurrentTime() }]);
+
+    // Acknowledges the PING message by sending back a PONG message.
     props.channelApi.notify("pingPongView__pong", props.initArgs.name, pingSource);
   });
 
-  useSubscription(props.channelApi, "pingPongView__pong", (pongSource, replyingTo) => {
+  // Subscribes to messages sent to `pingPongView__pong`.
+  useSubscription(props.channelApi, "pingPongView__pong", (pongSource: string, replyingTo: string) => {
+    // If this instance sent the PONG, or if this PONG was not meant to this instance, we ignore it.
     if (pongSource === props.initArgs.name || replyingTo !== props.initArgs.name) {
       return;
     }
 
-    console.info(`${props.initArgs.name} says: Pong from '${pongSource}' received.`);
+    // Updates the log to show a feedback that a PONG message was observed.
+    setLog((prevLog) => [...prevLog, { line: `PONG from '${pongSource}'.`, time: getCurrentTime() }]);
   });
+
+  // This effect simply keeps appending a dot to the log so that users have a sense of time passing.
+  useEffect(() => {
+    const interval = setInterval(() => setLog((prevLog) => [...prevLog, { line: ".", time: getCurrentTime() }]), 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
+      <i>#{props.initArgs.name}</i>
+
       <div
         style={{
           display: "flex",
@@ -64,12 +108,16 @@ export const PingPongViewReactImpl = React.forwardRef<PingPongViewApi, Props>((p
         <span>Hello from React!</span>
         <button onClick={ping}>Ping others!</button>
       </div>
-      <p><i>#{props.initArgs.name}</i></p>
-      <div style={{ padding: "10px" }}>
-        <p>.</p>
-        <p>.</p>
-        <p>.</p>
+
+      <div style={{ padding: "10px", backgroundColor: "black", color: "white", fontFamily: "monospace" }}>
+        {log.slice(-10).map((line) => (
+          <p key={line.time}>{line.line}</p>
+        ))}
       </div>
     </>
   );
 });
+
+function getCurrentTime() {
+  return new Date().getTime();
+}

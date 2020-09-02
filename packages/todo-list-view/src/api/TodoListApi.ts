@@ -16,6 +16,11 @@
 
 import { Item } from "./TodoListEnvelopeApi";
 
+/**
+ * The API of a TodoList.
+ *
+ * These methods are what the "external world" knows about this component.
+ */
 export interface TodoListApi {
   addItem(item: string): Promise<void>;
   getItems(): Promise<Item[]>;

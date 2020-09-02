@@ -30,6 +30,12 @@ interface Props {
   channelApi: MessageBusClient<TodoListChannelApi>;
 }
 
+/**
+ * The actual implementation of the Todo List View.
+ * In this case, it's a React component. See TodoListEnvelope.tsx.
+ *
+ * Provides an imperative handle to give control of this component to its containing components.
+ */
 export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, Props>((props, forwardedRef) => {
   const [user, setUser] = useState<string | undefined>();
   const [items, setItems] = useState<Item[]>([]);

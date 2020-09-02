@@ -24,7 +24,6 @@ module.exports = {
     "api/index": "./src/api/index.ts",
     "envelope/index": "./src/envelope/index.ts",
     "embedded/index": "./src/embedded/index.ts",
-    "channel/index": "./src/channel/index.ts",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),

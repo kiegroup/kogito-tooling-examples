@@ -16,13 +16,15 @@
 
 import * as React from "react";
 import { useCallback, useMemo } from "react";
-import { PingPongViewEnvelopeMapping } from "../channel";
 import { PingPongViewApi, PingPongViewChannelApi, PingPongViewEnvelopeApi } from "../api";
 import { EmbeddedEnvelopeFactory } from "../__copied-from-kogito-tooling/EmbeddedEnvelopeFactory";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 
 export type Props = PingPongViewChannelApi & {
-  mapping: PingPongViewEnvelopeMapping;
+  mapping: {
+    title: string;
+    envelopePath: string;
+  };
   targetOrigin: string;
   name: string;
 };

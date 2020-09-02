@@ -19,6 +19,14 @@ import { Uri, ViewColumn } from "vscode";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 import { TodoListChannelApi, TodoListEnvelopeApi } from "../api";
 
+/**
+ * This is a convenience class for VS Code Extensions to create a Todo List View inside a Webview
+ *
+ * It abstracts the complexity of instancing an EnvelopeServer and starting it properly.
+ * The lifecycle of the Webview is also controlled by this class.
+ *
+ * Calling `open` will open a new tab in VS Code containing the Todo List View.
+ */
 export class TodoListWebview {
   constructor(
     private readonly context: vscode.ExtensionContext,
@@ -31,6 +39,7 @@ export class TodoListWebview {
   ) {}
 
   public open(pageId: string, opts: { onClose: () => void }) {
+    // Creates a Webview instance. This will open a new tab on VS Code.
     const webviewPanel = vscode.window.createWebviewPanel(pageId, this.envelopeLocator.title, ViewColumn.Beside, {
       retainContextWhenHidden: true,
       enableCommandUris: true,
@@ -38,10 +47,12 @@ export class TodoListWebview {
       localResourceRoots: [vscode.Uri.file(this.context.extensionPath)],
     });
 
+    // Creates an absolute path for the script that the Webview needs to load.
     const scriptSrc = webviewPanel.webview
       .asWebviewUri(Uri.file(this.context.asAbsolutePath(this.envelopeLocator.envelopePath)))
       .toString();
 
+    // The HTML of the Webview
     webviewPanel.webview.html = `<!DOCTYPE html>
         <html lang="en">
         <head>
@@ -63,16 +74,22 @@ export class TodoListWebview {
         </html>`;
 
     const envelopeServer: EnvelopeServer<TodoListChannelApi, TodoListEnvelopeApi> = new EnvelopeServer(
+      //Bus implementation. Tells this instance of EnvelopeServer how to send messages to the Webview's iframe
       { postMessage: (message) => webviewPanel.webview.postMessage(message) },
+
+      //The origin to which the Envelope must send messages
       this.envelopeLocator.targetOrigin,
+
+      //This is the pollInit parameter. Used to connect the Envelope with this instance of EnvelopeServer.
       () =>
         envelopeServer.client.request(
-          "todoList__init",
-          { origin: envelopeServer.origin, envelopeServerId: envelopeServer.id },
-          { user: "Tiago" }
+          "todoList__init", //Init method
+          { origin: envelopeServer.origin, envelopeServerId: envelopeServer.id }, //Association
+          { user: "Tiago" } //Init args. This can be extracted as a parameter.
         )
     );
 
+    // Configures how the messages coming from the Envelope are received by the EnvelopeServer
     this.context.subscriptions.push(
       webviewPanel.webview.onDidReceiveMessage(
         (msg) => envelopeServer.receive(msg, this.api),
@@ -81,6 +98,7 @@ export class TodoListWebview {
       )
     );
 
+    // Cleans up when the Webview is closed
     webviewPanel.onDidDispose(
       () => {
         envelopeServer.stopInitPolling();
@@ -90,7 +108,10 @@ export class TodoListWebview {
       this.context.subscriptions
     );
 
+    // Starts polling using the initPolling method so that the Envelope can connect with the EnvelopeServer
     envelopeServer.startInitPolling();
+
+    // Returns the MessageBusClient instance so that the containing VS Code Extension can communicate with the Envelope.
     return envelopeServer.client;
   }
 }

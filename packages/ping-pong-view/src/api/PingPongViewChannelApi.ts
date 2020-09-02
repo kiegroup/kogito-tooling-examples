@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Methods provided by the Channel that can be consumed by the Envelope.
+ */
 export interface PingPongViewChannelApi {
   pingPongView__ping(source: string): void;
   pingPongView__pong(source: string, replyingTo: string): void;
