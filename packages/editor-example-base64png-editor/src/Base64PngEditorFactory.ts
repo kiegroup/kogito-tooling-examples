@@ -18,7 +18,7 @@ import { EditorFactory, EditorInitArgs, KogitoEditorEnvelopeContextType } from "
 import { Base64PngEditorInterface } from "./Base64PngEditorInterface";
 
 /**
- * Factory to be used by the Envelope to create a Base64 PNG Editor, It implements an EditorFactory, which instantiate an Base64PngEditorInterface.
+ * Factory to be used by the Envelope to create a Base64 PNG Editor, It implements an EditorFactory. It tells which extension the Editor supports and how to create a new Editor
  */
 export class Base64PngEditorFactory implements EditorFactory {
   public supports(fileExtension: string) {

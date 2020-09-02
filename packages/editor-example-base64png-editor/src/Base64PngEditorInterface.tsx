@@ -16,10 +16,31 @@
 
 import * as React from "react";
 import { Editor, EditorApi, EditorInitArgs, KogitoEditorEnvelopeContextType } from "@kogito-tooling/editor/dist/api";
+import { Rect } from "@kogito-tooling/guided-tour/dist/api";
 import { Base64PngEditor } from "./Base64PngEditor";
 
 /**
- * This class implements the Editor interface, a contract made by the Kogito Tooling that determines what methods an Editor needs to implement and what properties it must define. Instances are created by Base64PngEditorFactory.
+ * This class implements the Editor interface, a contract made by the Kogito Tooling that determines what methods an Editor needs to implement and its properties.
+ * The implemented methods in this class are used to communicate with the Channel.
+ *
+ * envelopeContext All the features and information provided by the Kogito Tooling Envelope.
+ * envelopeContext.services The services available to be used by the editor.
+ * envelopeContext.services.keyboardShortcuts Give the possibility to register keyboard shortcuts on your Editor
+ * envelopeContext.services.i18n Give the possibility to subscribe to locale changes that happened on the Channel.
+ * envelopeContext.services.guidedTour
+ * envelopeContext.channelApi The object which allows this Editor to communicate with its containing Channel.
+ * envelopeContext.channelApi.request Make requests to the Channel that returns a Promise with a response.
+ * envelopeContext.channelApi.notify Send a notification to the Channel that doesn't returns a response.
+ * envelopeContext.channelApi.subscribe Subscribe to other envelopes.
+ * envelopeContext.channelApi.unsubscribe Unsubscribe to other envelopes.
+ * envelopeContext.context The object that contains additional information about where the Editor is running.
+ * envelopeContext.context.channel The Channel which the Editor is running.
+ * envelopeContext.context.operatingSystem The OS which the Editor is running.
+ *
+ * @param props.initArgs Initial arguments sent by the Channel that enable this Editor to start properly.
+ * @param props.initArgs.resourcesPathPrefix The prefix which must be prepended by static resources (e.g. JS/CSS files) to be loaded properly.
+ * @param props.initArgs.fileExtension The file extension of the file that's being opened. Used when the same Editor can handle multiple file extensions.
+ * @param props.initArgs.initialLocale The initial locale of the application. Useful in case the Editor implements i18n.
  */
 export class Base64PngEditorInterface implements Editor {
   private editorRef: React.RefObject<EditorApi>;
@@ -35,56 +56,56 @@ export class Base64PngEditorInterface implements Editor {
   }
 
   /**
-   * Retrieve the editor content
+   * Retrieve the Editor content.
+   * The Editor must return a Promise of its content.
    */
   public getContent(): Promise<string> {
     return this.editorRef.current?.getContent()!;
   }
 
   /**
-   * Retrieve the Guided Tour current position
+   * Retrieve the Guided Tour current position.
+   * The Editor must return a Promise of the current position of the Guided Tour.
    * @param selector
    */
-  public getElementPosition(selector: string) {
+  public getElementPosition(selector: string): Promise<Rect | undefined> {
     return this.editorRef.current?.getElementPosition(selector)!;
   }
 
   /**
-   * Set the editor content
-   * @param path file path
-   * @param content file content
+   * Set the Editor content
+   * @param path The file path that is being open.
+   * @param content The file content in a string format.
    */
   public setContent(path: string, content: string): Promise<void> {
     return this.editorRef.current?.setContent(path, content)!;
   }
 
   /**
-   * Retrieve the SVG string representing the content of the Editor
+   * The Editor must return a valid SVG file, which represents the Editor content.
    */
   public getPreview(): Promise<string | undefined> {
     return this.editorRef.current?.getPreview()!;
   }
 
   /**
-   * Calls the editor undo method.
+   * Calls the Editor undo method.
    */
   public undo(): Promise<void> {
     return this.editorRef.current?.undo()!;
   }
 
   /**
-   * Calls the editor redo method.
+   * Calls the Editor redo method.
    */
   public redo(): Promise<void> {
     return this.editorRef.current?.redo()!;
   }
 
   /**
-   * Initialize the Editor component.
+   * Retrieve the root component of the Editor. Here the Editor is going to be initialized with its props.
    */
   public af_componentRoot() {
-    return (
-      <Base64PngEditor ref={this.editorRef} channelApi={this.envelopeContext.channelApi} initArgs={this.initArgs} />
-    );
+    return <Base64PngEditor ref={this.editorRef} channelApi={this.envelopeContext.channelApi} />;
   }
 }
