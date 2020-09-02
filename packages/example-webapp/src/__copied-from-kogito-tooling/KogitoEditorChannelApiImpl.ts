@@ -22,7 +22,7 @@ import {
   ResourceContent,
   ResourceContentRequest,
   ResourceListRequest,
-  ResourcesList
+  ResourcesList,
 } from "@kogito-tooling/channel-common-api";
 import { File, StateControl } from "@kogito-tooling/editor/dist/embedded";
 
