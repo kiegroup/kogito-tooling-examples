@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { PingPongPage } from "./PingPongPage";
+import { PingPongView } from "./PingPongView";
 import * as React from "react";
 import { useImperativeHandle, useState } from "react";
 
-export interface PingPongPageViewApi {
-  setPage(page: PingPongPage): Promise<void>;
+export interface PingPongViewApi {
+  setPage(page: PingPongView): Promise<void>;
 }
 
-export const PingPongPageEnvelopeView = React.forwardRef((props, forwardedRef) => {
-  const [page, setPage] = useState<PingPongPage>();
+export const PingPongViewEnvelopeView = React.forwardRef((props, forwardedRef) => {
+  const [page, setPage] = useState<PingPongView>();
 
   useImperativeHandle(forwardedRef, () => ({ setPage }), []);
 

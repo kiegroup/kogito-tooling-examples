@@ -16,19 +16,19 @@
 
 import { Association, PingPongViewChannelApi, PingPongViewEnvelopeApi, PingPongViewInitArgs } from "../api";
 import { EnvelopeApiFactoryArgs } from "@kogito-tooling/envelope";
-import { PingPongPageViewApi } from "./PingPongPageEnvelopeView";
-import { PingPongPageEnvelopeContext } from "./PingPongPageEnvelopeContext";
-import { PingPongPageFactory } from "./PingPongPageFactory";
+import { PingPongViewApi } from "./PingPongViewEnvelopeView";
+import { PingPongViewEnvelopeContext } from "./PingPongViewEnvelopeContext";
+import { PingPongViewFactory } from "./PingPongViewFactory";
 
-export class PingPongPageEnvelopeApiImpl implements PingPongViewEnvelopeApi {
+export class PingPongViewEnvelopeApiImpl implements PingPongViewEnvelopeApi {
   constructor(
     private readonly args: EnvelopeApiFactoryArgs<
       PingPongViewEnvelopeApi,
       PingPongViewChannelApi,
-      PingPongPageViewApi,
-      PingPongPageEnvelopeContext
+      PingPongViewApi,
+      PingPongViewEnvelopeContext
     >,
-    private readonly pingPongPageFactory: PingPongPageFactory
+    private readonly pingPongPageFactory: PingPongViewFactory
   ) {}
 
   public async pingPongView__init(association: Association, initArgs: PingPongViewInitArgs) {

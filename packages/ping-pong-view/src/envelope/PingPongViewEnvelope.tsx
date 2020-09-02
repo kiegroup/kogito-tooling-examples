@@ -19,28 +19,28 @@ import { Envelope } from "@kogito-tooling/envelope";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { PingPongViewChannelApi, PingPongViewEnvelopeApi } from "../api";
-import { PingPongPageFactory } from "./PingPongPageFactory";
-import { PingPongPageEnvelopeContext } from "./PingPongPageEnvelopeContext";
-import { PingPongPageEnvelopeView, PingPongPageViewApi } from "./PingPongPageEnvelopeView";
-import { PingPongPageEnvelopeApiImpl } from "./PingPongPageEnvelopeApiImpl";
+import { PingPongViewFactory } from "./PingPongViewFactory";
+import { PingPongViewEnvelopeContext } from "./PingPongViewEnvelopeContext";
+import { PingPongViewEnvelopeView, PingPongViewApi } from "./PingPongViewEnvelopeView";
+import { PingPongViewEnvelopeApiImpl } from "./PingPongViewEnvelopeApiImpl";
 
-export function init(args: { container: HTMLElement; bus: EnvelopeBus; pingPongPageFactory: PingPongPageFactory }) {
+export function init(args: { container: HTMLElement; bus: EnvelopeBus; pingPongPageFactory: PingPongViewFactory }) {
   const pageContext = {};
 
-  const envelope = new Envelope<PingPongViewEnvelopeApi, PingPongViewChannelApi, PingPongPageViewApi, PingPongPageEnvelopeContext>(
+  const envelope = new Envelope<PingPongViewEnvelopeApi, PingPongViewChannelApi, PingPongViewApi, PingPongViewEnvelopeContext>(
     args.bus
   );
 
   const pageEnvelopeViewDelegate = async () => {
-    const ref = React.createRef<PingPongPageViewApi>();
-    return new Promise<PingPongPageViewApi>(res =>
-      ReactDOM.render(<PingPongPageEnvelopeView ref={ref} />, args.container, () => res(ref.current!))
+    const ref = React.createRef<PingPongViewApi>();
+    return new Promise<PingPongViewApi>(res =>
+      ReactDOM.render(<PingPongViewEnvelopeView ref={ref} />, args.container, () => res(ref.current!))
     );
   };
 
   return envelope.start(pageEnvelopeViewDelegate, pageContext, {
     create(apiFactoryArgs) {
-      return new PingPongPageEnvelopeApiImpl(apiFactoryArgs, args.pingPongPageFactory);
+      return new PingPongViewEnvelopeApiImpl(apiFactoryArgs, args.pingPongPageFactory);
     }
   });
 }

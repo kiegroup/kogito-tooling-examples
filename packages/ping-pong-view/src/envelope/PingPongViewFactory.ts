@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import * as React from "react";
-import { PingPongViewApi } from "../api";
+import { PingPongViewChannelApi, PingPongViewInitArgs } from "../api";
+import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import { PingPongView } from "./PingPongView";
 
-export interface PingPongPage extends PingPongViewApi {
-  reactComponent?(): React.ReactNode;
+export interface PingPongViewFactory {
+  create(initArgs: PingPongViewInitArgs, channelApi: MessageBusClient<PingPongViewChannelApi>): PingPongView;
 }
