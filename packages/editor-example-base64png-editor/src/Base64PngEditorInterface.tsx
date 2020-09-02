@@ -37,10 +37,10 @@ import { Base64PngEditor } from "./Base64PngEditor";
  * envelopeContext.context.channel The Channel which the Editor is running.
  * envelopeContext.context.operatingSystem The OS which the Editor is running.
  *
- * @param props.initArgs Initial arguments sent by the Channel that enable this Editor to start properly.
- * @param props.initArgs.resourcesPathPrefix The prefix which must be prepended by static resources (e.g. JS/CSS files) to be loaded properly.
- * @param props.initArgs.fileExtension The file extension of the file that's being opened. Used when the same Editor can handle multiple file extensions.
- * @param props.initArgs.initialLocale The initial locale of the application. Useful in case the Editor implements i18n.
+ * initArgs Initial arguments sent by the Channel that enable this Editor to start properly.
+ * initArgs.resourcesPathPrefix The prefix which must be prepended by static resources (e.g. JS/CSS files) to be loaded properly.
+ * initArgs.fileExtension The file extension of the file that's being opened. Used when the same Editor can handle multiple file extensions.
+ * initArgs.initialLocale The initial locale of the application. Useful in case the Editor implements i18n.
  */
 export class Base64PngEditorInterface implements Editor {
   private editorRef: React.RefObject<EditorApi>;
