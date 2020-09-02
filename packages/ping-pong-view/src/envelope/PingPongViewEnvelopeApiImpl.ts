@@ -28,12 +28,12 @@ export class PingPongViewEnvelopeApiImpl implements PingPongViewEnvelopeApi {
       PingPongViewApi,
       PingPongViewEnvelopeContext
     >,
-    private readonly pingPongPageFactory: PingPongViewFactory
+    private readonly pingPongViewFactory: PingPongViewFactory
   ) {}
 
   public async pingPongView__init(association: Association, initArgs: PingPongViewInitArgs) {
     this.args.envelopeBusController.associate(association.origin, association.envelopeServerId);
-    const page = this.pingPongPageFactory.create(initArgs, this.args.envelopeBusController.client);
+    const page = this.pingPongViewFactory.create(initArgs, this.args.envelopeBusController.client);
     await this.args.view.setPage(page);
   }
 }

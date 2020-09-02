@@ -24,7 +24,7 @@ import { PingPongViewEnvelopeContext } from "./PingPongViewEnvelopeContext";
 import { PingPongViewEnvelopeView, PingPongViewApi } from "./PingPongViewEnvelopeView";
 import { PingPongViewEnvelopeApiImpl } from "./PingPongViewEnvelopeApiImpl";
 
-export function init(args: { container: HTMLElement; bus: EnvelopeBus; pingPongPageFactory: PingPongViewFactory }) {
+export function init(args: { container: HTMLElement; bus: EnvelopeBus; pingPongViewFactory: PingPongViewFactory }) {
   const pageContext = {};
 
   const envelope = new Envelope<PingPongViewEnvelopeApi, PingPongViewChannelApi, PingPongViewApi, PingPongViewEnvelopeContext>(
@@ -40,7 +40,7 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus; pingPongP
 
   return envelope.start(pageEnvelopeViewDelegate, pageContext, {
     create(apiFactoryArgs) {
-      return new PingPongViewEnvelopeApiImpl(apiFactoryArgs, args.pingPongPageFactory);
+      return new PingPongViewEnvelopeApiImpl(apiFactoryArgs, args.pingPongViewFactory);
     }
   });
 }

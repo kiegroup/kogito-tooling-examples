@@ -25,5 +25,5 @@ init({
       window.parent.postMessage(message, "*", transfer);
     },
   },
-  pingPongPageFactory: new PingPongViewReactImplFactory(),
+  pingPongViewFactory: new PingPongViewReactImplFactory(),
 });
