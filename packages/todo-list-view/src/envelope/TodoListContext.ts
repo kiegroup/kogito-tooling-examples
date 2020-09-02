@@ -14,5 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * This is a convenience class that the Envelope view can use.
+ * Since the Todo List View is very simple, it's empty.
+ */
 // tslint:disable-next-line:no-empty-interface
 export interface TodoListContext {}

@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Methods provided by the Envelope that can be consumed by the Channel.
+ */
 export interface TodoListEnvelopeApi {
   todoList__init(association: Association, initArgs: TodoListInitArgs): Promise<void>;
   todoList__addItem(item: string): Promise<void>;

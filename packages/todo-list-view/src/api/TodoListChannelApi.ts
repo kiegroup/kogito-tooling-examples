@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Methods provided by the Channel that can be consumed by the Envelope.
+ */
 export interface TodoListChannelApi {
   todoList__itemRemoved(item: string): void;
 }
