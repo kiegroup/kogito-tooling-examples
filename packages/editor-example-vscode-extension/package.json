@@ -16,14 +16,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onCustomEditor:kieKogitoWebviewSimpleEditors",
+    "onCustomEditor:kieKogitoWebviewBase64PNGEditor",
     "onCommand:extension.kogito.createBase64Png"
   ],
   "publisher": "kogito-tooling-examples",
   "contributes": {
     "customEditors": [
       {
-        "viewType": "kieKogitoWebviewSimpleEditors",
+        "viewType": "kieKogitoWebviewBase64PNGEditor",
         "displayName": "KIE Kogito Simple React Editor",
         "selector": [
           {

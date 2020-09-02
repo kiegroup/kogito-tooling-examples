@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
   KogitoVsCode.startExtension({
     extensionName: "kogito-tooling-examples.editor-example-vscode-extension",
     context: context,
-    viewType: "kieKogitoWebviewSimpleEditors",
+    viewType: "kieKogitoWebviewBase64PNGEditor",
     getPreviewCommandId: "extension.kogito.getPreviewSvg",
     editorEnvelopeLocator: {
       targetOrigin: "vscode",
