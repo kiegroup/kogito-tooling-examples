@@ -19,9 +19,9 @@ import {TodoListWebview} from "todo-list-view/dist/vscode";
 import {TodoListEnvelopeApi} from "todo-list-view/dist/api";
 import {MessageBusClient} from "@kogito-tooling/envelope-bus/dist/api";
 
-const openTodoListViewCommandId = "kogito-tooling-examples.todo-list-view";
-const addTodoItemCommandId = "kogito-tooling-examples.todo-list-view.add-item";
-const markAllAsCompletedCommandId = "kogito-tooling-examples.todo-list-view.mark-all-as-completed";
+const OPEN_TODO_LIST_VIEW_COMMAND_ID = "kogito-tooling-examples.todo-list-view";
+const ADD_TODO_ITEM_COMMAND_ID = "kogito-tooling-examples.todo-list-view.add-item";
+const MARK_ALL_AS_COMPLETED_COMMAND_ID = "kogito-tooling-examples.todo-list-view.mark-all-as-completed";
 
 export function activate(context: vscode.ExtensionContext) {
   console.info("Extension is alive.");
@@ -43,19 +43,19 @@ export function activate(context: vscode.ExtensionContext) {
   let envelopeApi: MessageBusClient<TodoListEnvelopeApi> | undefined;
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(openTodoListViewCommandId, () => {
+    vscode.commands.registerCommand(OPEN_TODO_LIST_VIEW_COMMAND_ID, () => {
       envelopeApi = todoListWebview.open("todo-list-view", { onClose: () => (envelopeApi = undefined) });
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(markAllAsCompletedCommandId, () => {
+    vscode.commands.registerCommand(MARK_ALL_AS_COMPLETED_COMMAND_ID, () => {
       envelopeApi?.notify("todoList__markAllAsCompleted");
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(addTodoItemCommandId, async () => {
+    vscode.commands.registerCommand(ADD_TODO_ITEM_COMMAND_ID, async () => {
       const textEditor = vscode.window.activeTextEditor;
       if (!textEditor) {
         throw new Error("Can't find selection of non-existent Text Editor");
@@ -83,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      await vscode.commands.executeCommand(openTodoListViewCommandId);
+      await vscode.commands.executeCommand(OPEN_TODO_LIST_VIEW_COMMAND_ID);
       addItems(items, envelopeApi);
     })
   );
