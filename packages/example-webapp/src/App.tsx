@@ -80,13 +80,13 @@ export function App() {
           <Route exact={true} path={"/"}>
             <Home />
           </Route>
-          <Route path={"/editor/base64png"}>
+          <Route path={Location.BASE46PNG}>
             <Base64PngPage />
           </Route>
-          <Route path={"/editor/bpmn"}>
+          <Route path={Location.BPMN}>
             <BpmnPage />
           </Route>
-          <Route path={"/editor/dmn"}>
+          <Route path={Location.DMN}>
             <DmnPage />
           </Route>
           <Route path={Location.TODO_LIST}>

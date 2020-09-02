@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { EmbeddedEditorRef } from "../../copied-from-kogito-tooling/EmbeddedEditor";
+import { EmbeddedEditorRef } from "../../__copied-from-kogito-tooling/EmbeddedEditor";
 import * as React from "react";
 import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
 import { useCallback, useRef, useState } from "react";
