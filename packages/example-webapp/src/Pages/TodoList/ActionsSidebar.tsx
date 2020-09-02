@@ -15,8 +15,8 @@
  */
 
 import * as React from "react";
-import { Nav, NavItem, NavList, Title } from "@patternfly/react-core";
 import { useCallback, useState } from "react";
+import { Nav, NavItem, NavList, Title } from "@patternfly/react-core";
 import { TodoListApi } from "todo-list-view/dist/api";
 
 interface Props {
@@ -34,8 +34,10 @@ export function ActionsSidebar(props: Props) {
   const addItem = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      props.todoListViewRef.current?.addItem(newItem);
-      setNewItem("");
+      if (newItem.length > 0) {
+        props.todoListViewRef.current?.addItem(newItem);
+        setNewItem("");
+      }
     },
     [newItem]
   );
