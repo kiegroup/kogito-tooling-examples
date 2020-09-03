@@ -14,5 +14,10 @@
  * limitations under the License.
  */
 
-// tslint:disable-next-line:no-empty-interface
-export interface PingPongViewEnvelopeContext {}
+.todo-list--list-items {
+  line-height: 2em;
+}
+
+.todo-list--list-item-completed {
+  text-decoration: line-through;
+}

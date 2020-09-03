@@ -19,6 +19,7 @@ import { useCallback, useEffect, useImperativeHandle, useMemo, useState } from "
 import { PingPongViewApi, PingPongViewChannelApi, PingPongViewInitArgs } from "ping-pong-view/dist/api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import { useSubscription } from "@kogito-tooling/envelope-bus/dist/hooks";
+import "./styles.scss";
 
 interface Props {
   initArgs: PingPongViewInitArgs;
@@ -96,20 +97,12 @@ export const PingPongViewReactImpl = React.forwardRef<PingPongViewApi, Props>((p
     <>
       <i>#{props.initArgs.name}</i>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "10px",
-          backgroundColor: "#292d34",
-          color: "rgb(96,210,243)",
-        }}
-      >
+      <div className={"ping-pong-view--header"}>
         <span>Hello from React!</span>
         <button onClick={ping}>Ping others!</button>
       </div>
 
-      <div style={{ padding: "10px", backgroundColor: "black", color: "white", fontFamily: "monospace" }}>
+      <div className={"ping-pong-view--log"}>
         {log.slice(-10).map((line) => (
           <p key={line.time}>{line.line}</p>
         ))}

@@ -121,12 +121,12 @@ export function Sidebar(props: Props) {
 
   return (
     <div>
-      <Nav style={{ backgroundColor: "rgb(24, 24, 24)", height: "100%" }}>
+      <Nav className={"webapp--page-navigation"}>
         <NavList>
-          <NavItem style={{ display: "flex", alignItems: "center" }}>
-            <div>
+          <NavItem className={"webapp--page-kogito-editors-sidebar--navigation-nav-item"}>
+            <div className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-div"}>
               <TextInput
-                style={{ width: "100px" }}
+                className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-text-input"}
                 value={fileName}
                 type={"text"}
                 aria-label={"Edit file name"}
@@ -135,46 +135,42 @@ export function Sidebar(props: Props) {
               />
             </div>
           </NavItem>
-          <NavItem onClick={onNewFile} style={{ display: "flex", alignItems: "center" }}>
-            <div>
-              <p>New Empty File</p>
+          <NavItem className={"webapp--page-kogito-editors-sidebar--navigation-nav-item"}>
+            <div className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-div"}>
+              <a className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-a"} onClick={onNewFile}>
+                New Empty File
+              </a>
             </div>
           </NavItem>
-          <NavItem style={{ display: "flex", alignItems: "center" }}>
-            <div>
-              <p>
+          <NavItem className={"webapp--page-kogito-editors-sidebar--navigation-nav-item"}>
+            <div className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-div"}>
+              <a className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-a"}>
                 Open File
                 <input
                   accept={props.accept}
-                  className="pf-c-button"
+                  className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-open-file pf-c-button"}
                   type="file"
                   aria-label="File selection"
                   onChange={onOpenFile}
                   ref={inputRef}
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
-                    opacity: 0,
-                    cursor: "pointer",
-                    width: "100%",
-                    zIndex: 999,
-                  }}
                 />
-              </p>
+              </a>
             </div>
           </NavItem>
-          <NavItem onClick={onOpenSample} style={{ display: "flex", alignItems: "center" }}>
-            <div>
-              <p>Open Sample</p>
+          <NavItem className={"webapp--page-kogito-editors-sidebar--navigation-nav-item"}>
+            <div className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-div"}>
+              <a className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-a"} onClick={onOpenSample}>
+                Open Sample
+              </a>
             </div>
           </NavItem>
-          <NavItem onClick={onDownload} style={{ display: "flex", alignItems: "center" }}>
-            <div>
+          <NavItem className={"webapp--page-kogito-editors-sidebar--navigation-nav-item"}>
+            <div className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-div"}>
               <a
-                style={{ color: "white" }}
+                className={"webapp--page-kogito-editors-sidebar--navigation-nav-item-a"}
                 download={`${props.file.fileName}.${props.fileExtension}`}
                 href={URL.createObjectURL(fileBlob)}
+                onClick={onDownload}
               >
                 Download
               </a>

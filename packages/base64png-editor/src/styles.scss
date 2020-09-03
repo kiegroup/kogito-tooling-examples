@@ -1,0 +1,53 @@
+.base64png-editor--page {
+  background-color: var(--pf-c-page__main-section--BackgroundColor);
+}
+
+.base64png-editor--div-main {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.base64png-editor--div-viewport {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.base64png-editor--image {
+  display: none;
+}
+
+.base64png-editor--canvas {
+  max-width: 600px;
+  max-height: 600px;
+}
+
+.base64png-editor--tweaks {
+  background-color: rgb(24, 24, 24);
+  height: 100%;
+  width: 350px;
+}
+
+.base64png-editor--tweaks-nav-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%
+}
+
+.base64png-editor--tweaks-nav-item-div {
+  display: flex;
+}
+
+.base64png-editor--tweaks-nav-item-input {
+  width: 100px;
+}
+
+.base64png-editor--tweaks-nav-item-span {
+  width: 40px;
+  text-align: right;
+}

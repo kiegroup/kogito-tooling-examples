@@ -15,7 +15,7 @@
  */
 
 import { ChannelType } from "@kogito-tooling/channel-common-api";
-import { EmbeddedEditor, EmbeddedEditorRef } from "../../__copied-from-kogito-tooling//EmbeddedEditor";
+import { EmbeddedEditor, EmbeddedEditorRef } from "../../__copied-from-kogito-tooling/EmbeddedEditor";
 import * as React from "react";
 import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
 import { useMemo, useRef, useState } from "react";
@@ -61,7 +61,7 @@ export function DmnPage() {
 
   return (
     <Page>
-      <div style={{ display: "flex", height: "100%" }}>
+      <div className={"webapp--page-main-div"}>
         <Sidebar
           editorRef={editorRef}
           editorEnvelopeLocator={editorEnvelopeLocator}

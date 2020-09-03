@@ -26,33 +26,33 @@ module.exports = {
     "envelope/image-editor": "./src/envelope/image-editor.ts",
     "envelope/gwt-editors": "./src/envelope/gwt-editors.ts",
     "envelope/ping-pong-view-react-impl": "./src/envelope/ping-pong-view-react-impl.ts",
-    "envelope/todo-list-view": "./src/envelope/todo-list-view.ts"
+    "envelope/todo-list-view": "./src/envelope/todo-list-view.ts",
   },
   output: {
     path: path.resolve("./dist"),
     filename: "[name].js",
-    publicPath: '/'
+    publicPath: "/",
   },
   stats: {
-    excludeAssets: [name => !name.endsWith(".js"), /gwt-editors\/.*/, /editors\/.*/],
-    excludeModules: true
+    excludeAssets: [(name) => !name.endsWith(".js"), /gwt-editors\/.*/, /editors\/.*/],
+    excludeModules: true,
   },
   performance: {
     maxAssetSize: 30000000,
-    maxEntrypointSize: 30000000
+    maxEntrypointSize: 30000000,
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".jsx"],
-    modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")]
+    modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")],
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "ts-loader"
+        loader: "ts-loader",
       },
-      ...pfWebpackOptions.patternflyRules
-    ]
+      ...pfWebpackOptions.patternflyRules,
+    ],
   },
   plugins: [
     new CopyPlugin({
@@ -60,8 +60,8 @@ module.exports = {
         { from: "./envelope", to: "./envelope" },
         { from: "./static", to: "." },
         { from: "../../node_modules/@kogito-tooling/kie-bc-editors-unpacked/dmn", to: "./gwt-editors/dmn" },
-      ]
-    })
+      ],
+    }),
   ],
   devServer: {
     historyApiFallback: false,
@@ -69,6 +69,6 @@ module.exports = {
     watchContentBase: true,
     contentBase: [path.join(__dirname, "./dist"), path.join(__dirname, "./static")],
     compress: true,
-    port: 9001
-  }
+    port: 9001,
+  },
 };

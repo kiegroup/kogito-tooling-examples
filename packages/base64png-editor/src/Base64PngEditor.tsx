@@ -21,6 +21,7 @@ import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import { EmptyState, EmptyStateIcon, Nav, NavItem, NavList, Page, Switch, Title } from "@patternfly/react-core";
 import { DEFAULT_RECT } from "@kogito-tooling/guided-tour/dist/api";
 import CubesIcon from "@patternfly/react-icons/dist/js/icons/cubes-icon";
+import "./styles.scss";
 
 /**
  * channelApi Gives the Editor the possibility to send requests and notifications to the channel. It implements KogitoEditorChannelApi.
@@ -29,13 +30,6 @@ import CubesIcon from "@patternfly/react-icons/dist/js/icons/cubes-icon";
 interface Props {
   channelApi: MessageBusClient<KogitoEditorChannelApi>;
 }
-
-// TODO: Add to CSS file
-const NavItemCss = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
 
 /**
  * This is an Editor component. By exposing its `ref` implementing EditorApi, this component exposes its imperative handles and gives control to its parent. To be able to do that, it's necessary to create a RefForwardingComponent.
@@ -276,10 +270,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   }, []);
 
   return (
-    <Page style={{ backgroundColor: "rgb(240, 240, 240)" }}>
-      <div style={{ display: "flex", height: "100%", width: "100%", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
-          <div style={{ display: "none" }}>
+    <Page className={"base64png-editor--page"}>
+      <div className={"base64png-editor--div-main"}>
+        <div className={"base64png-editor--div-viewport"}>
+          <div className={"base64png-editor--image"}>
             <img ref={imageRef} id={"original"} src={`${base64Header},${originalContent}`} alt={"Original Image"} />
           </div>
           {disabled && (
@@ -290,12 +284,12 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
               </Title>
             </EmptyState>
           )}
-          <canvas ref={canvasRef} id={"canvas"} style={{ maxWidth: "600px", maxHeight: "600px" }} />
+          <canvas ref={canvasRef} id={"canvas"} className={"base64png-editor--canvas"} />
         </div>
-        <div style={{ backgroundColor: "rgb(24, 24, 24)", height: "100%", width: "350px" }}>
+        <div className={"base64png-editor--tweaks"}>
           <Nav aria-label="Image tweaker">
             <NavList>
-              <NavItem style={NavItemCss} itemId={0}>
+              <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={0}>
                 <p>Contrast</p>
                 <div style={{ display: "flex" }}>
                   <input
@@ -310,68 +304,68 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
                   <span style={{ width: "40px", textAlign: "right" }}>{contrast}</span>
                 </div>
               </NavItem>
-              <NavItem style={NavItemCss} itemId={1}>
+              <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={1}>
                 <p>Brightness</p>
-                <div style={{ display: "flex" }}>
+                <div className={"base64png-editor--tweaks-nav-item-div"}>
                   <input
                     disabled={disabled}
-                    style={{ width: "100px" }}
+                    className={"base64png-editor--tweaks-nav-item-input"}
                     type="range"
                     min="0"
                     max="200"
                     value={brightness}
                     onChange={tweakBrightness}
                   />
-                  <span style={{ width: "40px", textAlign: "right" }}>{brightness}</span>
+                  <span className={"base64png-editor--tweaks-nav-item-span"}>{brightness}</span>
                 </div>
               </NavItem>
-              <NavItem style={NavItemCss} itemId={2}>
+              <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={2}>
                 <p>Sepia</p>
-                <div style={{ display: "flex" }}>
+                <div className={"base64png-editor--tweaks-nav-item-div"}>
                   <input
                     disabled={disabled}
-                    style={{ width: "100px" }}
+                    className={"base64png-editor--tweaks-nav-item-input"}
                     type="range"
                     min="0"
                     max="100"
                     value={sepia}
                     onChange={tweakSepia}
                   />
-                  <span style={{ width: "40px", textAlign: "right" }}>{sepia}</span>
+                  <span className={"base64png-editor--tweaks-nav-item-span"}>{sepia}</span>
                 </div>
               </NavItem>
-              <NavItem style={NavItemCss} itemId={3}>
+              <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={3}>
                 <p>Grayscale</p>
-                <div style={{ display: "flex" }}>
+                <div className={"base64png-editor--tweaks-nav-item-div"}>
                   <input
                     disabled={disabled}
-                    style={{ width: "100px" }}
+                    className={"base64png-editor--tweaks-nav-item-input"}
                     type="range"
                     min="0"
                     max="100"
                     value={grayscale}
                     onChange={tweakGrayscale}
                   />
-                  <span style={{ width: "40px", textAlign: "right" }}>{grayscale}</span>
+                  <span className={"base64png-editor--tweaks-nav-item-span"}>{grayscale}</span>
                 </div>
               </NavItem>
-              <NavItem style={NavItemCss} itemId={4}>
+              <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={4}>
                 <p>Saturate</p>
-                <div style={{ display: "flex" }}>
+                <div className={"base64png-editor--tweaks-nav-item-div"}>
                   <input
                     disabled={disabled}
-                    style={{ width: "100px" }}
+                    className={"base64png-editor--tweaks-nav-item-input"}
                     type="range"
                     min="0"
                     max="200"
                     value={saturate}
                     onChange={tweakSaturate}
                   />
-                  <span style={{ width: "40px", textAlign: "right" }}>{saturate}</span>
+                  <span className={"base64png-editor--tweaks-nav-item-span"}>{saturate}</span>
                 </div>
               </NavItem>
               <NavItem itemId={5}>
-                <div style={NavItemCss}>
+                <div className={"base64png-editor--tweaks-nav-item"}>
                   <p>Invert</p>
                   <Switch id="invert-switch" isDisabled={disabled} isChecked={invert} onChange={tweakInvert} />
                 </div>

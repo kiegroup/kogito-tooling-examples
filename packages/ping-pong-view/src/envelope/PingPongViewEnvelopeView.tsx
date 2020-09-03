@@ -17,6 +17,7 @@
 import { PingPongView } from "./PingPongView";
 import * as React from "react";
 import { useImperativeHandle, useState } from "react";
+import "./styles.scss";
 
 export interface PingPongViewApi {
   setPage(page: PingPongView): Promise<void>;
@@ -28,15 +29,15 @@ export const PingPongViewEnvelopeView = React.forwardRef((props, forwardedRef) =
   useImperativeHandle(forwardedRef, () => ({ setPage }), []);
 
   return (
-    <div style={{ border: "2px solid green", padding: "10px" }}>
+    <div className={"ping-pong-view--main"}>
       {page && (
         <>
           <h2>This is an implementation of Ping-Pong View</h2>
 
-          <p style={{color: "green"}}> The {"<iframe>"} border is green </p>
-          <p style={{color: "red"}}> The Ping-Pong View implementation border is red </p>
+          <p className={"ping-pong-view--p-iframe"}> The {"<iframe>"} border is green </p>
+          <p className={"ping-pong-view--p-ping-pong"}> The Ping-Pong View implementation border is red </p>
 
-          <div id={"ping-pong-page-container"} style={{ border: "2px solid red" }}>
+          <div id={"ping-pong-page-container"} className={"ping-pong-view--page-container"}>
             {page?.reactComponent?.()}
           </div>
         </>

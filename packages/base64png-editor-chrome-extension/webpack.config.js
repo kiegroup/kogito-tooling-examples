@@ -72,11 +72,6 @@ module.exports = (env, argv) => {
           }
         },
         {
-          test: /\.jsx?$/,
-          exclude: /node_modules/,
-          use: ["babel-loader"]
-        },
-        {
           test: /ChromeRouter\.ts$/,
           loader: "string-replace-loader",
           options: {

@@ -26,7 +26,7 @@ export function TodoListViewPage() {
 
   return (
     <Page>
-      <div style={{ display: "flex", height: "100%" }}>
+      <div className={"webapp--page-main-div"}>
         <ActionsSidebar todoListViewRef={todoListViewRef} />
         <PageSection>
           <EmbeddedTodoList

@@ -29,7 +29,6 @@ module.exports = {
     libraryTarget: "commonjs2",
   },
   externals: [nodeExternals({ modulesDir: "../../node_modules" })],
-  plugins: [],
   module: {
     rules: [
       {
@@ -40,10 +39,9 @@ module.exports = {
         },
       },
       {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: ["babel-loader"],
-      }
+        test: /\.s[ac]ss$/i,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
     ],
   },
   resolve: {

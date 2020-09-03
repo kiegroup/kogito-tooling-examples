@@ -18,6 +18,7 @@ import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import * as React from "react";
 import { useCallback, useImperativeHandle, useMemo, useState } from "react";
 import { Item, TodoListChannelApi } from "../api";
+import "./styles.scss";
 
 export interface TodoListEnvelopeViewApi {
   setUser(user: string): void;
@@ -102,10 +103,10 @@ export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, Pr
           )) || (
             <ol>
               {items.map((item) => (
-                <li key={item.label} style={{ lineHeight: "2em" }}>
+                <li key={item.label} className={"todo-list--list-items"}>
                   {(item.completed && (
                     <>
-                      <span style={{ textDecoration: "line-through" }}>{item.label}</span>
+                      <span className={"todo-list--list-item-completed"}>{item.label}</span>
                     </>
                   )) || (
                     <>

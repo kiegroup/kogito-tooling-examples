@@ -15,7 +15,7 @@
  */
 
 import { ChannelType } from "@kogito-tooling/channel-common-api";
-import { EmbeddedEditor } from "../../__copied-from-kogito-tooling//EmbeddedEditor";
+import { EmbeddedEditor } from "../../__copied-from-kogito-tooling/EmbeddedEditor";
 import * as React from "react";
 import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
 import { useMemo, useState } from "react";
@@ -59,7 +59,7 @@ export function Base64PngPage() {
 
   return (
     <Page>
-      <div style={{ display: "flex", height: "100%" }}>
+      <div className={"webapp--page-main-div"}>
         <Base64PngGallery setFile={setFile} />
         <EmbeddedEditor
           file={file}

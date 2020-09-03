@@ -39,11 +39,6 @@ const commonConfig = {
           configFile: path.resolve("./tsconfig.json"),
         },
       },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: ["babel-loader"],
-      },
     ],
   },
   resolve: {

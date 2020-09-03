@@ -43,9 +43,9 @@ export function PingPongViewsPage() {
 
   return (
     <Page>
-      <div style={{ display: "flex", height: "100%" }}>
+      <div className={"webapp--page-main-div"}>
         <StatsSidebar lastPing={lastPing} lastPong={lastPong} pings={pings} pongs={pongs} />
-        <div style={{ display: "flex" }}>
+        <div className={"webapp--page-ping-pong-view"}>
           <PageSection>
             <EmbeddedPingPongView
               {...api}

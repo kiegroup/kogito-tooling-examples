@@ -30,7 +30,6 @@ module.exports = {
     libraryTarget: "commonjs2",
   },
   externals: [nodeExternals({ modulesDir: "../../node_modules" })],
-  plugins: [],
   module: {
     rules: [
       {
@@ -39,11 +38,6 @@ module.exports = {
         options: {
           configFile: path.resolve("./tsconfig.json"),
         },
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: ["babel-loader"],
       },
       ...pfWebpackOptions.patternflyRules,
     ],

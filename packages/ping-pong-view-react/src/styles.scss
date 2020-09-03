@@ -14,5 +14,17 @@
  * limitations under the License.
  */
 
-// tslint:disable-next-line:no-empty-interface
-export interface PingPongViewEnvelopeContext {}
+.ping-pong-view--header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #292d34;
+  color: rgb(96, 210, 243);
+}
+
+.ping-pong-view--log {
+  padding: 10px;
+  background-color: black;
+  color: white;
+  font-family: "monospace";
+}

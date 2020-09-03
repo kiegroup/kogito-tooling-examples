@@ -27,6 +27,7 @@ import { DmnPage } from "./Pages/KogitoEditors/DmnPage";
 import { TodoListViewPage } from "./Pages/TodoList/TodoListViewPage";
 import { PingPongViewsPage } from "./Pages/PingPong/PingPongViewsPage";
 import { Home } from "./Home";
+import "../static/resources/styles.css";
 
 enum Location {
   BPMN = "/editor/bpmn",
@@ -57,7 +58,7 @@ export function App() {
           <PageHeader
             logo={<Brand src={"logo.png"} alt="Logo" />}
             topNav={
-              <Nav onSelect={e => setLocation(e.itemId as Location)} aria-label="Nav" variant="horizontal">
+              <Nav onSelect={(e) => setLocation(e.itemId as Location)} aria-label="Nav" variant="horizontal">
                 <NavList>
                   <NavItem itemId={Location.HOME} isActive={location === Location.HOME}>
                     <Link to={Location.HOME}>Home</Link>

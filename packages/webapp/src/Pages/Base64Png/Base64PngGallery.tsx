@@ -55,9 +55,9 @@ export function Base64PngGallery(props: { setFile: React.Dispatch<File> }) {
 
   return (
     <div>
-      <Nav style={{ backgroundColor: "rgb(24, 24, 24)", height: "100%" }}>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Title style={{ color: "white", padding: "20px" }} headingLevel="h3" size="xl">
+      <Nav className={"webapp--page-navigation"}>
+        <div className={"webapp--page-navigation-title-div"}>
+          <Title className={"webapp--page-navigation-title-h3"} headingLevel="h3" size="xl">
             Gallery
           </Title>
         </div>
@@ -65,10 +65,10 @@ export function Base64PngGallery(props: { setFile: React.Dispatch<File> }) {
           {images.map((image) => (
             <NavItem
               key={image.name}
-              style={{ display: "flex", alignItems: "center" }}
+              className={"webapp--page-base64png-gallery--navigation-nav-item"}
               onClick={() => openSample(image.name, image.path)}
             >
-              <Card style={{ width: "200px" }}>
+              <Card className={"webapp--page-base64png-gallery--navigation-nav-item-card"}>
                 <img alt={image.name} src={`data:image/png;base64,${image.content}`} />
               </Card>
             </NavItem>

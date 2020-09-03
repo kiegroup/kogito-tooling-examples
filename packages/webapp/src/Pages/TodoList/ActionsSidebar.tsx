@@ -44,9 +44,9 @@ export function ActionsSidebar(props: Props) {
 
   return (
     <div>
-      <Nav style={{ backgroundColor: "rgb(24, 24, 24)", height: "100%" }}>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Title style={{ color: "white", padding: "20px" }} headingLevel="h3" size="xl">
+      <Nav className={"webapp--page-navigation"}>
+        <div className={"webapp--page-navigation-title-div"}>
+          <Title className={"webapp--page-navigation-title-h3"} headingLevel="h3" size="xl">
             Actions
           </Title>
         </div>
