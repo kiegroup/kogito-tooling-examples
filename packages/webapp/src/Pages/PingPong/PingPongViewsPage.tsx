@@ -16,7 +16,7 @@
 
 import * as React from "react";
 import { useMemo, useState } from "react";
-import { Label, Nav, NavItem, NavList, Page, PageSection, Title } from "@patternfly/react-core";
+import { Page, PageSection } from "@patternfly/react-core";
 import { EmbeddedPingPongView } from "ping-pong-view/dist/embedded";
 import { PingPongViewChannelApi } from "ping-pong-view/dist/api";
 import { StatsSidebar } from "./StatsSidebar";

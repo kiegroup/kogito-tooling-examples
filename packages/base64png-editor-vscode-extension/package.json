@@ -1,5 +1,5 @@
 {
-  "name": "editor-example-vscode-extension",
+  "name": "base64png-editor-vscode-extension",
   "displayName": "Kogito Base64 PNG Editor",
   "description": "",
   "main": "./dist/extension/extension.js",
@@ -139,6 +139,6 @@
     "@kogito-tooling/editor": "0.6.1",
     "@kogito-tooling/patternfly-base": "0.6.1",
     "@kogito-tooling/vscode-extension": "0.6.1",
-    "editor-example-base64png-editor": "0.6.1"
+    "base64png-editor": "0.6.1"
   }
 }

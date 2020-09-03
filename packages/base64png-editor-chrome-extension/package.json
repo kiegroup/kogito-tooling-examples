@@ -1,5 +1,5 @@
 {
-  "name": "editor-example-chrome-extension",
+  "name": "base64png-editor-chrome-extension",
   "version": "0.6.1",
   "description": "",
   "license": "Apache-2.0",
@@ -26,7 +26,7 @@
     "@kogito-tooling/editor": "0.6.1",
     "@kogito-tooling/envelope-bus": "0.6.1",
     "@kogito-tooling/patternfly-base": "0.6.1",
-    "editor-example-base64png-editor": "0.6.1"
+    "base64png-editor": "0.6.1"
   },
   "resolutions": {
     "@patternfly/react-styles": "4.4.2"

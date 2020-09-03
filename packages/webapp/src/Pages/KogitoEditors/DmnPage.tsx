@@ -23,10 +23,7 @@ import { Page } from "@patternfly/react-core";
 import { File } from "@kogito-tooling/editor/dist/embedded";
 import { Sidebar } from "./Sidebar";
 
-/**
- * @constructor
- */
-export function BpmnPage() {
+export function DmnPage() {
   /**
    * The reference of the Editor. It allows us to access/modify the Editor properties imperatively.
    */
@@ -34,34 +31,28 @@ export function BpmnPage() {
 
   /**
    * State that handles the file. It's important to type with the File type of the @kogito-tooling/dist/embedded.
-   * It's initialized with an empty file with the base64png extension. The file is used by the EmbeddedEditor to set the content on the Editor. Updating the file will trigger a re-render on the Editor because the EmbeddedEditor will set updated content on the Editor.
+   * It's initialized with an empty file with the dmn extension. The file is used by the EmbeddedEditor to set the content on the Editor. Updating the file will trigger a re-render on the Editor because the EmbeddedEditor will set updated content on the Editor.
    */
   const [file, setFile] = useState<File>({
     fileName: "new-file",
-    fileExtension: "bpmn",
+    fileExtension: "dmn",
     getFileContents: () => Promise.resolve(""),
     isReadOnly: false,
   });
 
   /**
    * The Editor envelope locator informs the EmbeddedEditor what file extension the Editor can open, and it maps to the respective envelope path and the Editor resources (like CSS, icons, etc).
+   * On this example, we're using a local envelope. To do this, it's necessary to copy the files from the @kogito-tooling/kie-bc-editors-unpacked on the webpack.config
    */
   const editorEnvelopeLocator: EditorEnvelopeLocator = useMemo(() => {
     return {
       targetOrigin: window.location.origin,
       mapping: new Map([
         [
-          "bpmn",
+          "dmn",
           {
-            resourcesPathPrefix: "https://kiegroup.github.io/kogito-online/editors/0.6.1/bpmn",
-            envelopePath: "https://kiegroup.github.io/kogito-online/editors/0.6.1/envelope",
-          },
-        ],
-        [
-          "bpmn2",
-          {
-            resourcesPathPrefix: "https://kiegroup.github.io/kogito-online/editors/0.6.1/bpmn2",
-            envelopePath: "https://kiegroup.github.io/kogito-online/editors/0.6.1/envelope",
+            resourcesPathPrefix: "/gwt-editors/dmn/",
+            envelopePath: "/envelope/gwt-editors.html",
           },
         ],
       ]),
@@ -76,8 +67,8 @@ export function BpmnPage() {
           editorEnvelopeLocator={editorEnvelopeLocator}
           file={file}
           setFile={setFile}
-          fileExtension={"bpmn"}
-          accept={".bpmn, .bpmn2"}
+          fileExtension={"dmn"}
+          accept={".dmn"}
         />
         <EmbeddedEditor
           ref={editorRef}

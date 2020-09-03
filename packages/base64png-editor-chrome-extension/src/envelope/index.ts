@@ -15,12 +15,9 @@
  */
 
 import * as EditorEnvelope from "@kogito-tooling/editor/dist/envelope";
-import { Base64PngEditorFactory } from "editor-example-base64png-editor";
+import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
+import { Base64PngEditorFactory } from "base64png-editor";
 import { ChannelType, getOperatingSystem } from "@kogito-tooling/channel-common-api";
-
-declare global {
-  export const acquireVsCodeApi: any;
-}
 
 /**
  * Initialize the Envelope with some args.
@@ -32,7 +29,11 @@ declare global {
  */
 EditorEnvelope.init({
   container: document.getElementById("envelope-app")!,
-  bus: acquireVsCodeApi(),
+  bus: {
+    postMessage<D, T>(message: EnvelopeBusMessage<D, T>, targetOrigin?: string, _?: any) {
+      window.parent.postMessage(message, targetOrigin!, _);
+    },
+  },
   editorFactory: new Base64PngEditorFactory(),
-  editorContext: { channel: ChannelType.VSCODE, operatingSystem: getOperatingSystem() },
+  editorContext: { channel: ChannelType.GITHUB, operatingSystem: getOperatingSystem() },
 });

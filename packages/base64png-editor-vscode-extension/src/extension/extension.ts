@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
    * @params args.editorEnvelopeLocator.mapping A map associating a file extension with the respective envelope path and resources path.
    */
   KogitoVsCode.startExtension({
-    extensionName: "kogito-tooling-examples.editor-example-vscode-extension",
+    extensionName: "kogito-tooling-examples.base64png-editor-vscode-extension",
     context: context,
     viewType: "kieKogitoWebviewBase64PNGEditor",
     getPreviewCommandId: "extension.kogito.getPreviewSvg",
