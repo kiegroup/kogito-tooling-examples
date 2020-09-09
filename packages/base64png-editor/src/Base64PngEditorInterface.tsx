@@ -92,6 +92,7 @@ export class Base64PngEditorInterface implements Editor {
    * Calls the Editor undo method.
    */
   public undo(): Promise<void> {
+    console.log("UNdo!")
     return this.editorRef.current?.undo()!;
   }
 
@@ -106,6 +107,6 @@ export class Base64PngEditorInterface implements Editor {
    * Retrieve the root component of the Editor. Here the Editor is going to be initialized with its props.
    */
   public af_componentRoot() {
-    return <Base64PngEditor ref={this.editorRef} channelApi={this.envelopeContext.channelApi} />;
+    return <Base64PngEditor ref={this.editorRef} envelopeContext={this.envelopeContext} />;
   }
 }
