@@ -46,6 +46,7 @@ interface Props {
   setFile: React.Dispatch<File>;
   fileExtension: string;
   accept: string;
+  isDirty: boolean;
 }
 
 /**
@@ -57,6 +58,7 @@ interface Props {
 export function Sidebar(props: Props) {
   const [fileBlob, setFileBlob] = useState(new Blob());
   const onDownload = useCallback(() => {
+    props.editorRef.current?.getStateControl().setSavedCommand();
     props.editorRef.current?.getContent().then((content) => {
       setFileBlob(new Blob([content], { type: "text/plain" }));
     });
@@ -176,6 +178,11 @@ export function Sidebar(props: Props) {
               </a>
             </div>
           </NavItem>
+          {props.isDirty && (
+            <div style={{ display: "flex", alignItems: "center", padding: "20px" }}>
+              <p style={{ color: "red" }}>File Edited!</p>
+            </div>
+          )}
         </NavList>
       </Nav>
     </div>

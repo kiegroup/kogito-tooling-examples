@@ -20,7 +20,7 @@ import * as React from "react";
 import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
 import { useMemo, useRef, useState } from "react";
 import { Page } from "@patternfly/react-core";
-import { File } from "@kogito-tooling/editor/dist/embedded";
+import { File, useDirtyState } from "@kogito-tooling/editor/dist/embedded";
 import { Sidebar } from "./Sidebar";
 
 export function DmnPage() {
@@ -28,6 +28,7 @@ export function DmnPage() {
    * The reference of the Editor. It allows us to access/modify the Editor properties imperatively.
    */
   const editorRef = useRef<EmbeddedEditorRef>(null);
+  const isDirty = useDirtyState(editorRef);
 
   /**
    * State that handles the file. It's important to type with the File type of the @kogito-tooling/dist/embedded.
@@ -69,6 +70,7 @@ export function DmnPage() {
           setFile={setFile}
           fileExtension={"dmn"}
           accept={".dmn"}
+          isDirty={isDirty}
         />
         <EmbeddedEditor
           ref={editorRef}

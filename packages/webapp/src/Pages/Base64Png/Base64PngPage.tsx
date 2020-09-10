@@ -28,8 +28,6 @@ import { Base64PngGallery } from "./Base64PngGallery";
  * @constructor
  */
 export function Base64PngPage() {
-  
-
   /**
    * State that handles the file. It's important to type with the File type of the @kogito-tooling/dist/embedded.
    * It's initialized with an empty file with the base64png extension. The file is used by the EmbeddedEditor to set the content on the Editor. Updating the file will trigger a re-render on the Editor because the EmbeddedEditor will set updated content on the Editor.
