@@ -48,9 +48,6 @@ interface Props {
  * @param props.envelopeContext The object which allows this Editor to communicate with its containing Channel, and access the Envelope services
  */
 export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwardedRef) => {
-  const _ = undefined;
-  const stateControl = useMemo(() => new Base64PngStateControl(), []);
-
   /**
    * Editor Content - The current Editor value (contains all edits).
    * The editorContent has the current value of all tweaks that it has done to the image. This value is the one displayed on the canvas.
@@ -73,12 +70,16 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
     props.envelopeContext.channelApi.notify("receive_ready");
   }, []);
 
+  const stateControl = useMemo(() => new Base64PngStateControl(), [originalContent]);
+
   /**
    * Callback is exposed to the Channel that is called when a new file is opened. It sets the originalContent to the received value.
-   * TODO: The setTimout is a bug
+   * TODO: The setTimout solves a bug
    */
   const setContent = useCallback((path: string, content: string) => {
     setOriginalContent(content);
+    stateControl.clearCommandStack();
+    updateEditorStateWithCurrentEdit();
     return new Promise<void>((res) => setTimeout(res, 50));
   }, []);
 
@@ -112,7 +113,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   const undo = useCallback(() => {
     stateControl.undo();
     updateEditorStateWithCurrentEdit(stateControl.getCurrentBase64PngEdit());
-  }, []);
+  }, [stateControl]);
 
   /**
    * Do a redo command on the State Control and update the current state of the Editor
@@ -120,13 +121,13 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   const redo = useCallback(() => {
     stateControl.redo();
     updateEditorStateWithCurrentEdit(stateControl.getCurrentBase64PngEdit());
-  }, []);
+  }, [stateControl]);
 
   /**
    * Update the current state of the Editor using an edit.
    * If the edit is undefined which indicates that the current state is the initial one, the Editor state goes back to the initial state.
    */
-  const updateEditorStateWithCurrentEdit = useCallback((edit: Base64PngEdit | undefined) => {
+  const updateEditorStateWithCurrentEdit = useCallback((edit?: Base64PngEdit) => {
     if (edit) {
       const { contrast, brightness, saturate, sepia, grayscale, invert } = edit;
       setContrast(contrast);
@@ -236,7 +237,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
       stateControl.updateCommandStack(JSON.stringify(command));
       props.envelopeContext.channelApi.notify("receive_newEdit", command);
     },
-    [contrast, brightness, saturate, sepia, grayscale, invert]
+    [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
 
   /**
@@ -261,7 +262,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
       stateControl.updateCommandStack(JSON.stringify(command));
       props.envelopeContext.channelApi.notify("receive_newEdit", command);
     },
-    [contrast, brightness, saturate, sepia, grayscale, invert]
+    [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
 
   /**
@@ -286,7 +287,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
       stateControl.updateCommandStack(JSON.stringify(command));
       props.envelopeContext.channelApi.notify("receive_newEdit", command);
     },
-    [contrast, brightness, saturate, sepia, grayscale, invert]
+    [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
 
   /**
@@ -311,7 +312,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
       stateControl.updateCommandStack(JSON.stringify(command));
       props.envelopeContext.channelApi.notify("receive_newEdit", command);
     },
-    [contrast, brightness, saturate, sepia, grayscale, invert]
+    [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
 
   /**
@@ -336,7 +337,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
       stateControl.updateCommandStack(JSON.stringify(command));
       props.envelopeContext.channelApi.notify("receive_newEdit", command);
     },
-    [contrast, brightness, saturate, sepia, grayscale, invert]
+    [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
 
   /**
@@ -361,7 +362,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
       stateControl.updateCommandStack(JSON.stringify(command));
       props.envelopeContext.channelApi.notify("receive_newEdit", command);
     },
-    [contrast, brightness, saturate, sepia, grayscale, invert]
+    [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
 
   /**
@@ -393,15 +394,14 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d")!;
 
-    let filter =
+    ctx.filter =
       stateControl.getCurrentBase64PngEdit()?.filter ??
       `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturate}%) sepia(${sepia}%) grayscale(${grayscale}%) invert(${invert}%)`;
-    ctx.filter = filter;
 
     ctx.drawImage(imageRef.current!, 0, 0);
 
     setEditorContent(canvasRef.current!.toDataURL().split(",")[1]);
-  }, [contrast, brightness, saturate, sepia, grayscale, invert]);
+  }, [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]);
 
   /**
    * When the Editor starts, it must determine the canvas dimensions, and to do so requires the image dimension.
@@ -533,6 +533,11 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
                   />
                 </div>
               </NavItem>
+              {stateControl.isDirty() && (
+                <div style={{ display: "flex", alignItems: "center", padding: "20px" }}>
+                  <p style={{ color: "red" }}>Image was Edited!</p>
+                </div>
+              )}
             </NavList>
           </Nav>
         </div>
