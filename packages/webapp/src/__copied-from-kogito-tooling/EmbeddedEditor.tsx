@@ -32,7 +32,7 @@ import { useSyncedKeyboardEvents } from "@kogito-tooling/keyboard-shortcuts/dist
 import { useGuidedTourPositionProvider } from "@kogito-tooling/guided-tour/dist/channel";
 import * as CSS from "csstype";
 import * as React from "react";
-import { useImperativeHandle, useMemo, useRef } from "react";
+import { useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { File, StateControl, useEffectAfterFirstRender } from "@kogito-tooling/editor/dist/embedded";
 import { KogitoEditorChannelApiImpl } from "./KogitoEditorChannelApiImpl";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
@@ -117,11 +117,18 @@ const RefForwardingEmbeddedEditor: React.RefForwardingComponent<EmbeddedEditorRe
     envelopeServer.client.notify("receive_localeChange", props.locale);
   }, [props.locale]);
 
-  useEffectAfterFirstRender(() => {
-    props.file.getFileContents().then((content) => {
-      envelopeServer.client.notify("receive_contentChanged", { content: content! });
+  const [fileContent, setFileContent] = useState<string | undefined>("");
+  useEffect(() => {
+    props.file.getFileContents().then((newContent) => {
+      if (newContent !== fileContent) {
+        setFileContent(newContent);
+      }
     });
   }, [props.file]);
+
+  useEffectAfterFirstRender(() => {
+    envelopeServer.client.notify("receive_contentChanged", { content: fileContent! });
+  }, [fileContent]);
 
   // Register position provider for Guided Tour
   useGuidedTourPositionProvider(envelopeServer.client, iframeRef);

@@ -31,43 +31,6 @@ interface Props {
   envelopeContext: KogitoEditorEnvelopeContextType;
 }
 
-enum ActionType {
-  CONTRAST = "contrast",
-  BRIGHTNESS = "brightness",
-  SATURATE = "saturate",
-  SEPIA = "sepia",
-  GRAYSCALE = "grayscale",
-  INVERT = "invert",
-}
-
-interface Base64PngStates {
-  contrast: string;
-  brightness: string;
-  saturate: string;
-  sepia: string;
-  grayscale: string;
-  invert: string;
-}
-
-function reducer(state: Base64PngStates, action: { type: ActionType; value: string }) {
-  switch (action.type) {
-    case ActionType.CONTRAST:
-      return { ...state, contrast: action.value };
-    case ActionType.BRIGHTNESS:
-      return { ...state, brightness: action.value };
-    case ActionType.SATURATE:
-      return { ...state, saturate: action.value };
-    case ActionType.SEPIA:
-      return { ...state, sepia: action.value };
-    case ActionType.GRAYSCALE:
-      return { ...state, grayscale: action.value };
-    case ActionType.INVERT:
-      return { ...state, invert: action.value };
-    default:
-      throw Error("");
-  }
-}
-
 /**
  * This is an Editor component. By exposing its `ref` implementing EditorApi, this component exposes its imperative handles and gives control to its parent. To be able to do that, it's necessary to create a RefForwardingComponent.
  *
@@ -79,15 +42,6 @@ function reducer(state: Base64PngStates, action: { type: ActionType; value: stri
 export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwardedRef) => {
   const _ = undefined;
   const stateControl = useMemo(() => new Base64PngStateControl(), []);
-
-  const [contentState, dispatch] = useReducer(reducer, {
-    contrast: "100",
-    brightness: "100",
-    saturate: "100",
-    sepia: "0",
-    grayscale: "0",
-    invert: "0",
-  });
 
   /**
    * Editor Content - The current Editor value (contains all edits).
@@ -152,13 +106,13 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
 
   const updateState = useCallback((edit: Base64PngEdit | undefined) => {
     if (edit) {
-      const { contrast, brightness, saturate, sepia, grayscale, invert } = edit;
-      dispatch({ type: ActionType.CONTRAST, value: contrast });
-      dispatch({ type: ActionType.SEPIA, value: sepia });
-      dispatch({ type: ActionType.BRIGHTNESS, value: brightness });
-      dispatch({ type: ActionType.SATURATE, value: saturate });
-      dispatch({ type: ActionType.GRAYSCALE, value: grayscale });
-      dispatch({ type: ActionType.INVERT, value: invert });
+      const { contrast, brightness } = edit;
+      setContrast(contrast);
+      setBrightness(brightness);
+      setSaturate(saturate);
+      setSepia(sepia);
+      setGrayscale(grayscale);
+      setInvert(invert);
     }
   }, []);
 
@@ -199,40 +153,196 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
    */
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const getUpdatedCommand = useCallback(
-    (type: ActionType, value: string, command: Base64PngEdit) => {
-      switch (type) {
-        case ActionType.CONTRAST:
-          return { ...command, contrast: value };
-        case ActionType.BRIGHTNESS:
-          return { ...command, brightness: value };
-        case ActionType.SATURATE:
-          return { ...command, saturate: value };
-        case ActionType.SEPIA:
-          return { ...command, sepia: value };
-        case ActionType.GRAYSCALE:
-          return { ...command, grayscale: value };
-        case ActionType.INVERT:
-          return { ...command, invert: value };
-      }
-    },
-    [contentState]
-  );
+  /**
+   * State that handles the contrast value, 100% is the starting value.
+   */
+  const [contrast, setContrast] = useState("100");
 
-  const tweak = useCallback(
-    (type: ActionType, value: string) => {
-      dispatch({ type, value });
+  /**
+   * State that handles the brightness value, 100% is the starting value.
+   */
+  const [brightness, setBrightness] = useState("100");
 
+  /**
+   * State that handles the saturation value, 0% is the starting value.
+   */
+  const [saturate, setSaturate] = useState("100");
+
+  /**
+   * State that handles the sepia value, 0% is the starting value.
+   */
+  const [sepia, setSepia] = useState("0");
+
+  /**
+   * State that handles the grayscale value, 0% is the starting value.
+   */
+  const [grayscale, setGrayscale] = useState("0");
+
+  /**
+   * State that handles if the image is inverted or not. This state is modified by a switch, so it's only possible to have two values (false/true).
+   * The false is by default the starting value, which represents a no-inverted image.
+   *
+   * The invert value is discrete, and has a value on the interval [0%, 100%]. This Editor implements only two possible values: 0% (false) and 100% (true). The invertValue is re-calculated everytime the invert state is changed.
+   */
+  const [invert, setInvert] = useState("0");
+
+  /**
+   * This callback tweaks the contrast value. It also notifies to the Channel that a new edit happened on the Editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the Editor.
+   */
+  const tweakContrast = useCallback(
+    (value: string) => {
+      setContrast(value);
       const command: Base64PngEdit = {
         id: new Date().getTime().toString(),
-        filter: `contrast(${contentState.contrast}%) brightness(${contentState.brightness}%) invert(${contentState.invert}%) grayscale(${contentState.grayscale}%) sepia(${contentState.sepia}%) saturate(${contentState.saturate}%)`,
-        ...contentState,
+        filter: `contrast(${value}%) brightness(${brightness}%) saturate(${saturate}%) sepia(${sepia}%) grayscale(${grayscale}%) invert(${invert}%)`,
+        contrast: value,
+        brightness,
+        saturate,
+        sepia,
+        grayscale,
+        invert,
       };
-      stateControl.updateCommandStack(JSON.stringify(getUpdatedCommand(type, value, command)));
+      stateControl.updateCommandStack(JSON.stringify(command));
       props.envelopeContext.channelApi.notify("receive_newEdit", command);
     },
-    [contentState]
+    [contrast, brightness, saturate, sepia, grayscale, invert]
   );
+
+  /**
+   * This callback tweaks the brightness value. It also notifies to the Channel that a new edit happened on the Editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   */
+  const tweakBrightness = useCallback(
+    (value: string) => {
+      setBrightness(value);
+      const command: Base64PngEdit = {
+        id: new Date().getTime().toString(),
+        filter: `contrast(${contrast}%) brightness(${value}%) saturate(${saturate}%) sepia(${sepia}%) grayscale(${grayscale}%) invert(${invert}%)`,
+        contrast,
+        brightness: value,
+        saturate,
+        sepia,
+        grayscale,
+        invert,
+      };
+      stateControl.updateCommandStack(JSON.stringify(command));
+      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+    },
+    [contrast, brightness, saturate, sepia, grayscale, invert]
+  );
+
+  /**
+   * This callback tweaks the saturation value. It also notifies to the Channel that a new edit happened on the Editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   */
+  const tweakSaturate = useCallback(
+    (value: string) => {
+      setSaturate(value);
+      const command: Base64PngEdit = {
+        id: new Date().getTime().toString(),
+        filter: `contrast(${contrast}%) brightness(${brightness}%) saturate(${value}%) sepia(${sepia}%) grayscale(${grayscale}%) invert(${invert}%)`,
+        contrast,
+        brightness,
+        saturate: value,
+        sepia,
+        grayscale,
+        invert,
+      };
+      stateControl.updateCommandStack(JSON.stringify(command));
+      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+    },
+    [contrast, brightness, saturate, sepia, grayscale, invert]
+  );
+
+  /**
+   * Callback to tweak the sepia value. It also notifies to the Channel that a new edit happened on the Editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   */
+  const tweakSepia = useCallback(
+    (value: string) => {
+      setSepia(value);
+      const command: Base64PngEdit = {
+        id: new Date().getTime().toString(),
+        filter: `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturate}%) sepia(${value}%) grayscale(${grayscale}%) invert(${invert}%)`,
+        contrast,
+        brightness,
+        saturate,
+        sepia: value,
+        grayscale,
+        invert,
+      };
+      stateControl.updateCommandStack(JSON.stringify(command));
+      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+    },
+    [contrast, brightness, saturate, sepia, grayscale, invert]
+  );
+
+  /**
+   * This callback tweaks the grayscale value. It also notifies to the Channel that a new edit happened on the Editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   */
+  const tweakGrayscale = useCallback(
+    (value: string) => {
+      setGrayscale(value);
+      const command: Base64PngEdit = {
+        id: new Date().getTime().toString(),
+        filter: `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturate}%) sepia(${sepia}%) grayscale(${value}%) invert(${invert}%)`,
+        contrast,
+        brightness,
+        saturate,
+        sepia,
+        grayscale: value,
+        invert,
+      };
+      stateControl.updateCommandStack(JSON.stringify(command));
+      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+    },
+    [contrast, brightness, saturate, sepia, grayscale, invert]
+  );
+
+  /**
+   * This callback tweaks the invert value. It also notifies to the Channel that a new edit happened on the Editor.
+   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   */
+  const tweakInvert = useCallback(
+    (value: string) => {
+      setInvert(value);
+      const command: Base64PngEdit = {
+        id: new Date().getTime().toString(),
+        filter: `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturate}%) sepia(${sepia}%) grayscale(${grayscale}%) invert(${value}%)`,
+        contrast,
+        brightness,
+        saturate,
+        sepia,
+        grayscale,
+        invert: value,
+      };
+      stateControl.updateCommandStack(JSON.stringify(command));
+      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+    },
+    [contrast, brightness, saturate, sepia, grayscale, invert]
+  );
+
+  /**
+   * Register a keyboard shortcut to change the invert value.
+   */
+  useEffect(() => {
+    const invertId = props.envelopeContext.services.keyboardShortcuts.registerKeyPress(
+      "i",
+      `Edit | Invert Image`,
+      async () => {
+        if (!disabled && invert === "100") {
+          tweakInvert("0");
+        } else if (!disabled && invert === "0") {
+          tweakInvert("100");
+        }
+      }
+    );
+    return () => {
+      props.envelopeContext.services.keyboardShortcuts.deregister(invertId);
+    };
+  }, [invert]);
 
   /**
    * After the user makes a new edit, it will change one of the states that handle the tweak values (contrast/brightness/invert/grayscale/sepia/saturate). The content of the canvas needs to be re-printed, applying a filter with the current values. The resultant image is converted to base64 (toDataURL) and then saved in the editorContent after the base64 header is removed (split(",")[1]).
@@ -242,11 +352,11 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
 
     ctx.filter =
       stateControl.getCurrentBase64PngEdit()?.filter ??
-      `contrast(${contentState.contrast}%) brightness(${contentState.brightness}%) invert(${contentState.invert}%) grayscale(${contentState.grayscale}%) sepia(${contentState.sepia}%) saturate(${contentState.saturate}%)`;
+      `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturate}%) sepia(${sepia}%) grayscale(${grayscale}%) invert(${invert}%)`;
     ctx.drawImage(imageRef.current!, 0, 0);
 
     setEditorContent(canvasRef.current!.toDataURL().split(",")[1]);
-  }, [stateControl.getCurrentCommand(), contentState]);
+  }, [contrast, brightness, saturate, sepia, grayscale, invert]);
 
   /**
    * When the Editor starts, it must determine the canvas dimensions, and to do so requires the image dimension. On the first render, the image will not be loaded yet, so it's necessary to add a callback to when the image finishes loading, it'll set the canvas dimensions and show the image. If the image is loaded, the controls are not disabled; otherwise, the controllers will remain disabled.
@@ -298,10 +408,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
                     type="range"
                     min="0"
                     max="200"
-                    value={contentState.contrast}
-                    onChange={(e) => tweak(ActionType.CONTRAST, e.target.value)}
+                    value={contrast}
+                    onChange={(e) => tweakContrast(e.target.value)}
                   />
-                  <span style={{ width: "40px", textAlign: "right" }}>{contentState.contrast}</span>
+                  <span style={{ width: "40px", textAlign: "right" }}>{contrast}</span>
                 </div>
               </NavItem>
               <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={1}>
@@ -313,40 +423,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
                     type="range"
                     min="0"
                     max="200"
-                    value={contentState.brightness}
-                    onChange={(e) => tweak(ActionType.BRIGHTNESS, e.target.value)}
+                    value={brightness}
+                    onChange={(e) => tweakBrightness(e.target.value)}
                   />
-                  <span className={"base64png-editor--tweaks-nav-item-span"}>{contentState.brightness}</span>
-                </div>
-              </NavItem>
-              <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={2}>
-                <p>Sepia</p>
-                <div className={"base64png-editor--tweaks-nav-item-div"}>
-                  <input
-                    disabled={disabled}
-                    className={"base64png-editor--tweaks-nav-item-input"}
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={contentState.sepia}
-                    onChange={(e) => tweak(ActionType.SEPIA, e.target.value)}
-                  />
-                  <span className={"base64png-editor--tweaks-nav-item-span"}>{contentState.sepia}</span>
-                </div>
-              </NavItem>
-              <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={3}>
-                <p>Grayscale</p>
-                <div className={"base64png-editor--tweaks-nav-item-div"}>
-                  <input
-                    disabled={disabled}
-                    className={"base64png-editor--tweaks-nav-item-input"}
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={contentState.grayscale}
-                    onChange={(e) => tweak(ActionType.GRAYSCALE, e.target.value)}
-                  />
-                  <span className={"base64png-editor--tweaks-nav-item-span"}>{contentState.grayscale}</span>
+                  <span className={"base64png-editor--tweaks-nav-item-span"}>{brightness}</span>
                 </div>
               </NavItem>
               <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={4}>
@@ -358,10 +438,40 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
                     type="range"
                     min="0"
                     max="200"
-                    value={contentState.saturate}
-                    onChange={(e) => tweak(ActionType.SATURATE, e.target.value)}
+                    value={saturate}
+                    onChange={(e) => tweakSaturate(e.target.value)}
                   />
-                  <span className={"base64png-editor--tweaks-nav-item-span"}>{contentState.saturate}</span>
+                  <span className={"base64png-editor--tweaks-nav-item-span"}>{saturate}</span>
+                </div>
+              </NavItem>
+              <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={2}>
+                <p>Sepia</p>
+                <div className={"base64png-editor--tweaks-nav-item-div"}>
+                  <input
+                    disabled={disabled}
+                    className={"base64png-editor--tweaks-nav-item-input"}
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={sepia}
+                    onChange={(e) => tweakSepia(e.target.value)}
+                  />
+                  <span className={"base64png-editor--tweaks-nav-item-span"}>{sepia}</span>
+                </div>
+              </NavItem>
+              <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={3}>
+                <p>Grayscale</p>
+                <div className={"base64png-editor--tweaks-nav-item-div"}>
+                  <input
+                    disabled={disabled}
+                    className={"base64png-editor--tweaks-nav-item-input"}
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={grayscale}
+                    onChange={(e) => tweakGrayscale(e.target.value)}
+                  />
+                  <span className={"base64png-editor--tweaks-nav-item-span"}>{grayscale}</span>
                 </div>
               </NavItem>
               <NavItem itemId={5}>
@@ -370,8 +480,8 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
                   <Switch
                     id="invert-switch"
                     isDisabled={disabled}
-                    isChecked={contentState.invert === "100"}
-                    onChange={(value) => tweak(ActionType.INVERT, value ? "100" : "0")}
+                    isChecked={invert === "100"}
+                    onChange={(value) => tweakInvert(value ? "100" : "0")}
                   />
                 </div>
               </NavItem>
