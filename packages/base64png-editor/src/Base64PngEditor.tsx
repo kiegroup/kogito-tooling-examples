@@ -15,7 +15,7 @@
  */
 
 import * as React from "react";
-import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState, useReducer } from "react";
+import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { EditorApi, KogitoEditorEnvelopeContextType } from "@kogito-tooling/editor/dist/api";
 import { EmptyState, EmptyStateIcon, Nav, NavItem, NavList, Page, Switch, Title } from "@patternfly/react-core";
 import { DEFAULT_RECT } from "@kogito-tooling/guided-tour/dist/api";
@@ -23,21 +23,29 @@ import CubesIcon from "@patternfly/react-icons/dist/js/icons/cubes-icon";
 import "./styles.scss";
 import { Base64PngEdit, Base64PngStateControl } from "./Base64PngStateControl";
 
+const INITIAL_CONTRAST = "100";
+const INITIAL_BRIGHTNESS = "100";
+const INITIAL_SATURATE = "100";
+const INITIAL_SEPIA = "0";
+const INITIAL_GRAYSCALE = "0";
+const INITIAL_INVERT = "0";
+
 /**
- * channelApi Gives the Editor the possibility to send requests and notifications to the channel. It implements KogitoEditorChannelApi.
- * initArgs Initial arguments that are passed when the Editor is created. It has the file extension, the initial locale (if the Editor implements i18n), and the envelope resources path.
+ * envelopeContext All the features and information provided by the Kogito Tooling Envelope.
  */
 interface Props {
   envelopeContext: KogitoEditorEnvelopeContextType;
 }
 
 /**
- * This is an Editor component. By exposing its `ref` implementing EditorApi, this component exposes its imperative handles and gives control to its parent. To be able to do that, it's necessary to create a RefForwardingComponent.
+ * This is an Editor component. By exposing its `ref` implementing EditorApi, this component exposes its imperative
+ * handles and gives control to its parent. To be able to do that, it's necessary to create a RefForwardingComponent.
  *
- * The EditorApi is a contract created by Kogito Tooling, which determines the necessary methods for an Editor to implement so that the Channel can manipulate its contents and retrieve valuable information.
+ * The EditorApi is a contract created by Kogito Tooling, which determines the necessary methods for an Editor to
+ * implement so that the Channel can manipulate its contents and retrieve valuable information.
  *
  * @param props Any props that are necessary for this Editor to work. In this case..
- * @param props.channelApi The object which allows this Editor to communicate with its containing Channel.
+ * @param props.envelopeContext The object which allows this Editor to communicate with its containing Channel, and access the Envelope services
  */
 export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwardedRef) => {
   const _ = undefined;
@@ -52,7 +60,9 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   /**
    * Original Content - The original base64 value (can't be changed with edits).
    * All new edits are made on top of the original value.
-   * This is used because changing the image contrast to 0 would tweak it to a gray image, and turning it back to 100 would apply the changes on top of the gray image. This is solved using the originalContent on ever new edit, so it's not possible to lose the image metadata after an edit.
+   * This is used because changing the image contrast to 0 would tweak it to a gray image, and turning it back to 100
+   * would apply the changes on top of the gray image. This is solved using the originalContent on ever new edit,
+   * so it's not possible to lose the image metadata after an edit.
    */
   const [originalContent, setOriginalContent] = useState("");
 
@@ -73,14 +83,16 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   }, []);
 
   /**
-   * Callback is exposed to the Channel to retrieve the current value of the Editor. It returns the value of the editorContent, which is the state that has the edited image.
+   * Callback is exposed to the Channel to retrieve the current value of the Editor. It returns the value of
+   * the editorContent, which is the state that has the edited image.
    */
   const getContent = useCallback(() => {
     return editorContent;
   }, [editorContent]);
 
   /**
-   * Callback is exposed to the Channel to retrieve the SVG content of the Editor. A SVG is a XML file that is wrapped with a <svg> tag. For this Editor, it's necessary to return the edited image (editorContent).
+   * Callback is exposed to the Channel to retrieve the SVG content of the Editor. A SVG is a XML file that is
+   * wrapped with a <svg> tag. For this Editor, it's necessary to return the edited image (editorContent).
    */
   const getPreview = useCallback(() => {
     const width = imageRef.current!.width;
@@ -94,17 +106,27 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
 </svg>`;
   }, [editorContent]);
 
+  /**
+   * Do a undo command on the State Control and update the current state of the Editor
+   */
   const undo = useCallback(() => {
     stateControl.undo();
-    updateState(stateControl.getCurrentBase64PngEdit());
+    updateEditorStateWithCurrentEdit(stateControl.getCurrentBase64PngEdit());
   }, []);
 
+  /**
+   * Do a redo command on the State Control and update the current state of the Editor
+   */
   const redo = useCallback(() => {
     stateControl.redo();
-    updateState(stateControl.getCurrentBase64PngEdit());
+    updateEditorStateWithCurrentEdit(stateControl.getCurrentBase64PngEdit());
   }, []);
 
-  const updateState = useCallback((edit: Base64PngEdit | undefined) => {
+  /**
+   * Update the current state of the Editor using an edit.
+   * If the edit is undefined which indicates that the current state is the initial one, the Editor state goes back to the initial state.
+   */
+  const updateEditorStateWithCurrentEdit = useCallback((edit: Base64PngEdit | undefined) => {
     if (edit) {
       const { contrast, brightness, saturate, sepia, grayscale, invert } = edit;
       setContrast(contrast);
@@ -114,12 +136,12 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
       setGrayscale(grayscale);
       setInvert(invert);
     } else {
-      setContrast("100");
-      setBrightness("100");
-      setSaturate("100");
-      setSepia("0");
-      setGrayscale("0");
-      setInvert("0");
+      setContrast(INITIAL_CONTRAST);
+      setBrightness(INITIAL_BRIGHTNESS);
+      setSaturate(INITIAL_SATURATE);
+      setSepia(INITIAL_SEPIA);
+      setGrayscale(INITIAL_GRAYSCALE);
+      setInvert(INITIAL_INVERT);
     }
   }, []);
 
@@ -139,7 +161,8 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   });
 
   /**
-   * State that handles if the commands are disabled or not. It's useful in case of a broken image or an empty file is open. It starts disabled by default, and when an image is successfully loaded, it becomes false.
+   * State that handles if the commands are disabled or not. It's useful in case of a broken image or an empty file is open.
+   * It starts disabled by default, and when an image is successfully loaded, it becomes false.
    */
   const [disabled, setDisabled] = useState(true);
 
@@ -163,39 +186,39 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   /**
    * State that handles the contrast value, 100% is the starting value.
    */
-  const [contrast, setContrast] = useState("100");
+  const [contrast, setContrast] = useState(INITIAL_CONTRAST);
 
   /**
    * State that handles the brightness value, 100% is the starting value.
    */
-  const [brightness, setBrightness] = useState("100");
+  const [brightness, setBrightness] = useState(INITIAL_BRIGHTNESS);
 
   /**
    * State that handles the saturation value, 0% is the starting value.
    */
-  const [saturate, setSaturate] = useState("100");
+  const [saturate, setSaturate] = useState(INITIAL_SATURATE);
 
   /**
    * State that handles the sepia value, 0% is the starting value.
    */
-  const [sepia, setSepia] = useState("0");
+  const [sepia, setSepia] = useState(INITIAL_SEPIA);
 
   /**
    * State that handles the grayscale value, 0% is the starting value.
    */
-  const [grayscale, setGrayscale] = useState("0");
+  const [grayscale, setGrayscale] = useState(INITIAL_GRAYSCALE);
 
   /**
-   * State that handles if the image is inverted or not. This state is modified by a switch, so it's only possible to have two values (false/true).
-   * The false is by default the starting value, which represents a no-inverted image.
-   *
-   * The invert value is discrete, and has a value on the interval [0%, 100%]. This Editor implements only two possible values: 0% (false) and 100% (true). The invertValue is re-calculated everytime the invert state is changed.
+   * The invert value is discrete, and has a value on the interval [0%, 100%].
+   * This Editor implements only two possible values: 0% (false) and 100% (true).
    */
-  const [invert, setInvert] = useState("0");
+  const [invert, setInvert] = useState(INITIAL_INVERT);
 
   /**
-   * This callback tweaks the contrast value. It also notifies to the Channel that a new edit happened on the Editor.
-   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the state control of the Editor.
+   * This callback tweaks the contrast value. It also create a command object with the updated value to inform
+   * the Editor State Control, and then notifies to the Channel that a new edit happened on the Editor. The Channel
+   * will handle this notification by updating the Channel State Control with the new edit, so it stays synced with
+   * the Editor's State Control.
    */
   const tweakContrast = useCallback(
     (value: string) => {
@@ -217,8 +240,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   );
 
   /**
-   * This callback tweaks the brightness value. It also notifies to the Channel that a new edit happened on the Editor.
-   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   * This callback tweaks the brightness value. It also create a command object with the updated value to inform
+   * the Editor State Control, and then notifies to the Channel that a new edit happened on the Editor. The Channel
+   * will handle this notification by updating the Channel State Control with the new edit, so it stays synced with
+   * the Editor's State Control.
    */
   const tweakBrightness = useCallback(
     (value: string) => {
@@ -240,8 +265,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   );
 
   /**
-   * This callback tweaks the saturation value. It also notifies to the Channel that a new edit happened on the Editor.
-   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   * This callback tweaks the saturation value. It also create a command object with the updated value to inform
+   * the Editor State Control, and then notifies to the Channel that a new edit happened on the Editor. The Channel
+   * will handle this notification by updating the Channel State Control with the new edit, so it stays synced with
+   * the Editor's State Control.
    */
   const tweakSaturate = useCallback(
     (value: string) => {
@@ -263,8 +290,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   );
 
   /**
-   * Callback to tweak the sepia value. It also notifies to the Channel that a new edit happened on the Editor.
-   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   * This callback tweaks the sepia value. It also create a command object with the updated value to inform
+   * the Editor State Control, and then notifies to the Channel that a new edit happened on the Editor. The Channel
+   * will handle this notification by updating the Channel State Control with the new edit, so it stays synced with
+   * the Editor's State Control.
    */
   const tweakSepia = useCallback(
     (value: string) => {
@@ -286,8 +315,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   );
 
   /**
-   * This callback tweaks the grayscale value. It also notifies to the Channel that a new edit happened on the Editor.
-   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   * This callback tweaks the grayscale value. It also create a command object with the updated value to inform
+   * the Editor State Control, and then notifies to the Channel that a new edit happened on the Editor. The Channel
+   * will handle this notification by updating the Channel State Control with the new edit, so it stays synced with
+   * the Editor's State Control.
    */
   const tweakGrayscale = useCallback(
     (value: string) => {
@@ -309,8 +340,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   );
 
   /**
-   * This callback tweaks the invert value. It also notifies to the Channel that a new edit happened on the Editor.
-   * The Channel will handle this notification by updating the channel state control with the new edit, so it stays synced with the Editor's state control.
+   * This callback tweaks the invert value. It also create a command object with the updated value to inform
+   * the Editor State Control, and then notifies to the Channel that a new edit happened on the Editor. The Channel
+   * will handle this notification by updating the Channel State Control with the new edit, so it stays synced with
+   * the Editor's State Control.
    */
   const tweakInvert = useCallback(
     (value: string) => {
@@ -332,7 +365,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   );
 
   /**
-   * Register a keyboard shortcut to change the invert value.
+   * Register a keyboard shortcut using the keyboardShortcuts service expose on the envelopeContext to tweak the invert value.
    */
   useEffect(() => {
     const invertId = props.envelopeContext.services.keyboardShortcuts.registerKeyPress(
@@ -349,10 +382,13 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
     return () => {
       props.envelopeContext.services.keyboardShortcuts.deregister(invertId);
     };
-  }, [invert]);
+  }, [disabled, invert]);
 
   /**
-   * After the user makes a new edit, it will change one of the states that handle the tweak values (contrast/brightness/invert/grayscale/sepia/saturate). The content of the canvas needs to be re-printed, applying a filter with the current values. The resultant image is converted to base64 (toDataURL) and then saved in the editorContent after the base64 header is removed (split(",")[1]).
+   * After the user makes a new edit, it will change one of the states that handle the tweak
+   * values (contrast/brightness/invert/grayscale/sepia/saturate). The content of the canvas needs to be re-printed,
+   * applying a filter with the current values. The resultant image is converted to base64 (toDataURL) and
+   * then saved in the editorContent after the base64 header is removed (split(",")[1]).
    */
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d")!;
@@ -368,7 +404,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   }, [contrast, brightness, saturate, sepia, grayscale, invert]);
 
   /**
-   * When the Editor starts, it must determine the canvas dimensions, and to do so requires the image dimension. On the first render, the image will not be loaded yet, so it's necessary to add a callback to when the image finishes loading, it'll set the canvas dimensions and show the image. If the image is loaded, the controls are not disabled; otherwise, the controllers will remain disabled.
+   * When the Editor starts, it must determine the canvas dimensions, and to do so requires the image dimension.
+   * On the first render, the image will not be loaded yet, so it's necessary to add a callback to when the image
+   * finishes loading, it'll set the canvas dimensions and show the image. If the image is loaded, the controls are
+   * not disabled; otherwise, the controllers will remain disabled.
    */
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d")!;
