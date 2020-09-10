@@ -92,7 +92,6 @@ export class Base64PngEditorInterface implements Editor {
    * Calls the Editor undo method.
    */
   public undo(): Promise<void> {
-    console.log("UNdo!")
     return this.editorRef.current?.undo()!;
   }
 

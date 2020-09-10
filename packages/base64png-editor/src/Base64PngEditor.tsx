@@ -106,13 +106,20 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
 
   const updateState = useCallback((edit: Base64PngEdit | undefined) => {
     if (edit) {
-      const { contrast, brightness } = edit;
+      const { contrast, brightness, saturate, sepia, grayscale, invert } = edit;
       setContrast(contrast);
       setBrightness(brightness);
       setSaturate(saturate);
       setSepia(sepia);
       setGrayscale(grayscale);
       setInvert(invert);
+    } else {
+      setContrast("100");
+      setBrightness("100");
+      setSaturate("100");
+      setSepia("0");
+      setGrayscale("0");
+      setInvert("0");
     }
   }, []);
 
@@ -350,9 +357,11 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d")!;
 
-    ctx.filter =
+    let filter =
       stateControl.getCurrentBase64PngEdit()?.filter ??
       `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturate}%) sepia(${sepia}%) grayscale(${grayscale}%) invert(${invert}%)`;
+    ctx.filter = filter;
+
     ctx.drawImage(imageRef.current!, 0, 0);
 
     setEditorContent(canvasRef.current!.toDataURL().split(",")[1]);

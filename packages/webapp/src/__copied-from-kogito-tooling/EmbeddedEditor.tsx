@@ -118,7 +118,7 @@ const RefForwardingEmbeddedEditor: React.RefForwardingComponent<EmbeddedEditorRe
   }, [props.locale]);
 
   const [fileContent, setFileContent] = useState<string | undefined>("");
-  useEffect(() => {
+  useEffectAfterFirstRender(() => {
     props.file.getFileContents().then((newContent) => {
       if (newContent !== fileContent) {
         setFileContent(newContent);
@@ -127,8 +127,10 @@ const RefForwardingEmbeddedEditor: React.RefForwardingComponent<EmbeddedEditorRe
   }, [props.file]);
 
   useEffectAfterFirstRender(() => {
-    envelopeServer.client.notify("receive_contentChanged", { content: fileContent! });
-  }, [fileContent]);
+    props.file.getFileContents().then((content) => {
+      envelopeServer.client.notify("receive_contentChanged", {content: content!});
+    });
+  }, [props.file.getFileContents]);
 
   // Register position provider for Guided Tour
   useGuidedTourPositionProvider(envelopeServer.client, iframeRef);
