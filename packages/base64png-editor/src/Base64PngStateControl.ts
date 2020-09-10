@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-
 import { StateControl } from "@kogito-tooling/editor/dist/embedded";
 import { KogitoEdit } from "@kogito-tooling/channel-common-api";
 
+/**
+ * A Base64PngEdit is a object containing all Editor information necessary to update the current state.
+ */
 export interface Base64PngEdit extends KogitoEdit {
   id: string;
   filter: string;
@@ -29,7 +31,16 @@ export interface Base64PngEdit extends KogitoEdit {
   invert: string;
 }
 
+/**
+ * A Base64PngStateControl extends the Kogito State Control which is a class that implements a command stack, and all
+ * methods necessary to do undo/redo operations or even if the editor is dirty.
+ *
+ * The use of this implementation is optional, you can use your own if required.
+ */
 export class Base64PngStateControl extends StateControl {
+  /**
+   * The command stack on the Kogito State Control accept strings only, this method retrieve the Base64PngEdit object.
+   */
   getCurrentBase64PngEdit(): Base64PngEdit | undefined {
     const command = super.getCurrentCommand();
     if (command) {
