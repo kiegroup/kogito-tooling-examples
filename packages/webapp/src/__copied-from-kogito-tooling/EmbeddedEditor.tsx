@@ -32,7 +32,7 @@ import { useSyncedKeyboardEvents } from "@kogito-tooling/keyboard-shortcuts/dist
 import { useGuidedTourPositionProvider } from "@kogito-tooling/guided-tour/dist/channel";
 import * as CSS from "csstype";
 import * as React from "react";
-import { useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { useImperativeHandle, useMemo, useRef } from "react";
 import { File, StateControl, useEffectAfterFirstRender } from "@kogito-tooling/editor/dist/embedded";
 import { KogitoEditorChannelApiImpl } from "./KogitoEditorChannelApiImpl";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
@@ -83,7 +83,7 @@ const RefForwardingEmbeddedEditor: React.RefForwardingComponent<EmbeddedEditorRe
   forwardedRef
 ) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const stateControl = useMemo(() => new StateControl(), []);
+  const stateControl = useMemo(() => new StateControl(), [props.file.getFileContents]);
 
   const envelopeMapping = useMemo(() => props.editorEnvelopeLocator.mapping.get(props.file.fileExtension), [
     props.editorEnvelopeLocator,
@@ -117,18 +117,9 @@ const RefForwardingEmbeddedEditor: React.RefForwardingComponent<EmbeddedEditorRe
     envelopeServer.client.notify("receive_localeChange", props.locale);
   }, [props.locale]);
 
-  const [fileContent, setFileContent] = useState<string | undefined>("");
-  useEffectAfterFirstRender(() => {
-    props.file.getFileContents().then((newContent) => {
-      if (newContent !== fileContent) {
-        setFileContent(newContent);
-      }
-    });
-  }, [props.file]);
-
   useEffectAfterFirstRender(() => {
     props.file.getFileContents().then((content) => {
-      envelopeServer.client.notify("receive_contentChanged", {content: content!});
+      envelopeServer.client.notify("receive_contentChanged", { content: content! });
     });
   }, [props.file.getFileContents]);
 
@@ -138,7 +129,7 @@ const RefForwardingEmbeddedEditor: React.RefForwardingComponent<EmbeddedEditorRe
   // Forward keyboard events to the EditorEnvelope
   useSyncedKeyboardEvents(envelopeServer.client);
 
-  //Forward reference methods
+  // Forward reference methods
   useImperativeHandle(
     forwardedRef,
     () => {

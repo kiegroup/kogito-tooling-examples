@@ -20,6 +20,7 @@ import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
 import { useCallback, useRef, useState } from "react";
 import { Nav, NavItem, NavList, TextInput } from "@patternfly/react-core";
 import { File } from "@kogito-tooling/editor/dist/embedded";
+import { useDirtyState } from "../../__copied-from-kogito-tooling/Hooks";
 
 function extractFileExtension(fileName: string) {
   return fileName.match(/[\.]/)
@@ -40,13 +41,12 @@ function removeFileExtension(fileName: string) {
 }
 
 interface Props {
-  editorRef: React.RefObject<EmbeddedEditorRef>;
+  editor?: EmbeddedEditorRef;
   editorEnvelopeLocator: EditorEnvelopeLocator;
   file: File;
   setFile: React.Dispatch<File>;
   fileExtension: string;
   accept: string;
-  isDirty: boolean;
 }
 
 /**
@@ -57,9 +57,14 @@ interface Props {
  */
 export function Sidebar(props: Props) {
   const [fileBlob, setFileBlob] = useState(new Blob());
+  /**
+   * A state which indicates the Editor dirty state
+   */
+  const isDirty = useDirtyState(props.editor!);
+
   const onDownload = useCallback(() => {
-    props.editorRef.current?.getStateControl().setSavedCommand();
-    props.editorRef.current?.getContent().then((content) => {
+    props.editor?.getStateControl().setSavedCommand();
+    props.editor?.getContent().then((content) => {
       setFileBlob(new Blob([content], { type: "text/plain" }));
     });
   }, [props.file]);
@@ -178,7 +183,7 @@ export function Sidebar(props: Props) {
               </a>
             </div>
           </NavItem>
-          {props.isDirty && (
+          {isDirty && (
             <div style={{ display: "flex", alignItems: "center", padding: "20px" }}>
               <p style={{ color: "red" }}>File Edited!</p>
             </div>

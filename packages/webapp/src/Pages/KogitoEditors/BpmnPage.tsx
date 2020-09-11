@@ -15,13 +15,14 @@
  */
 
 import { ChannelType } from "@kogito-tooling/channel-common-api";
-import { EmbeddedEditor, EmbeddedEditorRef } from "../../__copied-from-kogito-tooling/EmbeddedEditor";
+import { EmbeddedEditor } from "../../__copied-from-kogito-tooling/EmbeddedEditor";
 import * as React from "react";
 import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { Page } from "@patternfly/react-core";
-import { File, useDirtyState } from "@kogito-tooling/editor/dist/embedded";
+import { File } from "@kogito-tooling/editor/dist/embedded";
 import { Sidebar } from "./Sidebar";
+import { useEditorRef } from "../../__copied-from-kogito-tooling/Hooks";
 
 /**
  * @constructor
@@ -30,8 +31,7 @@ export function BpmnPage() {
   /**
    * The reference of the Editor. It allows us to access/modify the Editor properties imperatively.
    */
-  const editorRef = useRef<EmbeddedEditorRef>(null);
-  const isDirty = useDirtyState(editorRef);
+  const { editor, ref } = useEditorRef();
 
   /**
    * State that handles the file. It's important to type with the File type of the @kogito-tooling/dist/embedded.
@@ -74,16 +74,15 @@ export function BpmnPage() {
     <Page>
       <div className={"webapp--page-main-div"}>
         <Sidebar
-          editorRef={editorRef}
+          editor={editor}
           editorEnvelopeLocator={editorEnvelopeLocator}
           file={file}
           setFile={setFile}
           fileExtension={"bpmn"}
           accept={".bpmn, .bpmn2"}
-          isDirty={isDirty}
         />
         <EmbeddedEditor
-          ref={editorRef}
+          ref={ref}
           file={file}
           editorEnvelopeLocator={editorEnvelopeLocator}
           channelType={ChannelType.EMBEDDED}
