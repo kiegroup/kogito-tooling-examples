@@ -2,6 +2,9 @@
 
 This package is the VS Code Extension, which runs the Base64 PNG Editor.
 
+### Pre requisites
+This example requires the VS Code version 1.46 or later.
+
 ### Running
 Install all dependencies and build the project on the **root** folder of this repository
 ```shell script

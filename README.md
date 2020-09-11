@@ -1,7 +1,7 @@
 Kogito Tooling Examples
 --
 
-This is an example that shows how to use `@kogito-tooling/*` packages APIs.
+Example packages showing how to use `@kogito-tooling/*` packages APIs.
 
 ### Organization
 This repository has examples of how to:

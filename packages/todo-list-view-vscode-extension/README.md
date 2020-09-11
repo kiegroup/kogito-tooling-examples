@@ -2,6 +2,9 @@
 
 This package provides a VS Code Extension containing a 'To do' list View.
 
+### Pre requisites
+This example requires the VS Code version 1.46 or later.
+
 This extensions has the following commands:
 
 1. `TODO: Open list`

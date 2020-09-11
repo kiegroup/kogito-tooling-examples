@@ -2,7 +2,7 @@
 
 This package exposes the necessary files for you to create a Ping-Pong View Envelope with you own Ping-Pong View implementation.
 
-It's divided in subpackages:
+It's divided in the following submodules:
 
 1. `api`
    - Provides the APIs that the Channel/Envelope expose to each other.

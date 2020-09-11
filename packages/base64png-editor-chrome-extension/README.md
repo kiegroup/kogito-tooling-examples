@@ -21,4 +21,4 @@ yarn serve-envelope
 
 It will run a server exposing your `dist/` folder on the `localhost:9000`. It's necessary to access your `localhost:9000`, and enable access to it.
 
-This is step is required, so the extension can access the envelope located on `dist/envelope/index.html`.
+This step is required, so the extension can access the envelope located on `dist/envelope/index.html`.
