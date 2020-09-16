@@ -3,7 +3,7 @@
 This is a Web application example that shows how to integrate an Embedded Editor [1] or an Embedded Envelope [2]
 
 1. The Embedded Editor enables you to use your Custom Editors or even to use the available Kogito Editor (BPMN and DMN)
-1. The Embedded Envelope gives you more flexibility to create any kind of application, in this example we bring two custom Pages.
+1. The Embedded Envelope gives you more flexibility to create any kind of application, in this example we bring two custom Views.
 
 ## Details
 
