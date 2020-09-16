@@ -51,7 +51,7 @@ export function PingPongViewsPage() {
               {...api}
               name={"React 1"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in React", envelopePath: "/envelope/ping-pong-view-react-impl.html" }}
+              mapping={{ title: "Ping-Pong Page in React", envelopePath: "envelope/ping-pong-view-react-impl.html" }}
             />
           </PageSection>
 
@@ -60,7 +60,7 @@ export function PingPongViewsPage() {
               {...api}
               name={"React 2"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in React", envelopePath: "/envelope/ping-pong-view-react-impl.html" }}
+              mapping={{ title: "Ping-Pong Page in React", envelopePath: "envelope/ping-pong-view-react-impl.html" }}
             />
           </PageSection>
 
@@ -69,7 +69,7 @@ export function PingPongViewsPage() {
               {...api}
               name={"React 3"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in React", envelopePath: "/envelope/ping-pong-view-react-impl.html" }}
+              mapping={{ title: "Ping-Pong Page in React", envelopePath: "envelope/ping-pong-view-react-impl.html" }}
             />
           </PageSection>
         </div>

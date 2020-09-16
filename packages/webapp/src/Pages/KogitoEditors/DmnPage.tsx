@@ -52,8 +52,8 @@ export function DmnPage() {
         [
           "dmn",
           {
-            resourcesPathPrefix: "/gwt-editors/dmn/",
-            envelopePath: "/envelope/gwt-editors.html",
+            resourcesPathPrefix: "../gwt-editors/dmn/",
+            envelopePath: "envelope/gwt-editors.html",
           },
         ],
       ]),

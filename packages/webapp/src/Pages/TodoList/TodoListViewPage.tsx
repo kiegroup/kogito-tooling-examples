@@ -32,7 +32,7 @@ export function TodoListViewPage() {
           <EmbeddedTodoList
             ref={todoListViewRef}
             targetOrigin={window.location.origin}
-            envelopePath={"/envelope/todo-list-view.html"}
+            envelopePath={"envelope/todo-list-view.html"}
             todoList__itemRemoved={(item) => window.alert(`Item '${item}' removed successfully!`)}
           />
         </PageSection>

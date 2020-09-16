@@ -23,7 +23,7 @@ module.exports = {
   devtool: "inline-source-map",
   entry: {
     index: "./src/index.tsx",
-    "envelope/image-editor": "./src/envelope/image-editor.ts",
+    "envelope/base64-editor": "./src/envelope/base64-editor.ts",
     "envelope/gwt-editors": "./src/envelope/gwt-editors.ts",
     "envelope/ping-pong-view-react-impl": "./src/envelope/ping-pong-view-react-impl.ts",
     "envelope/todo-list-view": "./src/envelope/todo-list-view.ts",
