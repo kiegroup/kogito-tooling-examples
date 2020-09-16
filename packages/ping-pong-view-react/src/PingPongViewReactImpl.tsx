@@ -104,7 +104,7 @@ export const PingPongViewReactImpl = React.forwardRef<PingPongViewApi, Props>((p
 
       <div className={"ping-pong-view--log"}>
         {log.slice(-10).map((line) => (
-          <p key={line.time}>{line.line}</p>
+          <p style={{ fontFamily: "monospace" }} key={line.time}>{line.line}</p>
         ))}
       </div>
     </>
