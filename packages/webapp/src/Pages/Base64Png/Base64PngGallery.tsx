@@ -23,6 +23,7 @@ const samplePaths = [
   { fileName: "sample", path: "examples/sample.base64png" },
   { fileName: "luiz", path: "examples/luiz.base64png" },
   { fileName: "tiago", path: "examples/tiago.base64png" },
+  { fileName: "dorinha", path: "examples/dorinha.base64png" },
 ];
 
 /**
