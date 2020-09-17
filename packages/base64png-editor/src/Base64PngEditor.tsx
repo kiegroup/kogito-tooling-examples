@@ -49,13 +49,13 @@ interface Props {
  */
 export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwardedRef) => {
   /**
-   * Editor Content - The current Editor value (contains all edits).
+   * Editor Content - The current Editor value (contains all tweaks).
    * The editorContent has the current value of all tweaks that it has done to the image. This value is the one displayed on the canvas.
    */
   const [editorContent, setEditorContent] = useState("");
 
   /**
-   * Original Content - The original base64 value (can't be changed with edits).
+   * Original Content - The original base64 value (can't be changed with tweaks).
    * All new edits are made on top of the original value.
    * This is used because changing the image contrast to 0 would tweak it to a gray image, and turning it back to 100
    * would apply the changes on top of the gray image. This is solved using the originalContent on ever new edit,
@@ -64,24 +64,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   const [originalContent, setOriginalContent] = useState("");
 
   /**
-   * Notify the channel that the Editor is ready after the first render. That enables it to open files.
+   * Initialize the StateControl instance. When the original content is modified it's necessary to get an another instance
+   * so the states aren't shared across contents.
    */
-  useEffect(() => {
-    props.envelopeContext.channelApi.notify("receive_ready");
-  }, []);
-
   const stateControl = useMemo(() => new Base64PngStateControl(), [originalContent]);
-
-  /**
-   * Callback is exposed to the Channel that is called when a new file is opened. It sets the originalContent to the received value.
-   * TODO: The setTimout solves a bug
-   */
-  const setContent = useCallback((path: string, content: string) => {
-    setOriginalContent(content);
-    stateControl.clearCommandStack();
-    updateEditorStateWithCurrentEdit();
-    return new Promise<void>((res) => setTimeout(res, 50));
-  }, []);
 
   /**
    * Callback is exposed to the Channel to retrieve the current value of the Editor. It returns the value of
@@ -90,6 +76,20 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   const getContent = useCallback(() => {
     return editorContent;
   }, [editorContent]);
+
+  /**
+   * Callback is exposed to the Channel that is called when a new file is opened. It sets the originalContent to the received value.
+   * TODO: The setTimout solves a bug
+   */
+  const setContent = useCallback(
+    (path: string, content: string) => {
+      setOriginalContent(content);
+      stateControl.clearStateControl();
+      updateEditorToInitialState();
+      return new Promise<void>((res) => setTimeout(res, 50));
+    },
+    [stateControl]
+  );
 
   /**
    * Callback is exposed to the Channel to retrieve the SVG content of the Editor. A SVG is a XML file that is
@@ -103,7 +103,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
 <svg version="1.1" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" 
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink">
-    <image width="${width}" height="${height}" xlink:href="${base64Header},${editorContent}" />
+    <image width="${width}" height="${height}" xlink:href="data:image/png;base64,${editorContent}" />
 </svg>`;
   }, [editorContent]);
 
@@ -137,13 +137,24 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
       setGrayscale(grayscale);
       setInvert(invert);
     } else {
-      setContrast(INITIAL_CONTRAST);
-      setBrightness(INITIAL_BRIGHTNESS);
-      setSaturate(INITIAL_SATURATE);
-      setSepia(INITIAL_SEPIA);
-      setGrayscale(INITIAL_GRAYSCALE);
-      setInvert(INITIAL_INVERT);
+      updateEditorToInitialState();
     }
+  }, []);
+
+  const updateEditorToInitialState = useCallback(() => {
+    setContrast(INITIAL_CONTRAST);
+    setBrightness(INITIAL_BRIGHTNESS);
+    setSaturate(INITIAL_SATURATE);
+    setSepia(INITIAL_SEPIA);
+    setGrayscale(INITIAL_GRAYSCALE);
+    setInvert(INITIAL_INVERT);
+  }, []);
+
+  /**
+   * Notify the channel that the Editor is ready after the first render. That enables it to open files.
+   */
+  useEffect(() => {
+    props.envelopeContext.channelApi.notify("receive_ready");
   }, []);
 
   /**
@@ -152,11 +163,11 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
    */
   useImperativeHandle(forwardedRef, () => {
     return {
-      getContent: () => Promise.resolve().then(() => getContent()),
+      getContent: () => Promise.resolve(getContent()),
       setContent: (path: string, content: string) => setContent(path, content),
-      getPreview: () => Promise.resolve().then(() => getPreview()),
-      undo: () => Promise.resolve().then(() => undo()),
-      redo: () => Promise.resolve().then(() => redo()),
+      getPreview: () => Promise.resolve(getPreview()),
+      undo: () => Promise.resolve(undo()),
+      redo: () => Promise.resolve(redo()),
       getElementPosition: (selector: string) => Promise.resolve(DEFAULT_RECT),
     };
   });
@@ -168,21 +179,16 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   const [disabled, setDisabled] = useState(true);
 
   /**
-   * The base64 PNG header is used to append to the originalContent/editorContent data, so it can be rendered on the <img> tag.
+   * The reference of the image. It allows us to access/modify the canvas properties imperatively.
+   * The image renders the originalContent.
    */
-  const base64Header = useMemo(() => "data:image/png;base64", []);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   /**
    * The reference of the canvas. It allows us to access/modify the canvas properties imperatively.
    * The canvas renders the editorContent.
    */
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  /**
-   * The reference of the image. It allows us to access/modify the canvas properties imperatively.
-   * The image renders the originalContent.
-   */
-  const imageRef = useRef<HTMLImageElement>(null);
 
   /**
    * State that handles the contrast value, 100% is the starting value.
@@ -429,11 +435,14 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
 
   return (
     <Page className={"base64png-editor--page"}>
-      <div className={"base64png-editor--div-main"}>
-        <div className={"base64png-editor--div-viewport"}>
-          <div className={"base64png-editor--image"}>
-            <img ref={imageRef} id={"original"} src={`${base64Header},${originalContent}`} alt={"Original Image"} />
-          </div>
+      <div className={"base64png-editor--main"}>
+        <div className={"base64png-editor--viewport"}>
+          <img
+            ref={imageRef}
+            className={"base64png-editor--image"}
+            src={`data:image/png;base64,${originalContent}`}
+            alt={"Original"}
+          />
           {disabled && (
             <EmptyState>
               <EmptyStateIcon icon={CubesIcon} />
@@ -442,7 +451,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
               </Title>
             </EmptyState>
           )}
-          <canvas ref={canvasRef} id={"canvas"} className={"base64png-editor--canvas"} />
+          <canvas ref={canvasRef} className={"base64png-editor--canvas"} />
         </div>
         <div className={"base64png-editor--tweaks"}>
           <Nav aria-label="Image tweaker">

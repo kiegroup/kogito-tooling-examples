@@ -49,7 +49,8 @@ export class Base64PngStateControl extends StateControl {
     return;
   }
 
-  clearCommandStack() {
+  clearStateControl() {
+    super.setCurrentCommand(undefined);
     super.setCommandStack([]);
   }
 }
