@@ -129,13 +129,12 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
    */
   const updateEditorStateWithCurrentEdit = useCallback((edit?: Base64PngEdit) => {
     if (edit) {
-      const { contrast, brightness, saturate, sepia, grayscale, invert } = edit;
-      setContrast(contrast);
-      setBrightness(brightness);
-      setSaturate(saturate);
-      setSepia(sepia);
-      setGrayscale(grayscale);
-      setInvert(invert);
+      setContrast(edit.contrast);
+      setBrightness(edit.brightness);
+      setSaturate(edit.saturate);
+      setSepia(edit.sepia);
+      setGrayscale(edit.grayscale);
+      setInvert(edit.invert);
     } else {
       updateEditorToInitialState();
     }
@@ -434,7 +433,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   }, []);
 
   return (
-    <Page className={"base64png-editor--page"}>
+    <Page>
       <div className={"base64png-editor--main"}>
         <div className={"base64png-editor--viewport"}>
           <img
@@ -458,10 +457,10 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
             <NavList>
               <NavItem className={"base64png-editor--tweaks-nav-item"} itemId={0}>
                 <p>Contrast</p>
-                <div style={{ display: "flex" }}>
+                <div className={"base64png-editor--tweaks-nav-item-div"}>
                   <input
                     disabled={disabled}
-                    style={{ width: "100px" }}
+                    className={"base64png-editor--tweaks-nav-item-input"}
                     type="range"
                     min="0"
                     max="200"

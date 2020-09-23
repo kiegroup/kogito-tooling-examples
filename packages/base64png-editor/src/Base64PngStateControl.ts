@@ -21,7 +21,6 @@ import { KogitoEdit } from "@kogito-tooling/channel-common-api";
  * A Base64PngEdit is a object containing all Editor information necessary to update the current state.
  */
 export interface Base64PngEdit extends KogitoEdit {
-  id: string;
   filter: string;
   contrast: string;
   brightness: string;
