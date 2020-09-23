@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,21 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const ZipPlugin = require("zip-webpack-plugin");
-const packageJson = require("./package.json");
 const pfWebpackOptions = require("@kogito-tooling/patternfly-base/patternflyWebpackOptions");
+const packageJson = require("./package.json");
 
 function getRouterArgs(argv) {
-  let targetOrigin = argv["ROUTER_targetOrigin"] || process.env["ROUTER_targetOrigin"] || "https://localhost:9000";
-  let relativePath = argv["ROUTER_relativePath"] || process.env["ROUTER_relativePath"] || "";
-
-  return [targetOrigin, relativePath];
+  return argv["ROUTER_targetOrigin"] || process.env["ROUTER_targetOrigin"] || "https://localhost:9000";
 }
 
 module.exports = (env, argv) => {
-  const [router_targetOrigin, router_relativePath] = getRouterArgs(argv);
+  const router_targetOrigin = getRouterArgs(argv);
 
   return {
     mode: "development",
     devtool: "inline-source-map",
     entry: {
       contentscript: "./src/contentscript.ts",
-      background: "./src/background.ts",
       "envelope/index": "./src/envelope/index.ts"
     },
     output: {
@@ -58,7 +54,7 @@ module.exports = (env, argv) => {
         ]
       }),
       new ZipPlugin({
-        filename: "kogito_tooling_examples_chrome_extension_simple_react_" + packageJson.version + ".zip",
+        filename: "kogito_tooling_examples_base64-chrome_extension_" + packageJson.version + ".zip",
         pathPrefix: "dist"
       })
     ],
@@ -72,17 +68,13 @@ module.exports = (env, argv) => {
           }
         },
         {
-          test: /ChromeRouter\.ts$/,
+          test: /contentscript\.ts$/,
           loader: "string-replace-loader",
           options: {
             multiple: [
               {
                 search: "$_{WEBPACK_REPLACE__targetOrigin}",
                 replace: router_targetOrigin
-              },
-              {
-                search: "$_{WEBPACK_REPLACE__relativePath}",
-                replace: router_relativePath
               }
             ]
           }

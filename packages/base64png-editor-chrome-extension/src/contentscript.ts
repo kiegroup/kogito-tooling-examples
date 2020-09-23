@@ -15,9 +15,9 @@
  */
 
 import { startExtension } from "@kogito-tooling/chrome-extension";
-import { ChromeRouter } from "./ChromeRouter";
 
-const resourcesPathPrefix = new ChromeRouter().getResourcesPathPrefix();
+// String replaced by Webpack
+const resourcesPathPrefix = "$_{WEBPACK_REPLACE__targetOrigin}";
 
 /**
  * Starts the extension and set initial properties:
