@@ -44,7 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
           "base64png",
           {
             resourcesPathPrefix: `dist/`,
-            envelopePath: `dist/base64png-editor-envelope/index.js`,
+            envelopePath: `dist/envelope/index.js`,
           },
         ],
       ]),

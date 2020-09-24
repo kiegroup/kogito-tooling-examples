@@ -1,8 +1,9 @@
 {
+  "publisher": "kogito-tooling-examples",
   "name": "base64png-editor-vscode-extension",
   "displayName": "Kogito Base64 PNG Editor",
   "description": "",
-  "main": "./dist/extension/extension.js",
+  "main": "./dist/extension.js",
   "version": "0.6.1",
   "license": "Apache-2.0",
   "engines": {
@@ -19,38 +20,15 @@
     "onCustomEditor:kieKogitoWebviewBase64PNGEditor",
     "onCommand:extension.kogito.createBase64Png"
   ],
-  "publisher": "kogito-tooling-examples",
   "contributes": {
     "customEditors": [
       {
         "viewType": "kieKogitoWebviewBase64PNGEditor",
-        "displayName": "KIE Kogito Simple React Editor",
+        "displayName": "Kogito Base64Png React Editor",
         "selector": [
           {
             "filenamePattern": "*.base64png"
           }
-        ]
-      }
-    ],
-    "languages": [
-      {
-        "id": "base64png",
-        "extensions": [
-          ".base64png"
-        ],
-        "aliases": [
-          "base64png",
-          "Base64 PNG"
-        ]
-      },
-      {
-        "id": "png",
-        "extensions": [
-          ".png"
-        ],
-        "aliases": [
-          "png",
-          "Png"
         ]
       }
     ],
@@ -85,18 +63,6 @@
       ],
       "editor/title": [
         {
-          "when": "resourceLangId == base64png",
-          "command": "extension.kogito.getPreviewSvg",
-          "group": "navigation"
-        },
-        {
-          "when": "resourceLangId == png",
-          "command": "extension.kogito.createBase64Png",
-          "group": "navigation"
-        }
-      ],
-      "explorer/context": [
-        {
           "when": "resourceLangId == png",
           "command": "extension.kogito.createBase64Png",
           "group": "navigation"
@@ -107,33 +73,41 @@
           "group": "navigation"
         }
       ]
-    }
+    },
+    "languages": [
+      {
+        "id": "base64png",
+        "extensions": [
+          ".base64png"
+        ],
+        "aliases": [
+          "base64png",
+          "Base64 PNG"
+        ]
+      },
+      {
+        "id": "png",
+        "extensions": [
+          ".png"
+        ],
+        "aliases": [
+          "png",
+          "Png"
+        ]
+      }
+    ]
   },
   "scripts": {
     "pack-extension": "vsce package --yarn -o ./dist/kogito_tooling_examples_vscode_extension_simple_react_$npm_package_version.vsix",
-    "compile": "yarn run build:fast",
-    "watch": "yarn run build:fast",
     "build:fast": "rm -rf dist && webpack",
     "build": "yarn run build:fast",
-    "build:prod": "yarn run build --mode production --devtool none && yarn run pack-extension"
+    "build:prod": "yarn run build:fast --mode production --devtool none && yarn run pack-extension"
   },
   "devDependencies": {
-    "@babel/core": "7.7.2",
-    "@babel/preset-env": "7.7.1",
-    "@babel/preset-react": "7.7.0",
-    "@types/mocha": "5.2.7",
     "@types/node": "^12.12.5",
     "@types/vscode": "^1.46.0",
-    "babel-loader": "8.0.6",
-    "mocha": "6.1.4",
-    "ts-jest": "^25.3.1",
-    "ts-loader": "6.2.1",
-    "tslint": "5.12.1",
-    "typescript": "3.8.3",
     "vsce": "1.59.0",
-    "vscode-test": "1.0.0",
-    "webpack": "4.41.2",
-    "webpack-cli": "3.3.10"
+    "vscode-test": "1.0.0"
   },
   "dependencies": {
     "@kogito-tooling/editor": "0.6.1",
