@@ -20,7 +20,7 @@
   ],
   "publisher": "kogito-tooling-examples",
   "scripts": {
-    "pack-extension": "vsce package --yarn -o ./dist/kogito_tooling_examples__todo_list_view_$npm_package_version.vsix",
+    "pack-extension": "vsce package --yarn -o ./dist/kogito_tooling_examples_todo_list_view_$npm_package_version.vsix",
     "compile": "yarn run build:fast",
     "watch": "yarn run build:fast",
     "build:fast": "rm -rf dist && webpack",
