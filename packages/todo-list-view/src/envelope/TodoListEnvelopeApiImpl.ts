@@ -15,7 +15,7 @@
  */
 
 import { EnvelopeApiFactoryArgs } from "../__copied-from-kogito-tooling/EnvelopeApiFactory";
-import { TodoListContext } from "./TodoListContext";
+import { TodoListEnvelopeContext } from "./TodoListEnvelopeContext";
 import { Association, TodoListChannelApi, TodoListEnvelopeApi, TodoListInitArgs } from "../api";
 import { TodoListEnvelopeViewApi } from "./TodoListEnvelopeView";
 
@@ -30,7 +30,7 @@ export class TodoListEnvelopeApiImpl implements TodoListEnvelopeApi {
       TodoListEnvelopeApi,
       TodoListChannelApi,
       TodoListEnvelopeViewApi,
-      TodoListContext
+      TodoListEnvelopeContext
     >
   ) {}
 

@@ -18,7 +18,7 @@ import { EnvelopeBus } from "@kogito-tooling/envelope-bus/dist/api";
 import { Envelope } from "../__copied-from-kogito-tooling/Envelope";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { TodoListContext } from "./TodoListContext";
+import { TodoListEnvelopeContext } from "./TodoListEnvelopeContext";
 import { TodoListEnvelopeApiImpl } from "./TodoListEnvelopeApiImpl";
 import { TodoListChannelApi, TodoListEnvelopeApi } from "../api";
 import { TodoListEnvelopeView, TodoListEnvelopeViewApi } from "./TodoListEnvelopeView";
@@ -36,7 +36,7 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
   /*
    Creates a new generic Envelope, typed with the right interfaces.
   */
-  const envelope = new Envelope<TodoListEnvelopeApi, TodoListChannelApi, TodoListEnvelopeViewApi, TodoListContext>(
+  const envelope = new Envelope<TodoListEnvelopeApi, TodoListChannelApi, TodoListEnvelopeViewApi, TodoListEnvelopeContext>(
     args.bus
   );
 
@@ -46,7 +46,7 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
    *
    * Returns a Promise<() => TodoListEnvelopeViewApi> that can be used in TodoListEnvelopeApiImpl.
    */
-  const pageEnvelopeViewDelegate = async () => {
+  const envelopeViewDelegate = async () => {
     const ref = React.createRef<TodoListEnvelopeViewApi>();
     return new Promise<() => TodoListEnvelopeViewApi>((res) =>
       ReactDOM.render(<TodoListEnvelopeView ref={ref} channelApi={envelope.channelApi} />, args.container, () =>
@@ -56,7 +56,7 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
   };
 
   // Starts the Envelope application with the provided TodoListEnvelopeApi implementation.
-  return envelope.start(pageEnvelopeViewDelegate, context, {
+  return envelope.start(envelopeViewDelegate, context, {
     create: (apiFactoryArgs) => new TodoListEnvelopeApiImpl(apiFactoryArgs),
   });
 }
