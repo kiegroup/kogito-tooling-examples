@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-export * from "./PingPongView";
-export * from "./PingPongViewFactory";
-export * from "./PingPongViewEnvelope";
+export * from "./PingPong";
+export * from "./PingPongFactory";
+export * from "./PingPongEnvelope";

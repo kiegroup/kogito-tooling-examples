@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-import * as React from "react";
-import { PingPongViewApi } from "../api";
-
-export interface PingPongView extends PingPongViewApi {
-  reactComponent?(): React.ReactNode;
-}
+/**
+ * The API of a PingPongViewApi.
+ *
+ * These methods are what the "external world" knows about this component.
+ * In this case, there are no direct interactions with a Ping-Pong View.
+ */
+// tslint:disable-next-line:no-empty-interface
+export interface PingPongApi {}

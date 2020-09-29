@@ -14,5 +14,10 @@
  * limitations under the License.
  */
 
-// tslint:disable-next-line:no-empty-interface
-export interface PingPongViewEnvelopeContext {}
+import { PingPongChannelApi, PingPongViewInitArgs } from "../api";
+import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import { PingPong } from "./PingPong";
+
+export interface PingPongFactory {
+  create(initArgs: PingPongViewInitArgs, channelApi: MessageBusClient<PingPongChannelApi>): PingPong;
+}

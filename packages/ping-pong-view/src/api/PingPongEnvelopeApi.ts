@@ -17,7 +17,7 @@
 /**
  * Methods provided by the Envelope that can be consumed by the Channel.
  */
-export interface PingPongViewEnvelopeApi {
+export interface PingPongEnvelopeApi {
   pingPongView__init(association: Association, initArgs: PingPongViewInitArgs): Promise<void>;
 }
 

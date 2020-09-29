@@ -15,8 +15,9 @@
  */
 
 /**
- * This is a convenience class that the Envelope view can use.
- * Since the Todo List View is very simple, it's empty.
+ * Methods provided by the Channel that can be consumed by the Envelope.
  */
-// tslint:disable-next-line:no-empty-interface
-export interface TodoListContext {}
+export interface PingPongChannelApi {
+  pingPongView__ping(source: string): void;
+  pingPongView__pong(source: string, replyingTo: string): void;
+}

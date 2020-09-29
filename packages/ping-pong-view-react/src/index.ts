@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from "./PingPongViewReactImpl";
-export * from "./PingPongViewReactImplFactory";
+export * from "./PingPongReactImpl";
+export * from "./PingPongReactImplFactory";

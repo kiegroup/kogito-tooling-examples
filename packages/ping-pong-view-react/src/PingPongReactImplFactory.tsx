@@ -16,16 +16,16 @@
 
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import * as React from "react";
-import { PingPongViewReactImpl } from "./PingPongViewReactImpl";
+import { PingPongReactImpl } from "./PingPongViewReactImpl";
 import { PingPongView, PingPongViewFactory } from "ping-pong-view/dist/envelope";
 import { PingPongViewApi, PingPongViewChannelApi, PingPongViewInitArgs } from "ping-pong-view/dist/api";
 
-export class PingPongViewReactImplFactory implements PingPongViewFactory {
+export class PingPongReactImplFactory implements PingPongViewFactory {
   public create(initArgs: PingPongViewInitArgs, channelApi: MessageBusClient<PingPongViewChannelApi>) {
     const ref = React.createRef<PingPongViewApi>();
 
     const pingPongView: PingPongView = {
-      reactComponent: () => <PingPongViewReactImpl initArgs={initArgs} channelApi={channelApi} ref={ref} />,
+      reactComponent: () => <PingPongReactImpl initArgs={initArgs} channelApi={channelApi} ref={ref} />,
     };
 
     return pingPongView;

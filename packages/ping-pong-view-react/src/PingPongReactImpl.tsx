@@ -36,7 +36,7 @@ interface LogEntry {
  *
  *
  */
-export const PingPongViewReactImpl = React.forwardRef<PingPongViewApi, Props>((props, forwardedRef) => {
+export const PingPongReactImpl = React.forwardRef<PingPongViewApi, Props>((props, forwardedRef) => {
   const pingPongViewApi: PingPongViewApi = useMemo(
     () => ({
       /*
