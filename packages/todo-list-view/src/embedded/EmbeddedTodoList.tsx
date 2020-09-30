@@ -49,7 +49,7 @@ export const EmbeddedTodoList = React.forwardRef<TodoListApi, Props>((props, for
    * Function that creates a `ref` to be exposed to the parent components.
    */
   const refDelegate = useCallback(
-    (envelopeServer): TodoListApi => ({
+    (envelopeServer: EnvelopeServer<TodoListChannelApi, TodoListEnvelopeApi>): TodoListApi => ({
       addItem: (item) => envelopeServer.client.request("todoList__addItem", item),
       getItems: () => envelopeServer.client.request("todoList__getItems"),
       markAllAsCompleted: () => envelopeServer.client.notify("todoList__markAllAsCompleted"),

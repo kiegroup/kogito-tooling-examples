@@ -55,7 +55,7 @@ export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, Pr
     [items]
   );
 
-  const markAsCompleted = useCallback(
+  const updateItemCompletedStatus = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, item: Item, completed: boolean) => {
       e.preventDefault();
       const itemsCopy = [...items];
@@ -117,11 +117,11 @@ export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, Pr
                   <span>{" - "}</span>
 
                   {(!item.completed && (
-                    <a href={"#"} onClick={(e) => markAsCompleted(e, item, true)}>
+                    <a href={"#"} onClick={(e) => updateItemCompletedStatus(e, item, true)}>
                       Mark as completed
                     </a>
                   )) || (
-                    <a href={"#"} onClick={(e) => markAsCompleted(e, item, false)}>
+                    <a href={"#"} onClick={(e) => updateItemCompletedStatus(e, item, false)}>
                       Unmark as completed
                     </a>
                   )}
