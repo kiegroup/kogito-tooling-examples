@@ -16,7 +16,7 @@
 
 import { Association, PingPongChannelApi, PingPongEnvelopeApi, PingPongViewInitArgs } from "../api";
 import { EnvelopeApiFactoryArgs } from "@kogito-tooling/envelope";
-import { PingPongViewApi } from "./PingPongEnvelopeView";
+import { PingPongEnvelopeViewApi } from "./PingPongEnvelopeView";
 import { PingPongEnvelopeContext } from "./PingPongEnvelopeContext";
 import { PingPongFactory } from "./PingPongFactory";
 
@@ -25,7 +25,7 @@ export class PingPongEnvelopeApiImpl implements PingPongEnvelopeApi {
     private readonly args: EnvelopeApiFactoryArgs<
       PingPongEnvelopeApi,
       PingPongChannelApi,
-      PingPongViewApi,
+      PingPongEnvelopeViewApi,
       PingPongEnvelopeContext
     >,
     private readonly pingPongViewFactory: PingPongFactory

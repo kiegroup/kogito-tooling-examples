@@ -19,7 +19,7 @@ import * as React from "react";
 import { useImperativeHandle, useState } from "react";
 import "./styles.scss";
 
-export interface PingPongViewApi {
+export interface PingPongEnvelopeViewApi {
   setView(page: PingPong): Promise<void>;
 }
 

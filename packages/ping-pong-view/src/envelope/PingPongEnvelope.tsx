@@ -21,26 +21,26 @@ import * as ReactDOM from "react-dom";
 import { PingPongChannelApi, PingPongEnvelopeApi } from "../api";
 import { PingPongFactory } from "./PingPongFactory";
 import { PingPongEnvelopeContext } from "./PingPongEnvelopeContext";
-import { PingPongEnvelopeView, PingPongViewApi } from "./PingPongEnvelopeView";
+import { PingPongEnvelopeView, PingPongEnvelopeViewApi } from "./PingPongEnvelopeView";
 import { PingPongEnvelopeApiImpl } from "./PingPongEnvelopeApiImpl";
 
 export function init(args: { container: HTMLElement; bus: EnvelopeBus; pingPongViewFactory: PingPongFactory }) {
-  const context = {};
-
-  const envelope = new Envelope<PingPongEnvelopeApi, PingPongChannelApi, PingPongViewApi, PingPongEnvelopeContext>(
-    args.bus
-  );
+  const envelope = new Envelope<
+    PingPongEnvelopeApi,
+    PingPongChannelApi,
+    PingPongEnvelopeViewApi,
+    PingPongEnvelopeContext
+  >(args.bus);
 
   const envelopeViewDelegate = async () => {
-    const ref = React.createRef<PingPongViewApi>();
-    return new Promise<PingPongViewApi>(res =>
+    const ref = React.createRef<PingPongEnvelopeViewApi>();
+    return new Promise<PingPongEnvelopeViewApi>((res) =>
       ReactDOM.render(<PingPongEnvelopeView ref={ref} />, args.container, () => res(ref.current!))
     );
   };
 
+  const context: PingPongEnvelopeContext = {};
   return envelope.start(envelopeViewDelegate, context, {
-    create(apiFactoryArgs) {
-      return new PingPongEnvelopeApiImpl(apiFactoryArgs, args.pingPongViewFactory);
-    }
+    create: (apiFactoryArgs) => new PingPongEnvelopeApiImpl(apiFactoryArgs, args.pingPongViewFactory),
   });
 }

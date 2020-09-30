@@ -16,7 +16,7 @@
 
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import * as React from "react";
-import { PingPongReactImpl } from "./PingPongViewReactImpl";
+import { PingPongReactImpl } from "./PingPongReactImpl";
 import { PingPongView, PingPongViewFactory } from "ping-pong-view/dist/envelope";
 import { PingPongViewApi, PingPongViewChannelApi, PingPongViewInitArgs } from "ping-pong-view/dist/api";
 
