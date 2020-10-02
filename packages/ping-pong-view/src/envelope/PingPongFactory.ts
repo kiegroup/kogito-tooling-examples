@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { PingPongChannelApi, PingPongViewInitArgs } from "../api";
+import { PingPongChannelApi, PingPongInitArgs } from "../api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import { PingPong } from "./PingPong";
 
 export interface PingPongFactory {
-  create(initArgs: PingPongViewInitArgs, channelApi: MessageBusClient<PingPongChannelApi>): PingPong;
+  create(initArgs: PingPongInitArgs, channelApi: MessageBusClient<PingPongChannelApi>): PingPong;
 }

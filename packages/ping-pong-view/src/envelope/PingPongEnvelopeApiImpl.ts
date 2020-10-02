@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Association, PingPongChannelApi, PingPongEnvelopeApi, PingPongViewInitArgs } from "../api";
+import { Association, PingPongChannelApi, PingPongEnvelopeApi, PingPongInitArgs } from "../api";
 import { EnvelopeApiFactoryArgs } from "@kogito-tooling/envelope";
 import { PingPongEnvelopeViewApi } from "./PingPongEnvelopeView";
 import { PingPongEnvelopeContext } from "./PingPongEnvelopeContext";
@@ -31,7 +31,7 @@ export class PingPongEnvelopeApiImpl implements PingPongEnvelopeApi {
     private readonly pingPongViewFactory: PingPongFactory
   ) {}
 
-  public async pingPongView__init(association: Association, initArgs: PingPongViewInitArgs) {
+  public async pingPongView__init(association: Association, initArgs: PingPongInitArgs) {
     this.args.envelopeBusController.associate(association.origin, association.envelopeServerId);
     const pingPongView = this.pingPongViewFactory.create(initArgs, this.args.envelopeBusController.client);
     await this.args.view.setView(pingPongView);

@@ -17,8 +17,8 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
 import { Page, PageSection } from "@patternfly/react-core";
-import { EmbeddedPingPongView } from "ping-pong-view/dist/embedded";
-import { PingPongViewChannelApi } from "ping-pong-view/dist/api";
+import { EmbeddedPingPong } from "ping-pong-view/dist/embedded";
+import { PingPongChannelApi } from "ping-pong-view/dist/api";
 import { StatsSidebar } from "./StatsSidebar";
 
 let pings = 0;
@@ -28,7 +28,7 @@ export function PingPongViewsPage() {
   const [lastPing, setLastPing] = useState<string>("-");
   const [lastPong, setLastPong] = useState<string>("-");
 
-  const api: PingPongViewChannelApi = useMemo(() => {
+  const api: PingPongChannelApi = useMemo(() => {
     return {
       pingPongView__ping(source: string) {
         pings++;
@@ -47,7 +47,7 @@ export function PingPongViewsPage() {
         <StatsSidebar lastPing={lastPing} lastPong={lastPong} pings={pings} pongs={pongs} />
         <div className={"webapp--page-ping-pong-view"}>
           <PageSection>
-            <EmbeddedPingPongView
+            <EmbeddedPingPong
               {...api}
               name={"React 1"}
               targetOrigin={window.location.origin}
@@ -56,7 +56,7 @@ export function PingPongViewsPage() {
           </PageSection>
 
           <PageSection>
-            <EmbeddedPingPongView
+            <EmbeddedPingPong
               {...api}
               name={"React 2"}
               targetOrigin={window.location.origin}
@@ -65,7 +65,7 @@ export function PingPongViewsPage() {
           </PageSection>
 
           <PageSection>
-            <EmbeddedPingPongView
+            <EmbeddedPingPong
               {...api}
               name={"React 3"}
               targetOrigin={window.location.origin}

@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
   const todoListWebview = new TodoListWebview(
     context,
     {
-      envelopePath: "dist/todo-list-view-envelope/index.js",
+      envelopePath: "dist/envelope/index.js",
       title: "//TODO", // This is displayed as the title of the Webview tab.
       targetOrigin: "vscode",
     },

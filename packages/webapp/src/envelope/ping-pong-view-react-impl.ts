@@ -16,7 +16,7 @@
 
 import { init } from "ping-pong-view/dist/envelope";
 import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
-import { PingPongViewReactImplFactory } from "ping-pong-view-react";
+import { PingPongReactImplFactory } from "ping-pong-view-react";
 
 init({
   container: document.getElementById("envelope-app")!,
@@ -25,5 +25,5 @@ init({
       window.parent.postMessage(message, "*", transfer);
     },
   },
-  pingPongViewFactory: new PingPongViewReactImplFactory(),
+  pingPongViewFactory: new PingPongReactImplFactory(),
 });

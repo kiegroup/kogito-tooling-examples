@@ -52,7 +52,7 @@ module.exports = [
     ...commonConfig,
     target: "node",
     entry: {
-      "extension/extension": "./src/extension/extension.ts",
+      "extension": "./src/extension.ts",
     },
     plugins: [],
   },
@@ -60,7 +60,7 @@ module.exports = [
     ...commonConfig,
     target: "web",
     entry: {
-      "todo-list-view-envelope/index": "./src/todo-list-view-envelope/index.ts",
+      "envelope/index": "./src/envelope/index.ts",
     },
     module: {
       rules: [...commonConfig.module.rules],

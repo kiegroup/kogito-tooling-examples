@@ -18,7 +18,7 @@
  * Methods provided by the Envelope that can be consumed by the Channel.
  */
 export interface PingPongEnvelopeApi {
-  pingPongView__init(association: Association, initArgs: PingPongViewInitArgs): Promise<void>;
+  pingPongView__init(association: Association, initArgs: PingPongInitArgs): Promise<void>;
 }
 
 export interface Association {
@@ -26,6 +26,6 @@ export interface Association {
   envelopeServerId: string;
 }
 
-export interface PingPongViewInitArgs {
+export interface PingPongInitArgs {
   name: string;
 }

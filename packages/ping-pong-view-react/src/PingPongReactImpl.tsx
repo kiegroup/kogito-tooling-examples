@@ -16,14 +16,14 @@
 
 import * as React from "react";
 import { useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
-import { PingPongViewApi, PingPongViewChannelApi, PingPongViewInitArgs } from "ping-pong-view/dist/api";
+import { PingPongApi, PingPongChannelApi, PingPongInitArgs } from "ping-pong-view/dist/api";
 import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
 import { useSubscription } from "@kogito-tooling/envelope-bus/dist/hooks";
 import "./styles.scss";
 
 interface Props {
-  initArgs: PingPongViewInitArgs;
-  channelApi: MessageBusClient<PingPongViewChannelApi>;
+  initArgs: PingPongInitArgs;
+  channelApi: MessageBusClient<PingPongChannelApi>;
 }
 
 interface LogEntry {
@@ -36,8 +36,8 @@ interface LogEntry {
  *
  *
  */
-export const PingPongReactImpl = React.forwardRef<PingPongViewApi, Props>((props, forwardedRef) => {
-  const pingPongViewApi: PingPongViewApi = useMemo(
+export const PingPongReactImpl = React.forwardRef<PingPongApi, Props>((props, forwardedRef) => {
+  const pingPongViewApi: PingPongApi = useMemo(
     () => ({
       /*
        * Here's where your PingPongViewApi implementation would go if it wasn't empty.
