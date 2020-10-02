@@ -15,12 +15,12 @@
  */
 
 import { ChannelType, getOperatingSystem } from "@kogito-tooling/channel-common-api";
-import * as EditorEnvelope from "@kogito-tooling/editor/dist/envelope";
+import { init } from "@kogito-tooling/editor/dist/envelope";
 import { CompositeEditorFactory } from "@kogito-tooling/editor/dist/envelope";
 import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
 import { GwtEditorWrapperFactory } from "@kogito-tooling/kie-bc-editors";
 
-EditorEnvelope.init({
+init({
   container: document.getElementById("envelope-app")!,
   bus: {
     postMessage<D, Type>(message: EnvelopeBusMessage<D, Type>, targetOrigin?: string, _?: any) {
