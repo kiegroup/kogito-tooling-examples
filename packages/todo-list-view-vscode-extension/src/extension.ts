@@ -17,7 +17,7 @@
 import * as vscode from "vscode";
 import { TodoListWebview } from "todo-list-view/dist/vscode";
 import { TodoListEnvelopeApi } from "todo-list-view/dist/api";
-import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import { MessageBusClientApi } from "@kogito-tooling/envelope-bus/dist/api";
 
 const OPEN_TODO_LIST_VIEW_COMMAND_ID = "kogito-tooling-examples.todo-list-view";
 const ADD_TODO_ITEM_COMMAND_ID = "kogito-tooling-examples.todo-list-view.add-item";
@@ -49,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // Will store the active envelopeApi.
-  let envelopeApi: MessageBusClient<TodoListEnvelopeApi> | undefined;
+  let envelopeApi: MessageBusClientApi<TodoListEnvelopeApi> | undefined;
 
   context.subscriptions.push(
     vscode.commands.registerCommand(OPEN_TODO_LIST_VIEW_COMMAND_ID, () => {
@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand(MARK_ALL_AS_COMPLETED_COMMAND_ID, () => {
-      envelopeApi?.notify("todoList__markAllAsCompleted");
+      envelopeApi?.notifications.todoList__markAllAsCompleted();
     })
   );
 
@@ -102,9 +102,9 @@ export function activate(context: vscode.ExtensionContext) {
   console.info("Extension is successfully setup.");
 }
 
-function addItems(items: string[], envelopeApi?: MessageBusClient<TodoListEnvelopeApi>) {
+function addItems(items: string[], envelopeApi?: MessageBusClientApi<TodoListEnvelopeApi>) {
   for (const item of items) {
-    envelopeApi?.request("todoList__addItem", item);
+    envelopeApi?.requests.todoList__addItem(item);
   }
 }
 

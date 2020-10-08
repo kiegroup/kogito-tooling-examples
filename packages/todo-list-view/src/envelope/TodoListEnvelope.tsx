@@ -15,13 +15,13 @@
  */
 
 import { EnvelopeBus } from "@kogito-tooling/envelope-bus/dist/api";
-import { Envelope } from "../__copied-from-kogito-tooling/Envelope";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { TodoListEnvelopeContext } from "./TodoListEnvelopeContext";
 import { TodoListEnvelopeApiImpl } from "./TodoListEnvelopeApiImpl";
 import { TodoListChannelApi, TodoListEnvelopeApi } from "../api";
 import { TodoListEnvelopeView, TodoListEnvelopeViewApi } from "./TodoListEnvelopeView";
+import { Envelope } from "@kogito-tooling/envelope";
 
 /**
  * Function that starts an Envelope application.

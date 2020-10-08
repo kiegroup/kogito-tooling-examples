@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import { MessageBusClientApi } from "@kogito-tooling/envelope-bus/dist/api";
 import * as React from "react";
 import { useCallback, useImperativeHandle, useMemo, useState } from "react";
 import { Item, TodoListChannelApi } from "../api";
@@ -28,7 +28,7 @@ export interface TodoListEnvelopeViewApi {
 }
 
 interface Props {
-  channelApi: MessageBusClient<TodoListChannelApi>;
+  channelApi: MessageBusClientApi<TodoListChannelApi>;
 }
 
 /**
@@ -49,7 +49,7 @@ export const TodoListEnvelopeView = React.forwardRef<TodoListEnvelopeViewApi, Pr
       if (i >= 0) {
         itemsCopy.splice(i, 1);
         setItems(itemsCopy);
-        props.channelApi.notify("todoList__itemRemoved", item.label);
+        props.channelApi.notifications.todoList__itemRemoved(item.label);
       }
     },
     [items]

@@ -82,8 +82,7 @@ export class TodoListWebview {
 
       //This is the pollInit parameter. Used to connect the Envelope with this instance of EnvelopeServer.
       () =>
-        envelopeServer.client.request(
-          "todoList__init", //Init method
+        envelopeServer.manager.clientApi.requests.todoList__init(
           { origin: envelopeServer.origin, envelopeServerId: envelopeServer.id }, //Association
           { user: "Tiago" } //Init args. This can be extracted as a parameter.
         )
@@ -112,6 +111,6 @@ export class TodoListWebview {
     envelopeServer.startInitPolling();
 
     // Returns the MessageBusClient instance so that the containing VS Code Extension can communicate with the Envelope.
-    return envelopeServer.client;
+    return envelopeServer.manager.clientApi;
   }
 }

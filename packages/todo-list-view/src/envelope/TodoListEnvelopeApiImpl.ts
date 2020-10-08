@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { EnvelopeApiFactoryArgs } from "../__copied-from-kogito-tooling/EnvelopeApiFactory";
 import { TodoListEnvelopeContext } from "./TodoListEnvelopeContext";
 import { Association, TodoListChannelApi, TodoListEnvelopeApi, TodoListInitArgs } from "../api";
 import { TodoListEnvelopeViewApi } from "./TodoListEnvelopeView";
+import { EnvelopeApiFactoryArgs } from "@kogito-tooling/envelope";
 
 /**
  * Implements the TodoListEnvelopeApi.

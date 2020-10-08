@@ -1,6 +1,6 @@
 {
   "name": "kogito-tooling-examples",
-  "version": "0.0.0",
+  "version": "0.7.0",
   "license": "Apache-2.0",
   "private": true,
   "workspaces": [

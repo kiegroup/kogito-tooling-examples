@@ -16,9 +16,9 @@
 
 import * as React from "react";
 import { useCallback, useMemo } from "react";
-import { EmbeddedEnvelopeFactory } from "../__copied-from-kogito-tooling/EmbeddedEnvelopeFactory";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 import { TodoListApi, TodoListChannelApi, TodoListEnvelopeApi } from "../api";
+import { EmbeddedEnvelopeFactory } from "@kogito-tooling/envelope/dist/embedded";
 
 export type Props = TodoListChannelApi & {
   targetOrigin: string;
@@ -35,8 +35,7 @@ export const EmbeddedTodoList = React.forwardRef<TodoListApi, Props>((props, for
    * This is the pollInit parameter. Used to connect the Envelope with this instance of EnvelopeServer.
    */
   const pollInit = useCallback((envelopeServer: EnvelopeServer<TodoListChannelApi, TodoListEnvelopeApi>) => {
-    return envelopeServer.client.request(
-      "todoList__init",
+    return envelopeServer.manager.clientApi.requests.todoList__init(
       {
         origin: envelopeServer.origin,
         envelopeServerId: envelopeServer.id,
@@ -50,9 +49,9 @@ export const EmbeddedTodoList = React.forwardRef<TodoListApi, Props>((props, for
    */
   const refDelegate = useCallback(
     (envelopeServer: EnvelopeServer<TodoListChannelApi, TodoListEnvelopeApi>): TodoListApi => ({
-      addItem: (item) => envelopeServer.client.request("todoList__addItem", item),
-      getItems: () => envelopeServer.client.request("todoList__getItems"),
-      markAllAsCompleted: () => envelopeServer.client.notify("todoList__markAllAsCompleted"),
+      addItem: (item) => envelopeServer.manager.clientApi.requests.todoList__addItem(item),
+      getItems: () => envelopeServer.manager.clientApi.requests.todoList__getItems(),
+      markAllAsCompleted: () => envelopeServer.manager.clientApi.notifications.todoList__markAllAsCompleted(),
     }),
     []
   );
