@@ -79,14 +79,12 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
 
   /**
    * Callback is exposed to the Channel that is called when a new file is opened. It sets the originalContent to the received value.
-   * TODO: The setTimout solves a bug
    */
   const setContent = useCallback(
     (path: string, content: string) => {
       setOriginalContent(content);
       stateControl.clearStateControl();
       updateEditorToInitialState();
-      return new Promise<void>((res) => setTimeout(res, 50));
     },
     [stateControl]
   );
@@ -153,7 +151,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
    * Notify the channel that the Editor is ready after the first render. That enables it to open files.
    */
   useEffect(() => {
-    props.envelopeContext.channelApi.notify("receive_ready");
+    props.envelopeContext.channelApi.notifications.receive_ready();
   }, []);
 
   /**
@@ -163,7 +161,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
   useImperativeHandle(forwardedRef, () => {
     return {
       getContent: () => Promise.resolve(getContent()),
-      setContent: (path: string, content: string) => setContent(path, content),
+      setContent: (path: string, content: string) => Promise.resolve(setContent(path, content)),
       getPreview: () => Promise.resolve(getPreview()),
       undo: () => Promise.resolve(undo()),
       redo: () => Promise.resolve(redo()),
@@ -240,7 +238,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
         invert,
       };
       stateControl.updateCommandStack(JSON.stringify(command));
-      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+      props.envelopeContext.channelApi.notifications.receive_newEdit(command);
     },
     [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
@@ -265,7 +263,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
         invert,
       };
       stateControl.updateCommandStack(JSON.stringify(command));
-      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+      props.envelopeContext.channelApi.notifications.receive_newEdit(command);
     },
     [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
@@ -290,7 +288,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
         invert,
       };
       stateControl.updateCommandStack(JSON.stringify(command));
-      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+      props.envelopeContext.channelApi.notifications.receive_newEdit(command);
     },
     [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
@@ -315,7 +313,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
         invert,
       };
       stateControl.updateCommandStack(JSON.stringify(command));
-      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+      props.envelopeContext.channelApi.notifications.receive_newEdit(command);
     },
     [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
@@ -340,7 +338,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
         invert,
       };
       stateControl.updateCommandStack(JSON.stringify(command));
-      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+      props.envelopeContext.channelApi.notifications.receive_newEdit(command);
     },
     [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );
@@ -365,7 +363,7 @@ export const Base64PngEditor = React.forwardRef<EditorApi, Props>((props, forwar
         invert: value,
       };
       stateControl.updateCommandStack(JSON.stringify(command));
-      props.envelopeContext.channelApi.notify("receive_newEdit", command);
+      props.envelopeContext.channelApi.notifications.receive_newEdit(command);
     },
     [contrast, brightness, saturate, sepia, grayscale, invert, stateControl]
   );

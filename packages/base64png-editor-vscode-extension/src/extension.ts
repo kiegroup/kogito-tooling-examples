@@ -16,11 +16,19 @@
 
 import * as vscode from "vscode";
 import * as KogitoVsCode from "@kogito-tooling/vscode-extension";
+import { VsCodeBackendProxy } from "@kogito-tooling/backend/dist/vscode";
+import { I18n } from "@kogito-tooling/i18n/dist/core";
+import { backendI18nDefaults, backendI18nDictionaries } from "@kogito-tooling/backend/dist/i18n";
 import * as path from "path";
 import * as fs from "fs";
 
+let backendProxy: VsCodeBackendProxy;
+
 export function activate(context: vscode.ExtensionContext) {
   console.info("Extension is alive.");
+
+  const backendI18n = new I18n(backendI18nDefaults, backendI18nDictionaries, vscode.env.language);
+  backendProxy = new VsCodeBackendProxy(context, backendI18n);
 
   /**
    * Starts the extension and set initial properties:
@@ -49,6 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
         ],
       ]),
     },
+    backendProxy: backendProxy,
   });
 
   /**
@@ -82,4 +91,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
   console.info("Extension is deactivating");
+  backendProxy?.stopServices();
 }
