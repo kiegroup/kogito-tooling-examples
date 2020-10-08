@@ -34,8 +34,8 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus; pingPongV
 
   const envelopeViewDelegate = async () => {
     const ref = React.createRef<PingPongEnvelopeViewApi>();
-    return new Promise<PingPongEnvelopeViewApi>((res) =>
-      ReactDOM.render(<PingPongEnvelopeView ref={ref} />, args.container, () => res(ref.current!))
+    return new Promise<() => PingPongEnvelopeViewApi>((res) =>
+      ReactDOM.render(<PingPongEnvelopeView ref={ref} />, args.container, () => res(() => ref.current!))
     );
   };
 

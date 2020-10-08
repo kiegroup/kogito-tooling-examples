@@ -17,13 +17,13 @@
 import * as React from "react";
 import { useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { PingPongApi, PingPongChannelApi, PingPongInitArgs } from "ping-pong-view/dist/api";
-import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import { MessageBusClientApi } from "@kogito-tooling/envelope-bus/dist/api";
 import { useSubscription } from "@kogito-tooling/envelope-bus/dist/hooks";
 import "./styles.scss";
 
 interface Props {
   initArgs: PingPongInitArgs;
-  channelApi: MessageBusClient<PingPongChannelApi>;
+  channelApi: MessageBusClientApi<PingPongChannelApi>;
 }
 
 interface LogEntry {
@@ -58,7 +58,7 @@ export const PingPongReactImpl = React.forwardRef<PingPongApi, Props>((props, fo
 
   // Function to be called when pressing the 'Ping others!' button.
   const ping = useCallback(() => {
-    props.channelApi.notify("pingPongView__ping", props.initArgs.name);
+    props.channelApi.notifications.pingPongView__ping(props.initArgs.name);
   }, []);
 
   // Subscribes to messages sent to `pingPongView__ping`.
@@ -73,7 +73,7 @@ export const PingPongReactImpl = React.forwardRef<PingPongApi, Props>((props, fo
     setLog((prevLog) => [...prevLog, { line: `PING from '${pingSource}'.`, time: getCurrentTime() }]);
 
     // Acknowledges the PING message by sending back a PONG message.
-    props.channelApi.notify("pingPongView__pong", props.initArgs.name, pingSource);
+    props.channelApi.notifications.pingPongView__pong(props.initArgs.name, pingSource);
   });
 
   // Subscribes to messages sent to `pingPongView__pong`.

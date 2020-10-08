@@ -15,9 +15,9 @@
  */
 
 import { PingPongChannelApi, PingPongInitArgs } from "../api";
-import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import { MessageBusClientApi } from "@kogito-tooling/envelope-bus/dist/api";
 import { PingPong } from "./PingPong";
 
 export interface PingPongFactory {
-  create(initArgs: PingPongInitArgs, channelApi: MessageBusClient<PingPongChannelApi>): PingPong;
+  create(initArgs: PingPongInitArgs, channelApi: MessageBusClientApi<PingPongChannelApi>): PingPong;
 }

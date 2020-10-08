@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { MessageBusClient } from "@kogito-tooling/envelope-bus/dist/api";
+import { MessageBusClientApi } from "@kogito-tooling/envelope-bus/dist/api";
 import * as React from "react";
 import { PingPongReactImpl } from "./PingPongReactImpl";
 import { PingPong, PingPongFactory } from "ping-pong-view/dist/envelope";
 import { PingPongApi, PingPongChannelApi, PingPongInitArgs } from "ping-pong-view/dist/api";
 
 export class PingPongReactImplFactory implements PingPongFactory {
-  public create(initArgs: PingPongInitArgs, channelApi: MessageBusClient<PingPongChannelApi>) {
+  public create(initArgs: PingPongInitArgs, channelApi: MessageBusClientApi<PingPongChannelApi>) {
     const ref = React.createRef<PingPongApi>();
 
     const pingPongView: PingPong = {

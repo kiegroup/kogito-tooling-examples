@@ -33,7 +33,7 @@ export class PingPongEnvelopeApiImpl implements PingPongEnvelopeApi {
 
   public async pingPongView__init(association: Association, initArgs: PingPongInitArgs) {
     this.args.envelopeBusController.associate(association.origin, association.envelopeServerId);
-    const pingPongView = this.pingPongViewFactory.create(initArgs, this.args.envelopeBusController.client);
-    await this.args.view.setView(pingPongView);
+    const pingPong = this.pingPongViewFactory.create(initArgs, this.args.envelopeBusController.manager.clientApi);
+    await this.args.view().setView(pingPong)
   }
 }
