@@ -15,20 +15,18 @@
  */
 
 import { ChannelType } from "@kogito-tooling/channel-common-api";
-import { EmbeddedEditor } from "../../__copied-from-kogito-tooling/EmbeddedEditor";
 import * as React from "react";
 import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
 import { useMemo, useState } from "react";
 import { Page } from "@patternfly/react-core";
-import { File } from "@kogito-tooling/editor/dist/embedded";
+import { File, EmbeddedEditor, useEditorRef } from "@kogito-tooling/editor/dist/embedded";
 import { Sidebar } from "./Sidebar";
-import { useEditorRef } from "../../__copied-from-kogito-tooling/Hooks";
 
 export function DmnPage() {
   /**
    * The reference of the Editor. It allows us to access/modify the Editor properties imperatively.
    */
-  const { editor, ref } = useEditorRef();
+  const { editor, editorRef } = useEditorRef();
 
   /**
    * State that handles the file. It's important to type with the File type of the @kogito-tooling/dist/embedded.
@@ -72,7 +70,7 @@ export function DmnPage() {
           accept={".dmn"}
         />
         <EmbeddedEditor
-          ref={ref}
+          ref={editorRef}
           file={file}
           editorEnvelopeLocator={editorEnvelopeLocator}
           channelType={ChannelType.EMBEDDED}

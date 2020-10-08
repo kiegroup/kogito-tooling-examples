@@ -15,12 +15,11 @@
  */
 
 import { ChannelType } from "@kogito-tooling/channel-common-api";
-import { EmbeddedEditor } from "../../__copied-from-kogito-tooling/EmbeddedEditor";
 import * as React from "react";
 import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
 import { useMemo, useState } from "react";
 import { Page } from "@patternfly/react-core";
-import { File } from "@kogito-tooling/editor/dist/embedded";
+import { File, EmbeddedEditor } from "@kogito-tooling/editor/dist/embedded";
 import { Base64PngGallery } from "./Base64PngGallery";
 
 /**

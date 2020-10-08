@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-import { EmbeddedEditorRef } from "../../__copied-from-kogito-tooling/EmbeddedEditor";
 import * as React from "react";
 import { EditorEnvelopeLocator } from "@kogito-tooling/editor/dist/api";
 import { useCallback, useRef, useState } from "react";
 import { Nav, NavItem, NavList, TextInput } from "@patternfly/react-core";
-import { File } from "@kogito-tooling/editor/dist/embedded";
-import { useDirtyState } from "../../__copied-from-kogito-tooling/Hooks";
+import { File, EmbeddedEditorRef, useDirtyState } from "@kogito-tooling/editor/dist/embedded";
 
 function extractFileExtension(fileName: string) {
   return fileName.match(/[\.]/)
