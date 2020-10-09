@@ -35,7 +35,7 @@ export const EmbeddedTodoList = React.forwardRef<TodoListApi, Props>((props, for
    * This is the pollInit parameter. Used to connect the Envelope with this instance of EnvelopeServer.
    */
   const pollInit = useCallback((envelopeServer: EnvelopeServer<TodoListChannelApi, TodoListEnvelopeApi>) => {
-    return envelopeServer.manager.clientApi.requests.todoList__init(
+    return envelopeServer.envelopeApi.requests.todoList__init(
       {
         origin: envelopeServer.origin,
         envelopeServerId: envelopeServer.id,
@@ -49,9 +49,9 @@ export const EmbeddedTodoList = React.forwardRef<TodoListApi, Props>((props, for
    */
   const refDelegate = useCallback(
     (envelopeServer: EnvelopeServer<TodoListChannelApi, TodoListEnvelopeApi>): TodoListApi => ({
-      addItem: (item) => envelopeServer.manager.clientApi.requests.todoList__addItem(item),
-      getItems: () => envelopeServer.manager.clientApi.requests.todoList__getItems(),
-      markAllAsCompleted: () => envelopeServer.manager.clientApi.notifications.todoList__markAllAsCompleted(),
+      addItem: (item) => envelopeServer.envelopeApi.requests.todoList__addItem(item),
+      getItems: () => envelopeServer.envelopeApi.requests.todoList__getItems(),
+      markAllAsCompleted: () => envelopeServer.envelopeApi.notifications.todoList__markAllAsCompleted(),
     }),
     []
   );

@@ -33,7 +33,7 @@ export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: Re
   const refDelegate = useCallback((envelopeServer): PingPongApi => ({}), []);
 
   const pollInit = useCallback((envelopeServer: EnvelopeServer<PingPongChannelApi, PingPongEnvelopeApi>) => {
-    return envelopeServer.manager.clientApi.requests.pingPongView__init(
+    return envelopeServer.envelopeApi.requests.pingPongView__init(
       { origin: envelopeServer.origin, envelopeServerId: envelopeServer.id },
       { name: props.name }
     );
