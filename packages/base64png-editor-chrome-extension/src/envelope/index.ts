@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import * as EditorEnvelope from "@kogito-tooling/editor/dist/envelope";
+import { init } from "@kogito-tooling/editor/dist/envelope";
 import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
-import { Base64PngEditorFactory } from "base64png-editor";
 import { ChannelType, getOperatingSystem } from "@kogito-tooling/channel-common-api";
+import { Base64PngEditorFactory } from "base64png-editor";
 
 /**
  * Initialize the Envelope with some args.
@@ -27,7 +27,7 @@ import { ChannelType, getOperatingSystem } from "@kogito-tooling/channel-common-
  * @param args.editorFactory A new instance of the Editor that is going to be used by the envelope.
  * @param args.editorContext The context of where this envelope is going to run.
  */
-EditorEnvelope.init({
+init({
   container: document.getElementById("envelope-app")!,
   bus: {
     postMessage<D, T>(message: EnvelopeBusMessage<D, T>, targetOrigin?: string, _?: any) {
