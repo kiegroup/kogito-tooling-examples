@@ -22,10 +22,10 @@
     ]
   },
   "dependencies": {
-    "@kogito-tooling/chrome-extension": "0.7.0",
-    "@kogito-tooling/editor": "0.7.0",
-    "@kogito-tooling/envelope-bus": "0.7.0",
-    "@kogito-tooling/patternfly-base": "0.7.0",
+    "@kogito-tooling/chrome-extension": "0.7.1",
+    "@kogito-tooling/editor": "0.7.1",
+    "@kogito-tooling/envelope-bus": "0.7.1",
+    "@kogito-tooling/patternfly-base": "0.7.1",
     "base64png-editor": "0.7.1"
   },
   "resolutions": {

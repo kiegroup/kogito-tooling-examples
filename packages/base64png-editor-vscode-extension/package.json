@@ -110,9 +110,9 @@
     "vscode-test": "1.0.0"
   },
   "dependencies": {
-    "@kogito-tooling/editor": "0.7.0",
-    "@kogito-tooling/patternfly-base": "0.7.0",
-    "@kogito-tooling/vscode-extension": "0.7.0",
+    "@kogito-tooling/editor": "0.7.1",
+    "@kogito-tooling/patternfly-base": "0.7.1",
+    "@kogito-tooling/vscode-extension": "0.7.1",
     "base64png-editor": "0.7.1"
   }
 }

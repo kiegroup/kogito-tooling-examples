@@ -11,9 +11,9 @@
     "start": "webpack-dev-server -d --host 0.0.0.0"
   },
   "dependencies": {
-    "@kogito-tooling/envelope-bus": "0.7.0",
-    "@kogito-tooling/kie-bc-editors": "0.7.0",
-    "@kogito-tooling/patternfly-base": "0.7.0",
+    "@kogito-tooling/envelope-bus": "0.7.1",
+    "@kogito-tooling/kie-bc-editors": "0.7.1",
+    "@kogito-tooling/patternfly-base": "0.7.1",
     "base64png-editor": "0.7.1",
     "ping-pong-view": "0.7.1",
     "ping-pong-view-react": "0.7.1",

@@ -18,7 +18,7 @@
     "build:prod": "yarn run build --mode production --devtool none"
   },
   "dependencies": {
-    "@kogito-tooling/envelope-bus": "0.7.0",
+    "@kogito-tooling/envelope-bus": "0.7.1",
     "ping-pong-view": "0.7.1"
   }
 }
