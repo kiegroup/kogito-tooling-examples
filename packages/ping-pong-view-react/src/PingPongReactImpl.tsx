@@ -93,6 +93,16 @@ export const PingPongReactImpl = React.forwardRef<PingPongApi, Props>((props, fo
     return () => clearInterval(interval);
   }, []);
 
+  const logList = useMemo(() => {
+    const lastTen = log.slice(-10);
+    console.log(lastTen);
+    return lastTen.map((line) => (
+      <p style={{ fontFamily: "monospace" }} key={line.time}>
+        {line.line}
+      </p>
+    ));
+  }, [log]);
+
   return (
     <>
       <i>#{props.initArgs.name}</i>
@@ -101,12 +111,7 @@ export const PingPongReactImpl = React.forwardRef<PingPongApi, Props>((props, fo
         <span>Hello from React!</span>
         <button onClick={ping}>Ping others!</button>
       </div>
-
-      <div className={"ping-pong-view--log"}>
-        {log.slice(-10).map((line) => (
-          <p style={{ fontFamily: "monospace" }} key={line.time}>{line.line}</p>
-        ))}
-      </div>
+      <div className={"ping-pong-view--log"}>{logList}</div>
     </>
   );
 });
