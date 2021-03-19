@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { init } from "ping-pong-view/dist/envelope";
+import { init } from "ping-pong-view/dist/iframe/envelope";
 import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
 import { PingPongReactImplFactory } from "ping-pong-view-react";
 

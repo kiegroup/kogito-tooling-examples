@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,17 @@
 
 import * as React from "react";
 import { useCallback, useMemo } from "react";
-import { PingPongApi, PingPongChannelApi, PingPongEnvelopeApi } from "../api";
+import { PingPongApi, PingPongChannelApi, PingPongEnvelopeApi } from "../../api";
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 import { EmbeddedEnvelopeFactory } from "@kogito-tooling/envelope/dist/embedded";
+import { ContainerType } from "@kogito-tooling/envelope/dist/api";
+import { init } from "../envelope";
+import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
+import { PingPongReactImplFactory } from "ping-pong-view-react";
 
 export type Props = PingPongChannelApi & {
   mapping: {
     title: string;
-    envelopePath: string;
   };
   targetOrigin: string;
   name: string;
@@ -32,20 +35,37 @@ export type Props = PingPongChannelApi & {
 export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: React.Ref<PingPongApi>) => {
   const refDelegate = useCallback((envelopeServer): PingPongApi => ({}), []);
 
-  const pollInit = useCallback((envelopeServer: EnvelopeServer<PingPongChannelApi, PingPongEnvelopeApi>) => {
-    return envelopeServer.envelopeApi.requests.pingPongView__init(
-      { origin: envelopeServer.origin, envelopeServerId: envelopeServer.id },
-      { name: props.name }
-    );
-  }, []);
+  const pollInit = useCallback(
+    (
+      envelopeServer: EnvelopeServer<PingPongChannelApi, PingPongEnvelopeApi>,
+      container: () => HTMLDivElement | HTMLIFrameElement
+    ) => {
+      init({
+        envelopeId: envelopeServer.id,
+        container: container(),
+        bus: {
+          postMessage<D, Type>(message: EnvelopeBusMessage<D, Type>, targetOrigin?: string, transfer?: any) {
+            window.postMessage(message, "*", transfer);
+          },
+        },
+        pingPongViewFactory: new PingPongReactImplFactory(),
+      });
+
+      return envelopeServer.envelopeApi.requests.pingPongView__init(
+        { origin: envelopeServer.origin, envelopeServerId: envelopeServer.id },
+        { name: props.name }
+      );
+    },
+    []
+  );
 
   const EmbeddedEnvelope = useMemo(() => {
     return EmbeddedEnvelopeFactory({
       api: props,
-      envelopePath: props.mapping.envelopePath,
       origin: props.targetOrigin,
       refDelegate,
       pollInit,
+      config: { containerType: ContainerType.DIV },
     });
   }, []);
 

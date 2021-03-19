@@ -17,14 +17,14 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
 import { Page, PageSection } from "@patternfly/react-core";
-import { EmbeddedPingPong } from "ping-pong-view/dist/embedded";
+import { EmbeddedPingPong } from "ping-pong-view/dist/div/embedded";
 import { PingPongChannelApi } from "ping-pong-view/dist/api";
 import { StatsSidebar } from "./StatsSidebar";
 
 let pings = 0;
 let pongs = 0;
 
-export function PingPongViewsPage() {
+export function PingPongDivViewsPage() {
   const [lastPing, setLastPing] = useState<string>("-");
   const [lastPong, setLastPong] = useState<string>("-");
 
@@ -51,7 +51,7 @@ export function PingPongViewsPage() {
               {...api}
               name={"React 1"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in React", envelopePath: "envelope/ping-pong-view-react-impl.html" }}
+              mapping={{ title: "Ping-Pong Page in React" }}
             />
           </PageSection>
 
@@ -60,7 +60,7 @@ export function PingPongViewsPage() {
               {...api}
               name={"React 2"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in React", envelopePath: "envelope/ping-pong-view-react-impl.html" }}
+              mapping={{ title: "Ping-Pong Page in React" }}
             />
           </PageSection>
 
@@ -69,7 +69,7 @@ export function PingPongViewsPage() {
               {...api}
               name={"React 3"}
               targetOrigin={window.location.origin}
-              mapping={{ title: "Ping-Pong Page in React", envelopePath: "envelope/ping-pong-view-react-impl.html" }}
+              mapping={{ title: "Ping-Pong Page in React" }}
             />
           </PageSection>
         </div>
