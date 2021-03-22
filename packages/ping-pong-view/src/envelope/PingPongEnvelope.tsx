@@ -23,10 +23,10 @@ import { PingPongFactory } from "../envelope/PingPongFactory";
 import { PingPongEnvelopeContext } from "../envelope/PingPongEnvelopeContext";
 import { PingPongEnvelopeView, PingPongEnvelopeViewApi } from "../envelope/PingPongEnvelopeView";
 import { PingPongEnvelopeApiImpl } from "../envelope/PingPongEnvelopeApiImpl";
-import {EnvelopeDivConfig, EnvelopeIFrameConfig} from "@kogito-tooling/envelope";
+import { EnvelopeDivConfig, EnvelopeIFrameConfig } from "@kogito-tooling/envelope";
 
 export function init(args: {
-  envelopeConfig: EnvelopeDivConfig | EnvelopeIFrameConfig;
+  config: EnvelopeDivConfig | EnvelopeIFrameConfig;
   container: HTMLElement;
   bus: EnvelopeBus;
   pingPongViewFactory: PingPongFactory;
@@ -36,7 +36,7 @@ export function init(args: {
     PingPongChannelApi,
     PingPongEnvelopeViewApi,
     PingPongEnvelopeContext
-  >(args.bus, args.envelopeConfig);
+  >(args.bus, args.config);
 
   const envelopeViewDelegate = async () => {
     const ref = React.createRef<PingPongEnvelopeViewApi>();
