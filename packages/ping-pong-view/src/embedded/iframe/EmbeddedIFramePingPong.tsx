@@ -30,7 +30,7 @@ export type Props = PingPongChannelApi & {
   name: string;
 };
 
-export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: React.Ref<PingPongApi>) => {
+export const EmbeddedIFramePingPong = React.forwardRef((props: Props, forwardedRef: React.Ref<PingPongApi>) => {
   const refDelegate = useCallback((envelopeServer): PingPongApi => ({}), []);
 
   const pollInit = useCallback((envelopeServer: EnvelopeServer<PingPongChannelApi, PingPongEnvelopeApi>, container: () => HTMLDivElement | HTMLIFrameElement) => {

@@ -23,10 +23,8 @@ module.exports = {
   entry: {
     "api/index": "./src/api/index.ts",
     "envelope/index": "./src/envelope/index.ts",
-    "div/envelope/index": "./src/div/envelope/index.ts",
-    "iframe/envelope/index": "./src/iframe/envelope/index.ts",
-    "div/embedded/index": "./src/div/embedded/index.ts",
-    "iframe/embedded/index": "./src/iframe/embedded/index.ts",
+    "embedded/div/index": "./src/embedded/div/index.ts",
+    "embedded/iframe/index": "./src/embedded/iframe/index.ts",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),

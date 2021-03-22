@@ -20,7 +20,7 @@ import { PingPongApi, PingPongChannelApi, PingPongEnvelopeApi } from "../../api"
 import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
 import { EmbeddedEnvelopeFactory } from "@kogito-tooling/envelope/dist/embedded";
 import { ContainerType } from "@kogito-tooling/envelope/dist/api";
-import { init } from "../envelope";
+import { init } from "../../envelope";
 import { EnvelopeBusMessage } from "@kogito-tooling/envelope-bus/dist/api";
 import { PingPongReactImplFactory } from "ping-pong-view-react";
 
@@ -32,7 +32,7 @@ export type Props = PingPongChannelApi & {
   name: string;
 };
 
-export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: React.Ref<PingPongApi>) => {
+export const EmbeddedDivPingPong = React.forwardRef((props: Props, forwardedRef: React.Ref<PingPongApi>) => {
   const refDelegate = useCallback((envelopeServer): PingPongApi => ({}), []);
 
   const pollInit = useCallback(
@@ -41,7 +41,7 @@ export const EmbeddedPingPong = React.forwardRef((props: Props, forwardedRef: Re
       container: () => HTMLDivElement | HTMLIFrameElement
     ) => {
       init({
-        envelopeId: envelopeServer.id,
+        envelopeConfig: { containerType: ContainerType.DIV, envelopeId: envelopeServer.id },
         container: container(),
         bus: {
           postMessage<D, Type>(message: EnvelopeBusMessage<D, Type>, targetOrigin?: string, transfer?: any) {

@@ -15,4 +15,5 @@
  */
 
 export * from "./PingPong";
+export * from "./PingPongEnvelope";
 export * from "./PingPongFactory";

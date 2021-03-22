@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export * from "./EmbeddedPingPong";
+export * from "./EmbeddedIFramePingPong";
