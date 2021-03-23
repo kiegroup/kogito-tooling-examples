@@ -42,6 +42,8 @@ export function PingPongDivViewsPage() {
     };
   }, [pings, pongs]);
 
+  const pingPongViewFactory = useMemo(() => new PingPongReactImplFactory(), []);
+
   return (
     <Page>
       <div className={"webapp--page-main-div"}>
@@ -53,7 +55,7 @@ export function PingPongDivViewsPage() {
               name={"React 1"}
               targetOrigin={window.location.origin}
               mapping={{ title: "Ping-Pong Page in React" }}
-              pingPongViewFactory={new PingPongReactImplFactory()}
+              pingPongViewFactory={pingPongViewFactory}
             />
           </PageSection>
 
@@ -63,7 +65,7 @@ export function PingPongDivViewsPage() {
               name={"React 2"}
               targetOrigin={window.location.origin}
               mapping={{ title: "Ping-Pong Page in React" }}
-              pingPongViewFactory={new PingPongReactImplFactory()}
+              pingPongViewFactory={pingPongViewFactory}
             />
           </PageSection>
 
@@ -73,7 +75,7 @@ export function PingPongDivViewsPage() {
               name={"React 3"}
               targetOrigin={window.location.origin}
               mapping={{ title: "Ping-Pong Page in React" }}
-              pingPongViewFactory={new PingPongReactImplFactory()}
+              pingPongViewFactory={pingPongViewFactory}
             />
           </PageSection>
         </div>
