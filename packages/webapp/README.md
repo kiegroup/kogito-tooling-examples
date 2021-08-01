@@ -11,11 +11,11 @@ This is a Web application example that shows how to integrate an Embedded Editor
 
 To get more the details please take a look on each implementation:
 
-- [Base64 PNG Editor]("src/Pages/Base64Png/Base64PngPage.tsx")
-- [BPMN Editor]("src/Pages/KogitoEditors/BpmnPage.tsx")
-- [DMN Editor]("src/Pages/KogitoEditors/DmnPage.tsx")
-- ['To-do' list View]("src/Pages/TodoList/TodoListViewPage.tsx")
-- [Ping-Pong View]("src/Pages/PingPong/PingPongViewsPage.tsx")
+- [Base64 PNG Editor](src/Pages/Base64Png/Base64PngPage.tsx)
+- [BPMN Editor](src/Pages/KogitoEditors/BpmnPage.tsx)
+- [DMN Editor](src/Pages/KogitoEditors/DmnPage.tsx)
+- ['To-do' list View](src/Pages/TodoList/TodoListViewPage.tsx)
+- [Ping-Pong View](src/Pages/PingPong/PingPongViewsPage.tsx)
 
 ## Setup
 
